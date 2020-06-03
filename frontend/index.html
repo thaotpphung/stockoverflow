@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>StockOverflow</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description"
+		content="Stock Tracker and Data Visualization" />
+
+	<!-- local css file -->
+	<link rel="stylesheet" type="text/css" href="styles/style.css" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+	<!-- Font Awesome kit code -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+		integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+		crossorigin="anonymous">
+
+	<!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<nav id="mainNav" class="navbar navbar-expand-md navbar-dark fixed-top">
+		<div class=" container-fluid">
+			<a class="navbar-brand" href="#">STOCKOVERFLOW</a>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navLinks, #logNavLinks" aria-label="Toggle navbar" aria-controls="navLinks"
+                aria-expanded="false">
+                
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navLinks" class="collapse navbar-collapse">
+				<div class="navbar-nav mr-auto pl-3">
+					<a class="nav-item nav-link" href="index.html">HOME</a>
+					<a class="nav-item nav-link" href="dashboard.html">DASHBOARD</a>
+					<a class="nav-item nav-link" href="porfolio.html">PORFOLIO</a>
+				</div>
+            </div>
+            
+            <div id="logNavLinks" class="collapse navbar-collapse">
+				<div class="navbar-nav ml-auto pl-3">
+					<a class="nav-item nav-link" href="login.html">LOG IN</a>
+					<a class="nav-item nav-link" href="signup.html">SIGN UP</a>
+				</div>
+			</div>
+
+		</div>
+	</nav>
+
+	<section id="header">
+		<div class="jumbotron">
+			<div class="container text-center">
+				<div  id="intro" class="row">
+                    <div id="introLeft" class="col 10 col-lg-6 ">
+                        <!-- order-2 order-lg-1 -->
+                        <!-- order2: second order in flex box -->
+                        <div id="banner">
+                            <span id="main-name">STOCKOVERFLOW</span> provides good service with no fees.
+                             A powerful tool to track and visualize stock data. 
+                        </div>
+                        <div id="intro-signup">
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="First name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" placeholder="Last name">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class = "col-12">
+                                                <input type="password" class="form-control" id="password" placeholder="Password">
+                                            </div>
+                                            <div class = "col-12">
+                                                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="password-warning" class="col-md-6">
+                                            Password must contain:
+                                            <ul>
+                                                <li>At least 8 characters</li>
+                                                <li>Numeric characters</li>
+                                                <li>Alphabetical characters</li>
+                                                <li>Special characters</li>
+                                            </ul>
+                                    </div> 
+
+                                    <div id="signup-button">
+                                        <button type="button" class="btn custom-signup-btn">Sign Up</button>
+                                    </div>
+                                    
+                                </div>
+                              </form>
+                        </div>
+                    </div>
+                    <div id="introRight" class="col-12 col-lg-6 d-none d-md-block pb-5 pb-lg-0">
+                        <!-- order-1 order-lg-2  -->
+                        <!-- order1: first order in flex box -->
+                        <!-- order-lg-2 -> order 1 except when large then order 2 -->
+                        <div id="stock-image"></div>
+                    </div>
+    
+                </div>	
+            </div>
+        </div>
+	</section>
+
+	<!-- Optional JavaScript for Bootstrap-->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap 4 Javascript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" 
+        crossorigin="anonymous"></script>
+	<!-- local javascript file -->
+	<script src="scripts/script.js"></script>
+</body>
+
+</html>

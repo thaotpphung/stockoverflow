@@ -1,0 +1,66 @@
+<%- include("partials/header") %>
+
+<section id="header">
+    <div class="jumbotron">
+        <div class="container text-center">
+            <div  id="intro" class="row">
+                <div id="introLeft" class="col 10 col-lg-6 ">
+                    <div id="banner">
+                        <span id="main-name">STOCKOVERFLOW</span> provides good service with no fees.
+                         A powerful tool to track and visualize stock data. 
+                    </div>
+                    <div id="intro-signup">
+                        <form>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="First name">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Last name">
+                                </div>
+
+                                <div class="col-12">
+                                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class = "col-12">
+                                            <input type="password" class="form-control" id="password" placeholder="Password">
+                                        </div>
+                                        <div class = "col-12">
+                                            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="password-warning" class="col-md-6">
+                                        Password must contain:
+                                        <ul>
+                                            <li>At least 8 characters</li>
+                                            <li>Numeric characters</li>
+                                            <li>Alphabetical characters</li>
+                                            <li>Special characters</li>
+                                        </ul>
+                                </div> 
+
+                                <div id="signup-button">
+                                    <button type="button" class="btn custom-signup-btn">Sign Up</button>
+                                </div>
+                                
+                            </div>
+                          </form>
+                    </div>
+                </div>
+                <div id="introRight" class="col-12 col-lg-6 d-none d-md-block pb-5 pb-lg-0">
+                    <div id="stock-image"></div>
+                </div>
+
+            </div>	
+        </div>
+    </div>
+</section>
+
+
+<%- include("partials/footer") %>
+
+

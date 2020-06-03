@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Dashboard</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description"
+		content="Stock Tracker and Data Visualization" />
+
+	<!-- local css file -->
+	<link rel="stylesheet" type="text/css" href="styles/style.css" />
+
+	<!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/lib/bootstrap4/bootstrap.css">
+
+	<!-- Font Awesome kit code -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+		integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+		crossorigin="anonymous">
+
+	<!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<nav id="mainNav" class="navbar navbar-expand-md navbar-dark fixed-top">
+		<div class=" container-fluid">
+			<a class="navbar-brand" href="#">STOCKOVERFLOW</a>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navLinks, #logNavLinks" aria-label="Toggle navbar" aria-controls="navLinks"
+                aria-expanded="false">
+                
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div id="navLinks" class="collapse navbar-collapse">
+				<div class="navbar-nav mr-auto pl-3">
+					<a class="nav-item nav-link" href="index.html">HOME</a>
+					<a class="nav-item nav-link" href="dashboard.html">DASHBOARD</a>
+					<a class="nav-item nav-link" href="porfolio.html">PORFOLIO</a>
+				</div>
+            </div>
+            
+            <div id="logNavLinks" class="collapse navbar-collapse">
+				<div class="navbar-nav ml-auto pl-3">
+					<a class="nav-item nav-link" href="login.html">LOG IN</a>
+					<a class="nav-item nav-link" href="signup.html">SIGN UP</a>
+				</div>
+			</div>
+
+		</div>
+	</nav>
+
+	<div id="dashboard-container">
+		<div id="tracked-stocks">
+			<h1>Tracked Stocks <i class="fa fa-plus"></i></h1>
+			<input type="text" placeholder="Search stock by tick symbol">
+
+			<table id="tracked-stock-table" class="table table-hover">
+				<thead>
+				  <tr>
+					<th scope="col">Name</th>
+					<th scope="col">Tick Symbol</th>
+					<th scope="col">Current Price</th>
+					<th scope="col">Change(%)</th>
+					<th scope="col">Change(USD)</th>
+					<th scope="col">Graph Option</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<th scope="row"><span><i class="fa fa-trash"></i></span>APPLE</th>
+					<td>APL</td>
+					<td>20.5</td>
+					<td>0.5</td>
+					<td>10</td>
+					<td><input type="checkbox"></td>
+				  </tr>
+				  <tr>
+					<th scope="row"><span><i class="fa fa-trash"></i></span>APPLE</th>
+					<td>APL</td>
+					<td>20.5</td>
+					<td>0.5</td>
+					<td>10</td>
+					<td><input type="checkbox"></td>
+				  </tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- <div id="graph-button">
+			<button type="button" class="btn custom-graph-btn">Graph</button>
+		</div> -->
+
+		<div id="graphs">
+			<h1>Graphs</h1>
+		</div>
+	</div>
+
+
+	<!-- Optional JavaScript for Bootstrap-->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	<!-- Bootstrap 4 Javascript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" 
+        crossorigin="anonymous"></script>
+	<!-- local javascript file -->
+	<script src="scripts/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<%- include("partials/header") %>
+
+<div id="dashboard-container">
+    <div id="tracked-stocks">
+        <h1>Tracked Stocks <i class="fa fa-plus"></i></h1>
+        <input type="text" placeholder="Search stock by tick symbol">
+
+        <table id="tracked-stock-table" class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Tick Symbol</th>
+                <th scope="col">Current Price</th>
+                <th scope="col">Change(%)</th>
+                <th scope="col">Change(USD)</th>
+                <th scope="col">Graph Option</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><span><i class="fa fa-trash"></i></span>APPLE</th>
+                <td>APL</td>
+                <td>20.5</td>
+                <td>0.5</td>
+                <td>10</td>
+                <td><input type="checkbox"></td>
+              </tr>
+              <tr>
+                <th scope="row"><span><i class="fa fa-trash"></i></span>APPLE</th>
+                <td>APL</td>
+                <td>20.5</td>
+                <td>0.5</td>
+                <td>10</td>
+                <td><input type="checkbox"></td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <div id="graph-button">
+        <button type="button" class="btn custom-graph-btn">Graph</button>
+    </div> -->
+
+    <div id="graphs">
+        <h1>Graphs</h1>
+    </div>
+
+    <div id=testing>
+      <a href="dashboard/new">Add new stock</a>
+  
+      <% stocks.forEach(function(stock){ %>
+          <h4><%= stock.name %></h4>
+      <% }); %>
+  </div>
+</div>
+
+
+
+
+<%- include("partials/footer") %>
