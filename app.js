@@ -4,6 +4,7 @@ var express      = require("express"),
     mongoose     = require('mongoose'),
     passport    = require("passport"),
     LocalStrategy = require("passport-local"),
+    // passportLocalMongoose = require("passport-local-mongoose"),
     Stock = require("./models/stock"),
     User        = require("./models/user"),
     seedDB      = require("./seeds");
@@ -15,19 +16,18 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set ("view engine", "ejs");
 // seedDB();
  
-
-// Stock.create(
-//     {
-//         name: "AMZ",
-//         description:"AMAZON"
-//     }, 
-//     function(err, stock){
-//     if(err){
-//         console.log(err);
-//     } else {
-//         console.log("CREATED NEW STOCK");
-//     }
-// });
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "A random message 1099",
+    resave: false, 
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+// local-mongoose package
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get("/", function(req, res) {
     res.render("landing");
@@ -40,7 +40,7 @@ app.get("/dashboard", function (req, res){
         if(err){
             console.log(err);
         } else {
-            res.render("dashboard", {stocks: allStocks});
+            res.render("dashboard/index", {stocks: allStocks});
         }
     });
     
@@ -63,7 +63,7 @@ app.post("/dashboard", function (req, res) {
 
 // NEW - show form to create new tracked stock
 app.get("/dashboard/new", function(req, res) {
-    res.render("new");
+    res.render("dashboard/new");
 })
 
 app.get("/dashboard/:id", function(req, res) {
@@ -72,10 +72,56 @@ app.get("/dashboard/:id", function(req, res) {
             console.log(err);
         } else {
             //render show template with that campground
-            res.render("show", {stock: foundStock});
+            res.render("dashboard/show", {stock: foundStock});
         }
     });
 })
+
+// === AUTH ===
+
+// show register form
+app.get("/register", function(req, res){
+    res.render("register"); 
+ });
+ //handle sign up logic
+ app.post("/register", function(req, res){
+     var newUser = new User({username: req.body.username});
+     User.register(newUser, req.body.password, function(err, user){ // encode the password 
+         if(err){
+             console.log(err);
+             return res.render("register");
+         } 
+         passport.authenticate("local")(req, res, function(){ // log user in, serialize session
+            res.redirect("/dashboard"); 
+         });
+     });
+ });
+ 
+ // show login form
+ app.get("/login", function(req, res){
+    res.render("login"); 
+ });
+ // handling login logic
+ app.post("/login", passport.authenticate("local", 
+     {
+         successRedirect: "/dashboard/new",
+         failureRedirect: "/login"
+     }), function(req, res){
+ });
+ 
+ // logic route
+ app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
+ });
+ 
+ function isLoggedIn(req, res, next){
+     if(req.isAuthenticated()){
+         return next();
+     }
+     res.redirect("/login");
+ }
+
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
