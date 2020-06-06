@@ -4,17 +4,31 @@ var express     = require("express"),
     mongoose    = require('mongoose');
 // var request = require("request"); // for API 
 
-mongoose.connect('mongodb://localhost/stockapp', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://127.0.0.1/stockapp', {useNewUrlParser: true, useUnifiedTopology: true});
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set ("view engine", "ejs");
 
 // set up 
 var trackedStockSchema = new mongoose.Schema({
-    name: String
+    name: String,
+    description: String
  });
 
 var TrackedStock = mongoose.model("TrackedStock", trackedStockSchema);
+
+// TrackedStock.create(
+//     {
+//         name: "AMZ",
+//         description:"AMAZON"
+//     }, 
+//     function(err, stock){
+//     if(err){
+//         console.log(err);
+//     } else {
+//         console.log("CREATED NEW STOCK");
+//     }
+// });
 
 app.get("/", function(req, res) {
     res.render("landing");
@@ -36,7 +50,8 @@ app.get("/dashboard", function (req, res){
 // CREATE - add new tracked stock to DB
 app.post("/dashboard", function (req, res) {
     var name = req.body.name;
-    var newStock = {name:name};
+    var description = req.body.description;
+    var newStock = {name:name, description:description};
     // create new stock and save to DB
     TrackedStock.create(newStock, function(err, stock){
         if(err){
@@ -50,6 +65,17 @@ app.post("/dashboard", function (req, res) {
 // NEW - show form to create new tracked stock
 app.get("/dashboard/new", function(req, res) {
     res.render("new");
+})
+
+app.get("/dashboard/:id", function(req, res) {
+    TrackedStock.findById(req.params.id, function(err, foundStock){
+        if(err){
+            console.log(err);
+        } else {
+            //render show template with that campground
+            res.render("show", {stock: foundStock});
+        }
+    });
 })
 
 var port = process.env.PORT || 3000;

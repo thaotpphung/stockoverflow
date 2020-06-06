@@ -49,13 +49,11 @@
       <a href="dashboard/new">Add new stock</a>
   
       <% stocks.forEach(function(stock){ %>
-          <h4><%= stock.name %></h4>
+          <h4><%=stock.name%>
+              <a href="/dashboard/<%=stock._id%>" class="btn btn-primary">More Info</a>
+         </h4>
       <% }); %>
   </div>
 </div>
-
-
-
-
 
 <%- include("partials/footer") %>
