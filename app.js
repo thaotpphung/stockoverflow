@@ -1,23 +1,22 @@
-var express     = require("express"),
-    app         = express(),
-    bodyParser  = require("body-parser"),
-    mongoose    = require('mongoose');
+var express      = require("express"),
+    app          = express(),
+    bodyParser   = require("body-parser"),
+    mongoose     = require('mongoose'),
+    passport    = require("passport"),
+    LocalStrategy = require("passport-local"),
+    Stock = require("./models/stock"),
+    User        = require("./models/user"),
+    seedDB      = require("./seeds");
 // var request = require("request"); // for API 
 
 mongoose.connect('mongodb://127.0.0.1/stockapp', {useNewUrlParser: true, useUnifiedTopology: true});
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set ("view engine", "ejs");
+// seedDB();
+ 
 
-// set up 
-var trackedStockSchema = new mongoose.Schema({
-    name: String,
-    description: String
- });
-
-var TrackedStock = mongoose.model("TrackedStock", trackedStockSchema);
-
-// TrackedStock.create(
+// Stock.create(
 //     {
 //         name: "AMZ",
 //         description:"AMAZON"
@@ -37,11 +36,11 @@ app.get("/", function(req, res) {
 // INDEX - show all tracked stocks
 app.get("/dashboard", function (req, res){
     // get all tracked stocks from DB
-    TrackedStock.find({}, function(err, allTrackedStocks){
+    Stock.find({}, function(err, allStocks){
         if(err){
             console.log(err);
         } else {
-            res.render("dashboard", {stocks: allTrackedStocks});
+            res.render("dashboard", {stocks: allStocks});
         }
     });
     
@@ -53,7 +52,7 @@ app.post("/dashboard", function (req, res) {
     var description = req.body.description;
     var newStock = {name:name, description:description};
     // create new stock and save to DB
-    TrackedStock.create(newStock, function(err, stock){
+    Stock.create(newStock, function(err, stock){
         if(err){
             console.log(err);
         } else {
@@ -68,7 +67,7 @@ app.get("/dashboard/new", function(req, res) {
 })
 
 app.get("/dashboard/:id", function(req, res) {
-    TrackedStock.findById(req.params.id, function(err, foundStock){
+    Stock.findById(req.params.id, function(err, foundStock){
         if(err){
             console.log(err);
         } else {
