@@ -39,17 +39,25 @@
 
 			<div id="navLinks" class="collapse navbar-collapse">
 				<div class="navbar-nav mr-auto pl-3">
-					<a class="nav-item nav-link" href="/">HOME</a>
-					<a class="nav-item nav-link" href="/dashboard">DASHBOARD</a>
-					<a class="nav-item nav-link" href="/porfolio">PORFOLIO</a>
+					<% if(!currentUser){ %>
+						<a class="nav-item nav-link" href="/">HOME</a>
+					<% } else { %>
+						<a class="nav-item nav-link" href="/">HOME</a>
+						<a class="nav-item nav-link" href="/dashboard">DASHBOARD</a>
+						<a class="nav-item nav-link" href="/porfolio">PORFOLIO</a>
+					<% } %>
 				</div>
             </div>
             
             <div id="logNavLinks" class="collapse navbar-collapse">
 				<div class="navbar-nav ml-auto pl-3">
-					<a class="nav-item nav-link" href="/login">LOG IN</a>
-					<a class="nav-item nav-link" href="/logout">LOG OUT</a>
-					<a class="nav-item nav-link" href="/register">SIGN UP</a>
+                    <% if(!currentUser){ %>
+						<a class="nav-item nav-link" href="/login">LOG IN</a>
+						<a class="nav-item nav-link" href="/register">SIGN UP</a>
+					<% } else { %>
+						<a class="nav-item nav-link" >Welcome <%= currentUser.username %></a>
+						<a class="nav-item nav-link" href="/logout">LOG OUT</a>
+					<% } %>
 				</div>
 			</div>
 
