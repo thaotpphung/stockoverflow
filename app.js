@@ -7,11 +7,13 @@ var express         = require("express"),
     // passportLocalMongoose = require("passport-local-mongoose"),
     Stock           = require("./models/stock"),
     User            = require("./models/user"),
+    Purchase        = require("./models/purchase"),
     seedDB          = require("./seeds");
 // var request = require("request"); // for API 
 
 // requring routes
-var dashboardRoutes = require("./routes/dashboard"),
+var purchaseRoutes    = require("./routes/purchases"),
+    dashboardRoutes = require("./routes/dashboard"),
     indexRoutes     = require("./routes/index")
 
 mongoose.connect('mongodb://127.0.0.1/stockapp', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -39,7 +41,8 @@ app.use(function(req, res, next){
 });
 
 app.use("/", indexRoutes);
-app.use("/dashboard", dashboardRoutes);
+app.use("/dashboard/:userid", dashboardRoutes);
+app.use("/dashboard/:userid/:stockid/purchases", purchaseRoutes);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {

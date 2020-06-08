@@ -2,12 +2,12 @@
 
 <h1> Add a new stock</h1>
 
-<form action ="/dashboard" method="POST">
-    <input type="text" name="name" placeholder="name">
-    <input type="text" name="description" placeholder="description">
+<form action ="/dashboard/<%=currentUser._id%>" method="POST">
+    <input type="text" name="stock[name]" placeholder="name">
+    <input type="text" name="stock[description]" placeholder="description">
     <button>Submit!</button>
 </form>
 
-<a href="/dashboard">Go Back</a>
+<a href="/dashboard/<%=currentUser._id%>">Go Back</a>
 
 <%- include("../partials/footer") %>

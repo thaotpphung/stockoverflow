@@ -6,6 +6,9 @@
     <h1><%=stock.name%></h1>
     
     <h2><%=stock.description%></h2>
+
+    <a class="btn btn-success" href="/dashboard/<%=currentUser._id%>/<%= stock._id %>/purchases/new">Buy Stock</a>
+
 </div>
 
 <%- include("../partials/footer") %>

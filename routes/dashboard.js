@@ -1,6 +1,7 @@
 var express = require("express");
-var router  = express.Router();
+var router  = express.Router({mergeParams: true});
 var Stock = require("../models/stock");
+var User = require("../models/user");
 
 // INDEX - show all tracked stocks
 router.get("/", function (req, res){
@@ -15,28 +16,35 @@ router.get("/", function (req, res){
     });
 })
 
-// CREATE - add new tracked stock to DB
-router.post("/", isLoggedIn, function (req, res) {
-    var name = req.body.name;
-    var description = req.body.description;
-    var newStock = {name:name, description:description};
-    // create new stock and save to DB
-    Stock.create(newStock, function(err, stock){
+router.post("/",isLoggedIn,function(req, res){
+    User.findById(req.params.userid, function(err, user){
         if(err){
             console.log(err);
+            res.redirect("/");
         } else {
-            res.redirect("/dashboard");
+         Stock.create(req.body.stock, function(err, stock){
+            if(err){
+                console.log(err);
+            } else {
+                //add username and id to comment
+                user.trackedstocks.push(stock.name);
+                user.save();
+                console.log(stock);
+                res.redirect('/dashboard/' + user._id);
+            }
+         });
         }
     });
-})
+ });
 
 // NEW - show form to create new tracked stock
 router.get("/new", isLoggedIn, function(req, res) {
     res.render("dashboard/new");
 })
 
-router.get("/:id", function(req, res) {
-    Stock.findById(req.params.id, function(err, foundStock){
+// show information of the chosen stock
+router.get("/:stockid", function(req, res) {
+    Stock.findById(req.params.stockid, function(err, foundStock){
         if(err){
             console.log(err);
         } else {

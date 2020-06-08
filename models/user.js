@@ -4,14 +4,19 @@ var passportLocalMongoose = require("passport-local-mongoose");
 var UserSchema = new mongoose.Schema({
     username: String,
     password: String,
-    stocks: [
+    trackedstocks: [
+         {
+            type: String
+         } 
+      ],
+    purchases: [
         {
            type: mongoose.Schema.Types.ObjectId,
-           ref: "Stock"
+           ref: "Purchase"
         }
      ]
 });
 
-UserSchema.plugin(passportLocalMongoose)
+UserSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", UserSchema);
