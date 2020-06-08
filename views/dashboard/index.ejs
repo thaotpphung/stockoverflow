@@ -47,11 +47,9 @@
 
     <div id=testing>
       <h4><%= currentUser %></h4>
-      <% console.log(currentUser); %>
       <a href="/dashboard/<%=currentUser._id%>/new">Add new stock</a>
-  
       <% stocks.forEach(function(stock){ %>
-          <h4><%=stock.name%>
+          <h4><%=stock%>
               <a href="/dashboard/<%=currentUser._id%>/<%=stock._id%>" class="btn btn-primary">More Info</a>
          </h4>
       <% }); %>
