@@ -5,9 +5,7 @@ var Purchase = require("../models/purchase");
 
 // New purchase - form to add purchase
 router.get("/new", isLoggedIn, function(req, res){
-    // find campground by id
-    console.log("In new purchase router: ", req.params.id);
-    User.findById(req.params.id, function(err, user ){
+    User.findById(req.params.userid, function(err, user ){
         if(err){
             console.log(err);
         } else {
@@ -30,7 +28,6 @@ router.post("/",isLoggedIn,function(req, res){
            } else {
                //add username and id to purchase
                purchase.user.id = req.user._id;
-               purchase.user.description = req.user.description;
                //save purchase
                purchase.save();
                user.purchases.push(purchase);

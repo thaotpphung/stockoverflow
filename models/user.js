@@ -5,10 +5,11 @@ var UserSchema = new mongoose.Schema({
     username: String,
     password: String,
     trackedstocks: [
-         {
-            type: String
-         } 
-      ],
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Stock"
+      }
+   ],
     purchases: [
         {
            type: mongoose.Schema.Types.ObjectId,

@@ -6,25 +6,18 @@ var User = require("../models/user");
 // INDEX - show all tracked stocks
 router.get("/", function (req, res){
     // get all tracked stocks from DB
-    User.findById(req.params.userid, function(err, user){
+    User.findById(req.params.userid).populate("trackedstocks").exec(function(err, foundUser){
         if(err){
             console.log(err);
             res.redirect("/");
         } else {
-            // var allStocks = [];
-            // user.trackedstocks.forEach(function(stock)
-            // {
-            //     Stock.find({name:stock}, function(err, foundStock){
-            //         allStocks.push(foundStock);
-            //         console.log("all stocks in loop", allStocks);
-            //     });
-            // });
-            // console.log("all stocks here", allStocks);
-            res.render("dashboard/index", {stocks: user.trackedstocks});
+            console.log(foundUser)
+            res.render("dashboard/index", {stocks: foundUser.trackedstocks});
         }
     });
 });
 
+// add tracked stocks to the shared stocks db
 router.post("/",isLoggedIn,function(req, res){
     User.findById(req.params.userid, function(err, user){
         if(err){
@@ -35,10 +28,8 @@ router.post("/",isLoggedIn,function(req, res){
             if(err){
                 console.log(err);
             } else {
-                //add username and id to comment
-                user.trackedstocks.push(stock.name);
+                user.trackedstocks.push(stock);
                 user.save();
-                console.log(stock);
                 res.redirect('/dashboard/' + user._id);
             }
          });

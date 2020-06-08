@@ -9,8 +9,8 @@ var purchaseSchema = mongoose.Schema({
         },
     },
     quantity: Number,
-    pricebought: Number,
-    timebought: Date
+    price: Number,
+    // time: Date
 });
 
 module.exports = mongoose.model("Purchase", purchaseSchema);
