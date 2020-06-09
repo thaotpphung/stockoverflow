@@ -12,8 +12,9 @@ var express         = require("express"),
 // var request = require("request"); // for API 
 
 // requring routes
-var purchaseRoutes    = require("./routes/purchases"),
+var purchaseRoutes  = require("./routes/purchases"),
     dashboardRoutes = require("./routes/dashboard"),
+    portfolioRoutes = require("./routes/portfolio"),
     indexRoutes     = require("./routes/index")
 
 mongoose.connect('mongodb://127.0.0.1/stockapp', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -42,6 +43,7 @@ app.use(function(req, res, next){
 
 app.use("/", indexRoutes);
 app.use("/dashboard/:userid", dashboardRoutes);
+app.use("/portfolio/:userid", portfolioRoutes);
 app.use("/dashboard/:userid/:stockid/purchases", purchaseRoutes);
 
 var port = process.env.PORT || 3000;

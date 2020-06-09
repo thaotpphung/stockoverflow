@@ -7,6 +7,7 @@ var purchaseSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
+        username: String
     },
     quantity: Number,
     price: Number,

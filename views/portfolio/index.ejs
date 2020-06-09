@@ -1,0 +1,17 @@
+<%- include("../partials/header") %>
+
+<br>
+<br>
+<div id=testing>
+    <h4><%= currentUser %></h4>
+    <% purchases.forEach(function(purchase){ %>
+        <hr>
+        <h4><%=purchase.name%>
+            <h3>price:<%=purchase.price%> </h3>
+            <h3>quantiy=ty:<%=purchase.quantity%> </h3>
+        </h4>
+        <hr>
+    <% }); %>
+  </div>
+
+  <%- include("../partials/footer") %>

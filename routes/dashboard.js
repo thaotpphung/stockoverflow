@@ -11,7 +11,7 @@ router.get("/", function (req, res){
             console.log(err);
             res.redirect("/");
         } else {
-            console.log(foundUser)
+            // console.log(foundUser)
             res.render("dashboard/index", {stocks: foundUser.trackedstocks});
         }
     });
