@@ -1,18 +1,18 @@
-var express         = require("express"),
+let express         = require("express"),
     app             = express(),
     bodyParser      = require("body-parser"),
     mongoose        = require('mongoose'),
     passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
     // passportLocalMongoose = require("passport-local-mongoose"),
-    request = require("request"); // for API 
+    // request = require("request"); // for API 
     Stock           = require("./models/stock"),
     User            = require("./models/user"),
     Purchase        = require("./models/purchase"),
     seedDB          = require("./seeds");
 
 // requring routes
-var purchaseRoutes  = require("./routes/purchases"),
+let purchaseRoutes  = require("./routes/purchases"),
     dashboardRoutes = require("./routes/dashboard"),
     portfolioRoutes = require("./routes/portfolio"),
     indexRoutes     = require("./routes/index")
@@ -36,7 +36,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(function(req, res, next){
+app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
 });
@@ -46,7 +46,7 @@ app.use("/dashboard/:userid", dashboardRoutes);
 app.use("/portfolio/:userid", portfolioRoutes);
 app.use("/dashboard/:userid/:stockid/purchases", purchaseRoutes);
 
-var port = process.env.PORT || 3000;
-app.listen(port, function () {
+let port = process.env.PORT || 3000;
+app.listen(port, () => {
   console.log("Stock App Server Has Started!");
 });

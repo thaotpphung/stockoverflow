@@ -1,12 +1,12 @@
-var express = require("express");
-var router  = express.Router({mergeParams: true});
-var Stock = require("../models/stock");
-var User = require("../models/user");
+let express = require("express"),
+    router  = express.Router({mergeParams: true}),
+    Stock = require("../models/stock"),
+    User = require("../models/user");
 
 // INDEX - show all tracked stocks
-router.get("/", function (req, res){
+router.get("/", (req, res) => {
     // get all tracked stocks from DB
-    User.findById(req.params.userid).populate("trackedstocks").exec(function(err, foundUser){
+    User.findById(req.params.userid).populate("trackedstocks").exec((err, foundUser) => {
         if(err){
             console.log(err);
             res.redirect("/");
@@ -18,18 +18,18 @@ router.get("/", function (req, res){
 });
 
 // add tracked stocks to the shared stocks db
-router.post("/",isLoggedIn,function(req, res){
-    User.findById(req.params.userid).populate("trackedstocks").exec(function(err, user){
+router.post("/",isLoggedIn, (req, res) => {
+    User.findById(req.params.userid).populate("trackedstocks").exec((err, user) => {
         if(err){
             console.log(err);
             res.redirect("/");
         } else {
-            Stock.find({name: req.body.stock.name}, function (err, stock)
+            Stock.find({name: req.body.stock.name}, (err, stock) =>
             {   
                 if (stock.length) {  // already exists in stocks db
                     // check if exists in trackedstocks for user, if not add it
                     let counter = 0;
-                    user.trackedstocks.forEach(function (aStock){
+                    user.trackedstocks.forEach((aStock) => {
                         if (aStock.name == stock[0].name) {
                             return;
                         }
@@ -41,7 +41,7 @@ router.post("/",isLoggedIn,function(req, res){
                     }
                     res.redirect('/dashboard/' + user._id);
                 } else { // not exists, add to stock db and trackedstock db
-                    Stock.create(req.body.stock, function(err, stock){
+                    Stock.create(req.body.stock, (err, stock) => {
                         if(err){
                             console.log(err);
                         } else {
@@ -57,13 +57,13 @@ router.post("/",isLoggedIn,function(req, res){
  });
 
 // NEW - show form to create new tracked stock
-router.get("/new", isLoggedIn, function(req, res) {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("dashboard/new");
 })
 
 // show information of the chosen stock
-router.get("/:stockid", function(req, res) {
-    Stock.findById(req.params.stockid, function(err, foundStock){
+router.get("/:stockid", (req, res) => {
+    Stock.findById(req.params.stockid, (err, foundStock) => {
         if(err){
             console.log(err);
         } else {
@@ -74,7 +74,7 @@ router.get("/:stockid", function(req, res) {
 })
 
 //middleware
-function isLoggedIn(req, res, next){
+function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
         return next();
     }

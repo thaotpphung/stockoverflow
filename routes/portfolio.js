@@ -1,17 +1,16 @@
-var express = require("express");
-var router  = express.Router({mergeParams: true});
-var Stock = require("../models/stock");
-var User = require("../models/user");
+let express = require("express"),
+    router  = express.Router({mergeParams: true}),
+    Stock = require("../models/stock"),
+    User = require("../models/user");
 
 // INDEX - show all purchases
-router.get("/", isLoggedIn, function (req, res){
+router.get("/", isLoggedIn, (req, res) => {
     // get all tracked stocks from DB
-    User.findById(req.params.userid).populate("purchases").exec(function(err, foundUser){
+    User.findById(req.params.userid).populate("purchases").exec((err, foundUser) => {
         if(err){
             console.log(err);
             res.redirect("/");
         } else {
-            // console.log(foundUser)
             res.render("portfolio/index", {purchases: foundUser.purchases});
         }
     });

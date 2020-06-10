@@ -1,36 +1,36 @@
-var express = require("express");
-var router  = express.Router({mergeParams: true});
-var passport = require("passport");
-var User = require("../models/user");
+let express = require("express"),
+    router  = express.Router({mergeParams: true}),
+    passport = require("passport"),
+    User = require("../models/user");
 
 // root route
-router.get("/", function(req, res) {
+router.get("/", (req, res) => {
     res.render("landing");
 });
 
 // === AUTH ===
 // show register form
-router.get("/register", function(req, res){
+router.get("/register", (req, res) => {
     res.render("register"); 
  });
 
  //handle sign up logic
- router.post("/register", function(req, res){
-     var newUser = new User({username: req.body.username});
+ router.post("/register", (req, res) => {
+     let newUser = new User({username: req.body.username});
      // check unique valid user name here 
-     User.register(newUser, req.body.password, function(err, user){ // encode the password 
+     User.register(newUser, req.body.password, (err, user) => { // encode the password 
          if(err){
              console.log(err);
              return res.render("register");
          } 
-         passport.authenticate("local")(req, res, function(){ // log user in, serialize session
+         passport.authenticate("local")(req, res, () => { // log user in, serialize session
             res.redirect("/"); 
          });
      });
  });
  
  // show login form
- router.get("/login", function(req, res){
+ router.get("/login", (req, res) => {
     res.render("login"); 
  });
 
@@ -39,12 +39,12 @@ router.get("/register", function(req, res){
      {
         successRedirect: "/",
         failureRedirect: "/login"
-     }), function(req, res){
+     }), (req, res) => {
         res.redirect("/");
  });
  
  // logout route
- router.get("/logout", function(req, res){
+ router.get("/logout", (req, res) => {
     req.logout();
     res.redirect("/");
  });
