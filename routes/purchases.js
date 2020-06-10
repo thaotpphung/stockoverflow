@@ -34,13 +34,21 @@ router.post("/",isLoggedIn,function(req, res){
             if(err){
                 console.log(err);
             } else { 
-                purchase.user.id = req.user._id;
-                purchase.user.username = req.user.username;
-                //save purchase
-                purchase.save();
-                user.purchases.push(purchase);
-                user.save();
-                res.redirect('/dashboard/' + user._id);
+                Stock.findById(req.params.stockid, function(err, stock){
+                    if(err){
+                        console.log(err);
+                    } else { 
+                        purchase.name = stock.name;
+                        purchase.price = stock.price;
+                        purchase.user.id = req.user._id;
+                        purchase.user.username = req.user.username;
+                        //save purchase
+                        purchase.save();
+                        user.purchases.push(purchase);
+                        user.save();
+                        res.redirect('/portfolio/' + user._id);
+                    }
+                });
             }
         });
        }

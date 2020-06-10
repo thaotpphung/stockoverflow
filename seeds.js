@@ -5,15 +5,18 @@ var Stock = require("./models/stock");
 var data = [
     {
         name: "AMZ", 
-        description: "blah blah blah"
+        description: "blah blah blah",
+        price: "12"
     },
     {
-        name: "APPL", 
-        description: "blah blah blah 2"
+        name: "APL", 
+        description: "blah blah blah 2",
+        price: "15"
     },
     {
         name: "HULU", 
-        description: "hululuf"
+        description: "hululuf",
+        price: "20"
     }
 ]
 

@@ -19,20 +19,39 @@ router.get("/", function (req, res){
 
 // add tracked stocks to the shared stocks db
 router.post("/",isLoggedIn,function(req, res){
-    User.findById(req.params.userid, function(err, user){
+    User.findById(req.params.userid).populate("trackedstocks").exec(function(err, user){
         if(err){
             console.log(err);
             res.redirect("/");
         } else {
-         Stock.create(req.body.stock, function(err, stock){
-            if(err){
-                console.log(err);
-            } else {
-                user.trackedstocks.push(stock);
-                user.save();
-                res.redirect('/dashboard/' + user._id);
-            }
-         });
+            Stock.find({name: req.body.stock.name}, function (err, stock)
+            {   
+                if (stock.length) {  // already exists in stocks db
+                    // check if exists in trackedstocks for user, if not add it
+                    let counter = 0;
+                    user.trackedstocks.forEach(function (aStock){
+                        if (aStock.name == stock[0].name) {
+                            return;
+                        }
+                        counter++;
+                    });
+                    if (counter == user.trackedstocks.length){
+                        user.trackedstocks.push(stock[0]);
+                        user.save();
+                    }
+                    res.redirect('/dashboard/' + user._id);
+                } else { // not exists, add to stock db and trackedstock db
+                    Stock.create(req.body.stock, function(err, stock){
+                        if(err){
+                            console.log(err);
+                        } else {
+                            user.trackedstocks.push(stock);
+                            user.save();
+                            res.redirect('/dashboard/' + user._id);
+                        }
+                     });
+                }
+            });
         }
     });
  });

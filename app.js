@@ -5,11 +5,11 @@ var express         = require("express"),
     passport        = require("passport"),
     LocalStrategy   = require("passport-local"),
     // passportLocalMongoose = require("passport-local-mongoose"),
+    request = require("request"); // for API 
     Stock           = require("./models/stock"),
     User            = require("./models/user"),
     Purchase        = require("./models/purchase"),
     seedDB          = require("./seeds");
-// var request = require("request"); // for API 
 
 // requring routes
 var purchaseRoutes  = require("./routes/purchases"),

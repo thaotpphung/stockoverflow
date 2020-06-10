@@ -10,7 +10,7 @@ var purchaseSchema = mongoose.Schema({
         username: String
     },
     quantity: Number,
-    price: Number,
+    price: String,
     // time: Date
 });
 
