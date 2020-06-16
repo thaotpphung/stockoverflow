@@ -1,10 +1,11 @@
-let express = require("express"),
+const express = require("express"),
     router  = express.Router({mergeParams: true}),
     Stock = require("../models/stock"),
-    User = require("../models/user");
+    User = require("../models/user"),
+    middleware = require("../middleware");
 
 // INDEX - show all purchases
-router.get("/", isLoggedIn, (req, res) => {
+router.get("/", middleware.checkCorrectUser, (req, res) => {
     // get all tracked stocks from DB
     User.findById(req.params.userid).populate("purchases").exec((err, foundUser) => {
         if(err){
@@ -15,13 +16,5 @@ router.get("/", isLoggedIn, (req, res) => {
         }
     });
 });
-
-//middleware
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 module.exports = router;

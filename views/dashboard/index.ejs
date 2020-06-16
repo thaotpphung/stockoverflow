@@ -2,13 +2,16 @@
 
 <div id="dashboard-container">
     <div id=testing>
-      <h4><%= currentUser %></h4>
-      <a href="/dashboard/<%=currentUser._id%>/new">Add new stock</a>
-      <% stocks.forEach(function(stock){ %>
+      <% if (currentUser) { %>
+        <h4><%= currentUser %></h4>
+        <a href="/dashboard/<%=currentUser._id%>/new">Add new stock</a>
+        <% stocks.forEach(function(stock){ %>
           <h4><%=stock.name%>
               <a href="/dashboard/<%=currentUser._id%>/<%=stock._id%>" class="btn btn-primary">More Info</a>
-        </h4>
-      <% }); %>
+          </h4>
+        <% }); %>
+      <% } %>
+      
     </div>
     
     <div id="tracked-stocks">
@@ -54,8 +57,6 @@
     <div id="graphs">
         <h1>Graphs</h1>
     </div>
-
-    
 </div>
 
 <%- include("../partials/footer") %>

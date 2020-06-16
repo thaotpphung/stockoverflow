@@ -1,12 +1,16 @@
-let express = require("express"),
-    router  = express.Router({mergeParams: true}),
-    passport = require("passport"),
-    User = require("../models/user");
+const express = require("express"),
+      router  = express.Router({mergeParams: true}),
+      passport = require("passport"),
+      User = require("../models/user"),
+      middleware = require("../middleware");
 
 // root route
 router.get("/", (req, res) => {
     res.render("landing");
 });
+
+// dashboard invalid route
+router.get("/dashboard", middleware.isLoggedIn);
 
 // === AUTH ===
 // show register form
@@ -20,10 +24,11 @@ router.get("/register", (req, res) => {
      // check unique valid user name here 
      User.register(newUser, req.body.password, (err, user) => { // encode the password 
          if(err){
-             console.log(err);
-             return res.render("register");
+            req.flash("error", err.message);
+            return res.render("register");
          } 
          passport.authenticate("local")(req, res, () => { // log user in, serialize session
+            req.flash("success", "Welcome to Stockoverflow " + user.username);
             res.redirect("/"); 
          });
      });
@@ -46,15 +51,12 @@ router.get("/register", (req, res) => {
  // logout route
  router.get("/logout", (req, res) => {
     req.logout();
+    req.flash("success", "Logged you out!");
     res.redirect("/");
  });
- 
-//middleware
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
+router.get('*', function(req, res){
+   res.status(404).render("errorpage");
+});
+ 
 module.exports = router;

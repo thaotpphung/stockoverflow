@@ -1,24 +1,23 @@
-let express = require("express"),
+const express = require("express"),
     router  = express.Router({mergeParams: true}),
     Stock = require("../models/stock"),
-    User = require("../models/user");
+    User = require("../models/user"),
+    middleware = require("../middleware");
 
 // INDEX - show all tracked stocks
-router.get("/", (req, res) => {
-    // get all tracked stocks from DB
+router.get("/", middleware.checkCorrectUser, (req, res) => {
     User.findById(req.params.userid).populate("trackedstocks").exec((err, foundUser) => {
-        if(err){
+        if (err){
             console.log(err);
             res.redirect("/");
         } else {
-            // console.log(foundUser)
             res.render("dashboard/index", {stocks: foundUser.trackedstocks});
         }
     });
 });
 
 // add tracked stocks to the shared stocks db
-router.post("/",isLoggedIn, (req, res) => {
+router.post("/", middleware.checkCorrectUser, (req, res) => {
     User.findById(req.params.userid).populate("trackedstocks").exec((err, user) => {
         if(err){
             console.log(err);
@@ -38,6 +37,9 @@ router.post("/",isLoggedIn, (req, res) => {
                     if (counter == user.trackedstocks.length){
                         user.trackedstocks.push(stock[0]);
                         user.save();
+                        req.flash("success", "Successfully added stock");
+                    } else {
+                        req.flash("error", "Stock already exists");
                     }
                     res.redirect('/dashboard/' + user._id);
                 } else { // not exists, add to stock db and trackedstock db
@@ -47,6 +49,7 @@ router.post("/",isLoggedIn, (req, res) => {
                         } else {
                             user.trackedstocks.push(stock);
                             user.save();
+                            req.flash("success", "Successfully added stock");
                             res.redirect('/dashboard/' + user._id);
                         }
                      });
@@ -57,15 +60,16 @@ router.post("/",isLoggedIn, (req, res) => {
  });
 
 // NEW - show form to create new tracked stock
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleware.checkCorrectUser, (req, res) => {
     res.render("dashboard/new");
 })
 
 // show information of the chosen stock
-router.get("/:stockid", (req, res) => {
+router.get("/:stockid", middleware.checkCorrectUser, (req, res) => {
     Stock.findById(req.params.stockid, (err, foundStock) => {
-        if(err){
-            console.log(err);
+        if(err || !foundStock){
+            req.flash("error", "Stock not found");
+            res.redirect("back");
         } else {
             //render show template with that stock
             res.render("dashboard/show", {stock: foundStock});
@@ -73,12 +77,21 @@ router.get("/:stockid", (req, res) => {
     });
 })
 
-//middleware
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
+// DESTROY ROUTE - delete a tracked stock
+router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
+    User.findById(req.params.userid, (err, user) => {
+        if(err){
+            console.log(err);
+        } else {
+            const index = user.trackedstocks.indexOf(req.params.stockid);
+            if (index > -1) {
+                user.trackedstocks.splice(index, 1);
+                user.save();
+            }
+            req.flash("success", "Stock deleted");
+            res.redirect("/dashboard/" + req.params.userid);
+        }
+    });
+});
 
 module.exports = router;

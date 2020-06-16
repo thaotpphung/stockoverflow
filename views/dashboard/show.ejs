@@ -11,6 +11,9 @@
 
     <a class="btn btn-success" href="/dashboard/<%=currentUser._id%>/<%= stock._id %>/purchases/new">Buy Stock</a>
 
+    <form action="/dashboard/<%=currentUser._id%>/<%= stock._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger">Delete</button>
+    </form>
 </div>
 
 <%- include("../partials/footer") %>

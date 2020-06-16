@@ -1,20 +1,23 @@
-let express = require("express"),
+const express = require("express"),
     router  = express.Router({mergeParams: true}),
     User = require("../models/user"),
     Purchase = require("../models/purchase"),
-    Stock = require("../models/stock");
+    Stock = require("../models/stock"),
+    middleware = require("../middleware");
 
 // show purchase
 
 // New purchase - form to add purchase
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleware.checkCorrectUser, (req, res) => {
     User.findById(req.params.userid, (err, user) =>{
-        if(err){
-            console.log(err);
+        if(err || !user){
+            req.flash("error", "User not found");
+            res.redirect("back"); 
         } else {
             Stock.findById(req.params.stockid, (err, stock) => {
-                if(err){
-                    console.log(err);
+                if(err || !stock){
+                    req.flash("error", "Stock not found");
+                    res.redirect("back"); 
                 } else {
                     res.render("purchases/new", {user: user, stock: stock});
                 }
@@ -24,11 +27,11 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 //  creat - add purchase to db
-router.post("/",isLoggedIn, (req, res) => {
+router.post("/", middleware.checkCorrectUser, (req, res) => {
    User.findById(req.params.userid, (err, user) => {
-       if(err){
-           console.log(err);
-           res.redirect("/dashboard");
+       if(err || !user){
+            req.flash("error", "User not found");
+            res.redirect("back"); 
        } else {
             Purchase.create(req.body.purchase, (err, purchase) => {
             if(err){
@@ -42,10 +45,10 @@ router.post("/",isLoggedIn, (req, res) => {
                         purchase.price = stock.price;
                         purchase.user.id = req.user._id;
                         purchase.user.username = req.user.username;
-                        //save purchase
                         purchase.save();
                         user.purchases.push(purchase);
                         user.save();
+                        req.flash("success", "Successfully purchased stock");
                         res.redirect('/portfolio/' + user._id);
                     }
                 });
@@ -54,13 +57,5 @@ router.post("/",isLoggedIn, (req, res) => {
        }
    });
 });
-
-//middleware
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 module.exports = router;
