@@ -2,7 +2,8 @@ const express = require("express"),
     router  = express.Router({mergeParams: true}),
     Stock = require("../models/stock"),
     User = require("../models/user"),
-    middleware = require("../middleware");
+    middleware = require("../middleware"),
+    got = require('got');
 
 // INDEX - show all tracked stocks
 router.get("/", middleware.checkCorrectUser, (req, res) => {
@@ -11,7 +12,33 @@ router.get("/", middleware.checkCorrectUser, (req, res) => {
             console.log(err);
             res.redirect("/");
         } else {
-            res.render("dashboard/index", {stocks: foundUser.trackedstocks});
+            var datapoints = [];
+            const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?timeseries=20&apikey=demo";
+            chartIt();
+            async function fetchData()  {
+                try {
+                    const response = await got(api_url);
+                    let stockdata = JSON.parse(response.body)["historical"];
+                    stockdata.forEach((stock) => {
+                        datapoints.push({
+                            label: stock["date"],
+                            y: parseFloat(stock["open"])
+                        });
+                    });
+                    return datapoints;
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+            async function chartIt() {
+                try {
+                    datapoints =  await fetchData();
+                    console.log('data ne', datapoints);
+                    res.render("dashboard/index", {stocks: foundUser.trackedstocks, datapoints: datapoints});
+                } catch (error) {
+                    console.log('error', error);
+                }
+            }
         }
     });
 });

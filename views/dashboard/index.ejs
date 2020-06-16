@@ -56,6 +56,57 @@
 
     <div id="graphs">
         <h1>Graphs</h1>
+        <canvas id="chart"></canvas>
+        <script>
+          chartIt();
+          function chartIt () {
+            const data = JSON.parse('<%- JSON.stringify(datapoints) %>');
+            const xs = [];
+            const ys = [];
+            data.forEach(stock => {
+              xs.push(stock.label);
+              ys.push(stock.y);
+            });
+              const ctx = document.getElementById('chart').getContext('2d');
+              ctx.canvas.width = 1000
+              ctx.canvas.height = 300
+              const chart = new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                      labels: xs,
+                      datasets: [{
+                          label: 'Stock Price of IBM',
+                          data: ys,
+                          borderColor: ['rgba(75, 192, 192)'],
+                          borderWidth: 2,
+                          fill: false,
+                          lineTension: 0,
+                          pointRadius: 0.5
+                      }]
+                  },
+                  options: {
+                      scales: {
+                          yAxes: [{
+                              ticks: {
+                                  callback: function (value, index, values) {
+                                      return value + '$';
+                                  },
+                                  // stepSize: 1,
+                              },
+                              scaleLabel: {
+                                  display: true,
+                                  labelString: 'Openning Price ($)'
+                              }
+                          }],
+                          xAxes: [{
+          
+                          }]
+                      },
+                      
+                  }
+              });
+          }    
+          </script>
     </div>
 </div>
 
