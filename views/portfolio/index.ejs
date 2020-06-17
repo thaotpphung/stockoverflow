@@ -10,9 +10,10 @@
     <h4><%= currentUser %></h4>
     <% purchases.forEach(function(purchase){ %>
         <hr>
-        <h4>name: <%=purchase.name%>
+        <h4>name: <%=purchase.symbol%>
             <h3>price :<%=purchase.price%> </h3>
             <h3>quantiy :<%=purchase.quantity%> </h3>
+            <h3>time :<%=purchase.time%> </h3>
         </h4>
         <hr>
     <% }); %>

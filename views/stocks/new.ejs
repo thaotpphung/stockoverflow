@@ -3,9 +3,7 @@
 <h1> Add a new stock</h1>
 
 <form action ="/stocks/<%=currentUser._id%>" method="POST">
-    <input type="text" name="stock[name]" placeholder="name for new stock">
-    <input type="text" name="stock[description]" placeholder="description">
-    <input type="text" name="stock[price]" placeholder="price">
+    <input type="text" name="stock[symbol]" placeholder="symbol for new stock">
     <button>Submit!</button>
 </form>
 

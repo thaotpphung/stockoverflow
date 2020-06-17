@@ -39,10 +39,11 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
                     if(err){
                         console.log(err);
                     } else { 
-                        purchase.name = stock.name;
-                        purchase.price = stock.price;
-                        purchase.user.id = req.user._id;
-                        purchase.user.username = req.user.username;
+                        purchase.user.id = req.user._id;   // user purchase
+                        // info from stock table
+                        purchase.symbol = stock.symbol;
+                        purchase.price = stock.price[0];
+                        purchase.time = stock.time[0];
                         purchase.save();
                         user.purchases.push(purchase);
                         user.save();

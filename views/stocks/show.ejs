@@ -3,11 +3,16 @@
 <div id="testing">
     <h1>SHOW.EJS</h1>
 
-    <h1><%=stock.name%></h1>
-    
-    <h2><%=stock.description%></h2>
+    <h1><%=stock.symbol%></h2>
 
-    <h2><%=stock.price%></h2>
+    <h2><%=stock.price[0]%></h2>
+
+    <h2><%=stock.time[0]%></h2>
+
+    <h2><%=stock.change[0]%></h2>
+
+    <h2><%=stock.changepercent[0]%></h2>
+
 
     <a class="btn btn-success" href="/stocks/<%=currentUser._id%>/<%= stock._id %>/purchases/new">Buy Stock</a>
 

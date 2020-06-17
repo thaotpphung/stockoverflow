@@ -5,9 +5,7 @@
         <div style="width: 30%; margin: 25px auto;">
             <form action="/stocks/<%=user._id%>/<%=stock._id%>/purchases" method="POST">
                 <div class="form-group">
-                    <!-- <input class="form-control" type="text" name="purchase[name]" placeholder="name"> -->
                     <input class="form-control" type="number" name="purchase[quantity]" placeholder="quantity">
-                    <!-- <input class="form-control" type="number" name="purchase[price]" step="0.01" placeholder="price"> -->
                 </div>
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Submit!</button>
