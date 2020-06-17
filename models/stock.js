@@ -8,3 +8,10 @@ var StockSchema = new mongoose.Schema({
 
 module.exports = mongoose.model("Stock", StockSchema);
 
+
+// symbol: String, // AAPL
+// name: String,  // APPLE
+// time:[String],
+// price: [Number], // open price
+// change: [Number],
+// changepercent: [Number]

@@ -4,16 +4,18 @@ const express = require("express"),
     User = require("../models/user"),
     middleware = require("../middleware"),
     got = require('got');
+require("dotenv").config();
 
 // INDEX - show all tracked stocks
 router.get("/", middleware.checkCorrectUser, (req, res) => {
+    // console.log(process.env.API_KEY);
     User.findById(req.params.userid).populate("trackedstocks").exec((err, foundUser) => {
         if (err){
             console.log(err);
             res.redirect("/");
         } else {
             var datapoints = [];
-            const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?timeseries=20&apikey=demo";
+            const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?timeseries=30&apikey=demo";
             chartIt();
             async function fetchData()  {
                 try {
@@ -21,7 +23,7 @@ router.get("/", middleware.checkCorrectUser, (req, res) => {
                     let stockdata = JSON.parse(response.body)["historical"];
                     stockdata.forEach((stock) => {
                         datapoints.push({
-                            label: stock["date"],
+                            label: stock["label"],
                             y: parseFloat(stock["open"])
                         });
                     });
@@ -33,8 +35,7 @@ router.get("/", middleware.checkCorrectUser, (req, res) => {
             async function chartIt() {
                 try {
                     datapoints =  await fetchData();
-                    console.log('data ne', datapoints);
-                    res.render("dashboard/index", {stocks: foundUser.trackedstocks, datapoints: datapoints});
+                    res.render("stocks/index", {stocks: foundUser.trackedstocks, datapoints: datapoints});
                 } catch (error) {
                     console.log('error', error);
                 }
@@ -68,7 +69,7 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
                     } else {
                         req.flash("error", "Stock already exists");
                     }
-                    res.redirect('/dashboard/' + user._id);
+                    res.redirect('/stocks/' + user._id);
                 } else { // not exists, add to stock db and trackedstock db
                     Stock.create(req.body.stock, (err, stock) => {
                         if(err){
@@ -77,7 +78,7 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
                             user.trackedstocks.push(stock);
                             user.save();
                             req.flash("success", "Successfully added stock");
-                            res.redirect('/dashboard/' + user._id);
+                            res.redirect('/stocks/' + user._id);
                         }
                      });
                 }
@@ -88,7 +89,7 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
 
 // NEW - show form to create new tracked stock
 router.get("/new", middleware.checkCorrectUser, (req, res) => {
-    res.render("dashboard/new");
+    res.render("stocks/new");
 })
 
 // show information of the chosen stock
@@ -99,7 +100,7 @@ router.get("/:stockid", middleware.checkCorrectUser, (req, res) => {
             res.redirect("back");
         } else {
             //render show template with that stock
-            res.render("dashboard/show", {stock: foundStock});
+            res.render("stocks/show", {stock: foundStock});
         }
     });
 })
@@ -116,7 +117,7 @@ router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
                 user.save();
             }
             req.flash("success", "Stock deleted");
-            res.redirect("/dashboard/" + req.params.userid);
+            res.redirect("/stocks/" + req.params.userid);
         }
     });
 });

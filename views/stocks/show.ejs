@@ -9,9 +9,9 @@
 
     <h2><%=stock.price%></h2>
 
-    <a class="btn btn-success" href="/dashboard/<%=currentUser._id%>/<%= stock._id %>/purchases/new">Buy Stock</a>
+    <a class="btn btn-success" href="/stocks/<%=currentUser._id%>/<%= stock._id %>/purchases/new">Buy Stock</a>
 
-    <form action="/dashboard/<%=currentUser._id%>/<%= stock._id%>?_method=DELETE" method="POST">
+    <form action="/stocks/<%=currentUser._id%>/<%= stock._id%>?_method=DELETE" method="POST">
         <button class="btn btn-danger">Delete</button>
     </form>
 </div>

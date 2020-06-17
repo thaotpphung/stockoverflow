@@ -1,0 +1,7 @@
+<%- include("../partials/header") %>
+
+<h1>User Profile </h1>
+<h1><%=currentUser.username%></h1>
+<a class="btn btn-xs btn-warning" href="/users/<%=currentUser._id %>/edit">Edit</a>
+
+<%- include("../partials/footer") %>

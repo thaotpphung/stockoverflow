@@ -46,7 +46,7 @@
 						<a class="nav-item nav-link" href="/">HOME</a>
 					<% } else { %>
 						<a class="nav-item nav-link" href="/">HOME</a>
-						<a class="nav-item nav-link" href="/dashboard/<%=currentUser._id%>/">DASHBOARD</a>
+						<a class="nav-item nav-link" href="/stocks/<%=currentUser._id%>/">DASHBOARD</a>
 						<a class="nav-item nav-link" href="/portfolio/<%=currentUser._id%>/">PORTFOLIO</a>
 					<% } %>
 				</div>
@@ -58,7 +58,7 @@
 						<a class="nav-item nav-link" href="/login">LOG IN</a>
 						<a class="nav-item nav-link" href="/register">SIGN UP</a>
 					<% } else { %>
-						<a class="nav-item nav-link" >Welcome <%= currentUser.username %></a>
+						<a class="nav-item nav-link" href="/users/<%=currentUser._id%>">Welcome <%= currentUser.username %></a>
 						<a class="nav-item nav-link" href="/logout">LOG OUT</a>
 					<% } %>
 				</div>

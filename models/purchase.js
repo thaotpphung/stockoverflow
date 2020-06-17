@@ -15,3 +15,14 @@ var purchaseSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model("Purchase", purchaseSchema);
+
+// symbol: String,
+//     user: {
+//         id: {
+//             type: mongoose.Schema.Types.ObjectId,
+//             ref: "User"
+//         },
+//     },
+//     quantity: Number,
+//     price: String,
+//     time: String

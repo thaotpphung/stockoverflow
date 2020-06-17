@@ -3,7 +3,7 @@
     <div class="row">
         <h1 style="text-align: center">Add New Purchase to <%= user.username %></h1>
         <div style="width: 30%; margin: 25px auto;">
-            <form action="/dashboard/<%=user._id%>/<%=stock._id%>/purchases" method="POST">
+            <form action="/stocks/<%=user._id%>/<%=stock._id%>/purchases" method="POST">
                 <div class="form-group">
                     <!-- <input class="form-control" type="text" name="purchase[name]" placeholder="name"> -->
                     <input class="form-control" type="number" name="purchase[quantity]" placeholder="quantity">
@@ -13,7 +13,7 @@
                     <button class="btn btn-lg btn-primary btn-block">Submit!</button>
                 </div>
             </form>
-            <a href="/dashboard/<%=user._id%>">Go Back</a>
+            <a href="/stocks/<%=user._id%>">Go Back</a>
         </div>
     </div>
 </div>

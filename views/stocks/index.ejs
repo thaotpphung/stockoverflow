@@ -4,10 +4,10 @@
     <div id=testing>
       <% if (currentUser) { %>
         <h4><%= currentUser %></h4>
-        <a href="/dashboard/<%=currentUser._id%>/new">Add new stock</a>
+        <a href="/stocks/<%=currentUser._id%>/new">Add new stock</a>
         <% stocks.forEach(function(stock){ %>
           <h4><%=stock.name%>
-              <a href="/dashboard/<%=currentUser._id%>/<%=stock._id%>" class="btn btn-primary">More Info</a>
+              <a href="/stocks/<%=currentUser._id%>/<%=stock._id%>" class="btn btn-primary">More Info</a>
           </h4>
         <% }); %>
       <% } %>
@@ -102,7 +102,6 @@
           
                           }]
                       },
-                      
                   }
               });
           }    

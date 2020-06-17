@@ -9,9 +9,6 @@ router.get("/", (req, res) => {
     res.render("landing");
 });
 
-// dashboard invalid route
-router.get("/dashboard", middleware.isLoggedIn);
-
 // === AUTH ===
 // show register form
 router.get("/register", (req, res) => {
@@ -19,16 +16,22 @@ router.get("/register", (req, res) => {
  });
 
  //handle sign up logic
- router.post("/register", (req, res) => {
-     let newUser = new User({username: req.body.username});
-     // check unique valid user name here 
-     User.register(newUser, req.body.password, (err, user) => { // encode the password 
+ router.post("/register", (req, res) => { 
+      let newUser = new User({
+         username: req.body.username, 
+         firstname: req.body.firstname,
+         lastname: req.body.lastname, 
+         email: req.body.email
+      });
+      // check unique valid user name here 
+      User.register(newUser, req.body.password, (err, user) => { // encode the password 
          if(err){
+            console.log("error in register", err);
             req.flash("error", err.message);
             return res.render("register");
          } 
          passport.authenticate("local")(req, res, () => { // log user in, serialize session
-            req.flash("success", "Welcome to Stockoverflow " + user.username);
+            req.flash("success", "Welcome to Stockoverflow " + user.firstname);
             res.redirect("/"); 
          });
      });
@@ -38,7 +41,7 @@ router.get("/register", (req, res) => {
  router.get("/login", (req, res) => {
     res.render("login"); 
  });
-
+ 
  // handling login logic
  router.post("/login", passport.authenticate("local", 
      {

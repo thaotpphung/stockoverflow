@@ -5,8 +5,6 @@ const express = require("express"),
     Stock = require("../models/stock"),
     middleware = require("../middleware");
 
-// show purchase
-
 // New purchase - form to add purchase
 router.get("/new", middleware.checkCorrectUser, (req, res) => {
     User.findById(req.params.userid, (err, user) =>{

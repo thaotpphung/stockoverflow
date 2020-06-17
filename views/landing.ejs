@@ -10,26 +10,29 @@
                          A powerful tool to track and visualize stock data. 
                     </div>
                     <div id="intro-signup">
-                        <form>
+                        <form action="/register" method="POST">
                             <div class="form-row">
+                                <div class="col-6">
+                                    <input type="text" class="form-control" name="username" placeholder="Username">
+                                </div>
+                                <div class="col-6">
+                                    <input type="email" class="form-control" name="email" placeholder="Email">
+                                </div>
+                                
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="First name">
+                                    <input type="text" class="form-control" name="firstname" placeholder="First name">
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="Last name">
-                                </div>
-
-                                <div class="col-12">
-                                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                                    <input type="text" class="form-control" name="lastname" placeholder="Last name">
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class = "col-12">
-                                            <input type="password" class="form-control" id="password" placeholder="Password">
+                                            <input type="password" class="form-control" name="password" placeholder="Password">
                                         </div>
                                         <div class = "col-12">
-                                            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
+                                            <input type="password" class="form-control" name="confirm-password" placeholder="Confirm Password">
                                         </div>
                                     </div>
                                 </div>
@@ -44,11 +47,10 @@
                                 </div> 
 
                                 <div id="signup-button">
-                                    <button type="button" class="btn custom-signup-btn">Sign Up</button>
+                                    <button class="btn custom-signup-btn">Sign Up</button>
                                 </div>
-                                
                             </div>
-                          </form>
+                        </form>
                     </div>
                 </div>
                 <div id="introRight" class="col-12 col-lg-6 d-none d-md-block pb-5 pb-lg-0">
