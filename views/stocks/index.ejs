@@ -1,58 +1,121 @@
 <%- include("../partials/header") %>
 
 <div id="dashboard-container">
-    <div id=testing>
-      <% if (currentUser) { %>
-        <h4><%= currentUser %></h4>
-        <a href="/stocks/<%=currentUser._id%>/new">Add new stock</a>
-        <% stocks.forEach(function(stock){ %>
-          <h4><%=stock.symbol%>
-              <a href="/stocks/<%=currentUser._id%>/<%=stock._id%>" class="btn btn-primary">More Info</a>
-          </h4>
+  <div id="testing">
+    <a href="/stocks/<%=currentUser._id%>/new">Add new stock</a>
+  </div>
+
+  <% if (currentUser) { %>
+
+  <div id="tracked-stocks">
+    <h1>Tracked Stocks <i class="fa fa-plus"></i></h1>
+    <input type="text" placeholder="Search stock by tick symbol" />
+
+    <table id="tracked-stock-table" class="table table-hover">
+      <thead>
+        <tr>
+          <th style="width: 180px !important;" scope="col">Name</th>
+          <th scope="col">Tick Symbol</th>
+          <th scope="col">Current Price</th>
+          <th scope="col">Change(%)</th>
+          <th scope="col">Change(USD)</th>
+          <th scope="col">More Info</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% stocks.forEach(stock => { %>
+        <tr>
+          <th scope="row">
+            <span><i class="fa fa-trash"></i></span><%=stock.name%>
+          </th>
+          <td><%=stock.symbol%></td>
+          <td><%=stock.price[0]%></td>
+          <td <% if (stock.changepercent[0] < 0) { %>
+            class="negative" <% } else { %> class="possitive" <% } %>>
+            <%=stock.changepercent[0]%>
+          </td>
+          <td <% if (stock.changepercent[0] < 0) { %>
+            class="negative" <% } else { %> class="possitive" <% } %>>
+            <%=stock.change[0]%>
+          </td>
+          <!-- <td><input type="checkbox"></td> -->
+          <td>
+            <a
+              href="/stocks/<%=currentUser._id%>/<%=stock._id%>"
+              class="btn btn-primary"
+              >Click</a
+            >
+          </td>
+        </tr>
         <% }); %>
-      <% } %>
-      
-    </div>
-    
-    <div id="tracked-stocks">
-        <h1>Tracked Stocks <i class="fa fa-plus"></i></h1>
-        <input type="text" placeholder="Search stock by tick symbol">
+      </tbody>
+    </table>
+  </div>
 
-        <table id="tracked-stock-table" class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Tick Symbol</th>
-                <th scope="col">Current Price</th>
-                <th scope="col">Change(%)</th>
-                <th scope="col">Change(USD)</th>
-                <th scope="col">Graph Option</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row"><span><i class="fa fa-trash"></i></span>APPLE</th>
-                <td>APL</td>
-                <td>20.5</td>
-                <td>0.5</td>
-                <td>10</td>
-                <td><input type="checkbox"></td>
-              </tr>
-              <tr>
-                <th scope="row"><span><i class="fa fa-trash"></i></span>APPLE</th>
-                <td>APL</td>
-                <td>20.5</td>
-                <td>0.5</td>
-                <td>10</td>
-                <td><input type="checkbox"></td>
-              </tr>
-            </tbody>
-        </table>
-    </div>
 
-    <!-- <div id="graph-button">
+  <!-- <div id="graph-button">
         <button type="button" class="btn custom-graph-btn">Graph</button>
-    </div> -->
+  </div> -->
+  <div id="graphs">
+    <h1>Graphs</h1>
+    <% if (stocks.length > 0) { %>
+    <% stocks.forEach(stock => { %>
+    <canvas id="chart<%=stock.symbol%>"></canvas>
+    <hr />
+    <script>
+      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+      var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
+      ctx.canvas.width = 1000;
+      ctx.canvas.height = 350;
+      var color;
+      console.log(stockinfo.change[0]);
+      if (stockinfo.change[0] < 0) {
+        color = ["rgba(75, 192, 192)"]
+      } else {
+        color = ["#f5291b"]
+      }
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: stockinfo.time.slice().reverse(),
+          datasets: [
+            {
+              label: "Stock Price of " + stockinfo.symbol,
+              data: stockinfo.price.slice().reverse(),
+              borderColor: color,
+              borderWidth: 2,
+              fill: false,
+              lineTension: 0,
+              pointRadius: 0.5,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  callback: function (value, index, values) {
+                    return value + "$";
+                  },
+                  // stepSize: 1,
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: "Openning Price ($)",
+                },
+              },
+            ],
+            xAxes: [{}],
+          },
+        },
+      });
+    </script>
+    <% }); %>
+    <% } %>
+  </div>
 </div>
+
+<% } %>
 
 <%- include("../partials/footer") %>

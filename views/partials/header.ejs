@@ -1,87 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>StockOverflow</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="Stock Tracker and Data Visualization" />
 
-<head>
-	<meta charset="UTF-8" />
-	<title>StockOverflow</title>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Stock Tracker and Data Visualization" />
+    <!-- local css file -->
+    <link rel="stylesheet" type="text/css" href="/app.css" />
 
-	<!-- local css file -->
-	<link rel="stylesheet" type="text/css" href="/app.css" />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
 
-	<!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Font Awesome kit code -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+      integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
+      crossorigin="anonymous"
+    />
 
-	<!-- Font Awesome kit code -->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
-		integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V"
-		crossorigin="anonymous">
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
 
-	<!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
-	
-	<!-- chart.js -->
-	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script> 
-</head>
+    <!-- chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  </head>
 
-<body>
+  <body>
     <nav id="mainNav" class="navbar navbar-expand-md navbar-dark fixed-top">
-		<div class=" container-fluid">
-			<a class="navbar-brand" href="#">STOCKOVERFLOW</a>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">STOCKOVERFLOW</a>
 
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#navLinks, #logNavLinks" aria-label="Toggle navbar" aria-controls="navLinks"
-                aria-expanded="false">
-                
-				<span class="navbar-toggler-icon"></span>
-			</button>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navLinks, #logNavLinks"
+          aria-label="Toggle navbar"
+          aria-controls="navLinks"
+          aria-expanded="false"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-			<div id="navLinks" class="collapse navbar-collapse">
-				<div class="navbar-nav mr-auto pl-3">
-					<% if(!currentUser){ %>
-						<a class="nav-item nav-link" href="/">HOME</a>
-					<% } else { %>
-						<a class="nav-item nav-link" href="/">HOME</a>
-						<a class="nav-item nav-link" href="/stocks/<%=currentUser._id%>/">DASHBOARD</a>
-						<a class="nav-item nav-link" href="/portfolio/<%=currentUser._id%>/">PORTFOLIO</a>
-					<% } %>
-				</div>
-            </div>
-            
-            <div id="logNavLinks" class="collapse navbar-collapse">
-				<div class="navbar-nav ml-auto pl-3">
-                    <% if(!currentUser){ %>
-						<a class="nav-item nav-link" href="/login">LOG IN</a>
-						<a class="nav-item nav-link" href="/register">SIGN UP</a>
-					<% } else { %>
-						<a class="nav-item nav-link" href="/users/<%=currentUser._id%>">Welcome <%= currentUser.username %></a>
-						<a class="nav-item nav-link" href="/logout">LOG OUT</a>
-					<% } %>
-				</div>
-			</div>
+        <div id="navLinks" class="collapse navbar-collapse">
+          <div class="navbar-nav mr-auto pl-3">
+            <% if(!currentUser){ %>
+            <a class="nav-item nav-link" href="/">HOME</a>
+            <% } else { %>
+            <a class="nav-item nav-link" href="/">HOME</a>
+            <a class="nav-item nav-link" href="/stocks/<%=currentUser._id%>/"
+              >DASHBOARD</a
+            >
+            <a class="nav-item nav-link" href="/portfolio/<%=currentUser._id%>/"
+              >PORTFOLIO</a
+            >
+            <% } %>
+          </div>
+        </div>
 
-		</div>
-	</nav>
+        <div id="logNavLinks" class="collapse navbar-collapse">
+          <div class="navbar-nav ml-auto pl-3">
+            <% if(!currentUser){ %>
+            <a class="nav-item nav-link" href="/login">LOG IN</a>
+            <a class="nav-item nav-link" href="/register">SIGN UP</a>
+            <% } else { %>
+            <a class="nav-item nav-link" href="/users/<%=currentUser._id%>"
+              >Welcome <%= currentUser.username %></a
+            >
+            <a class="nav-item nav-link" href="/logout">LOG OUT</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </nav>
 
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-
-	<div id="flash-mes" class="container">
-        <% if(error && error.length > 0){ %>
-            <div class="alert alert-danger" role="alert">
-                <%= error %>
-            </div>
-        <% } %>
-        <% if(success && success.length > 0){ %>
-            <div class="alert alert-success" role="alert">
-                <%= success %>
-            </div>
-        <% } %>
+    <div id="flash-mes" class="container">
+      <% if(error && error.length > 0){ %>
+      <div class="alert alert-danger" role="alert">
+        <%= error %>
+      </div>
+      <% } %> <% if(success && success.length > 0){ %>
+      <div class="alert alert-success" role="alert">
+        <%= success %>
+      </div>
+      <% } %>
     </div>
+  </body>
+</html>

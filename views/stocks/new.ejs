@@ -1,10 +1,18 @@
 <%- include("../partials/header") %>
 
-<h1> Add a new stock</h1>
+<form action="/search" method="GET">
+  <button>Search</button>
+</form>
 
-<form action ="/stocks/<%=currentUser._id%>" method="POST">
-    <input type="text" name="stock[symbol]" placeholder="symbol for new stock">
-    <button>Submit!</button>
+<h1>Add a new stock</h1>
+<form action="/stocks/<%=currentUser._id%>" method="POST">
+  <input
+    type="text"
+    name="stock[symbol]"
+    placeholder="symbol for new stock"
+    value="<%=searchTerm%>"
+  />
+  <button>Submit!</button>
 </form>
 
 <a href="/stocks/<%=currentUser._id%>">Go Back</a>

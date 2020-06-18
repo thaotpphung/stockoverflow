@@ -1,25 +1,31 @@
 <%- include("../partials/header") %>
 
 <div id="testing">
-    <h1>SHOW.EJS</h1>
+  <h1>SHOW.EJS</h1>
 
-    <h1><%=stock.symbol%></h2>
+  <h1>Symbol: <%=stock.symbol%></h1>
+  <h2>Name: <%=stock.name%></h2>
 
-    <h2><%=stock.price[0]%></h2>
+  <h2><%=stock.price[0]%></h2>
 
-    <h2><%=stock.time[0]%></h2>
+  <h2><%=stock.time[0]%></h2>
 
-    <h2><%=stock.change[0]%></h2>
+  <h2><%=stock.change[0]%></h2>
 
-    <h2><%=stock.changepercent[0]%></h2>
+  <h2><%=stock.changepercent[0]%></h2>
 
+  <a
+    class="btn btn-success"
+    href="/stocks/<%=currentUser._id%>/<%= stock._id %>/purchases/new"
+    >Buy Stock</a
+  >
 
-    <a class="btn btn-success" href="/stocks/<%=currentUser._id%>/<%= stock._id %>/purchases/new">Buy Stock</a>
-
-    <form action="/stocks/<%=currentUser._id%>/<%= stock._id%>?_method=DELETE" method="POST">
-        <button class="btn btn-danger">Delete</button>
-    </form>
+  <form
+    action="/stocks/<%=currentUser._id%>/<%= stock._id%>?_method=DELETE"
+    method="POST"
+  >
+    <button class="btn btn-danger">Delete</button>
+  </form>
 </div>
 
 <%- include("../partials/footer") %>
-

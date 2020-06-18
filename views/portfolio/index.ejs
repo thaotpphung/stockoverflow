@@ -1,22 +1,36 @@
 <%- include("../partials/header") %>
 
-<br>
-<br>
-<br>
-<br>
-<br>
+<% if (currentUser) { %>
 
-<div id=testing>
-    <h4><%= currentUser %></h4>
-    <% purchases.forEach(function(purchase){ %>
-        <hr>
-        <h4>name: <%=purchase.symbol%>
-            <h3>price :<%=purchase.price%> </h3>
-            <h3>quantiy :<%=purchase.quantity%> </h3>
-            <h3>time :<%=purchase.time%> </h3>
-        </h4>
-        <hr>
-    <% }); %>
+<div id="dashboard-container">
+  <div id="tracked-stocks">
+    <h1>Transaction History</h1>
+    <table id="tracked-stock-table" class="table table-hover">
+      <thead>
+        <tr>
+          <!-- <th style="width: 180px !important;" scope="col">Name</th> -->
+          <th scope="col">Tick Symbol</th>
+          <th scope="col">Bought Time</th>
+          <th scope="col">Bought Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% purchases.forEach(function(purchase){ %>
+        <tr>
+          <td><%=purchase.symbol%></td>
+          <td><%=purchase.time%></td>
+          <td><%=purchase.price%></td>
+          <td><%=purchase.quantity%></td>
+          <td><%=(purchase.quantity*purchase.price).toFixed(2)%></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
   </div>
+  </div>
+</div>
 
-  <%- include("../partials/footer") %>
+<% } %>
+<%- include("../partials/footer") %>

@@ -4,26 +4,38 @@
 }
 
 html {
-font-size: 100%;
+  font-size: 100%;
 }
 
 body {
-background-color: #1a2a5a!important; 
-background-size: cover;
+  background-color: #1a2a5a !important;
+  background-size: cover;
+}
+
+#flash-mes {
+  margin-top: 62px;
+}
+
+.negative {
+  color: red;
+}
+
+.possitive {
+  color: green;
 }
 
 /* ----------------------------Navbar---------------------------- */
 a.navbar-brand {
-font-family: "lato", sans-serif;
-font-weight: bold;
-font-size: 1.5rem;
+  font-family: "lato", sans-serif;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
 .navbar-dark .navbar-nav .nav-link {
-color: white;
-font-family: "lato", sans-serif;
-font-weight: 300 ;
-font-size: 1.1rem;
+  color: white;
+  font-family: "lato", sans-serif;
+  font-weight: 300;
+  font-size: 1.1rem;
 }
 
 #mainNav {
@@ -31,11 +43,11 @@ font-size: 1.1rem;
 }
 
 #mainNav .nav-link:hover {
-color: #3CAEA3 !important; 
+  color: #3caea3 !important;
 }
 
 .active {
-color:  #3CAEA3  !important;
+  color: #3caea3 !important;
 }
 
 /* .navbar.scrolled {
@@ -45,36 +57,35 @@ background-color: #6A7E7A;
 /* }  
 
 /* ----------------------Home-header section---------------------------- */
-.jumbotron{
-height: 100vh;
-padding-top: 8rem !important;
-margin-bottom: 0 !important;
-background-color: #1a2a5a!important; 
-/* background: url("https://wallpapercave.com/wp/wp2128226.jpg"); */
-/* background-size: cover;
+.jumbotron {
+  height: 100vh;
+  padding-top: 4rem !important;
+  margin-bottom: 0 !important;
+  background-color: #1a2a5a !important;
+  /* background: url("https://wallpapercave.com/wp/wp2128226.jpg"); */
+  /* background-size: cover;
 background-position: center; */
 }
 
 #intro {
-height: 70vh;
+  height: 70vh;
 }
 
 #stock-image {
-background: url("https://wallpapercave.com/wp/wp2128226.jpg");
-/* background-position: center; */
-background-repeat: no-repeat;
-background-size: cover;
-margin: 0 auto;
-height: 100%;
-width: auto;
-max-width: 100%;
-
+  background: url("https://wallpapercave.com/wp/wp2128226.jpg");
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0 auto;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
 }
 
 #banner {
   color: white;
   font-size: 1.8em;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 100;
 }
 
@@ -91,7 +102,7 @@ max-width: 100%;
 }
 
 .btn.custom-signup-btn {
-  background-color: #3CAEA3;
+  background-color: #3caea3;
   color: #495057;
   width: 100%;
 }
@@ -112,66 +123,75 @@ max-width: 100%;
 
 /* ----------------------------Dashboard---------------------------- */
 #dashboard-container {
-  padding-top: 8rem !important;
+  padding-top: 4rem !important;
   margin: 0 12em;
   min-width: 700px;
 }
 
 /* ----------Dashboard-tracked stocks------------------------ */
-#tracked-stocks, #graphs {
+#tracked-stocks,
+#graphs {
   background-color: white;
   border: black solid 1px;
   margin-bottom: 2em;
-}   
+}
 
-#tracked-stocks h1, #graphs h1  {
-background: #111720;
-color: white;
-margin: 0;
-padding: 10px 20px;
-text-transform: uppercase;
-font-size: 24px;
-font-weight: normal;
+#tracked-stocks h1,
+#graphs h1 {
+  background: #111720;
+  color: white;
+  margin: 0;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: normal;
 }
 
 #tracked-stock-table {
-margin-bottom: 0;
+  margin-bottom: 0;
 }
 
-#tracked-stocks .fa-plus, #graphs .fa-plus {
-float: right;
+#tracked-stocks .table td,
+#tracked-stocks .table th {
+  vertical-align: middle;
+  padding: 0.5rem !important;
+}
+
+#tracked-stocks .fa-plus,
+#graphs .fa-plus {
+  float: right;
 }
 
 #tracked-stocks span {
-background: #e74c3c;
-margin-right: 5px;
-text-align: center;
-color: white;
-width: 0;
-display: inline-block;
-transition: 0.2s linear;
-opacity: 0;
+  background: #e74c3c;
+  margin-right: 5px;
+  text-align: center;
+  color: white;
+  width: 0;
+  display: inline-block;
+  transition: 0.2s linear;
+  opacity: 0;
 }
 
 #tracked-stocks th:hover span {
-width: 40px;
-opacity: 1.0;
+  width: 40px;
+  opacity: 1;
 }
 
 #tracked-stocks input {
-font-size: 18px;
-color: #2980b9;
-background-color: #f7f7f7;
-width: 100%;
-padding: 13px 13px 13px 20px;
-box-sizing: border-box;
-border: 3px solid rgba(0,0,0,0);
+  font-size: 18px;
+  color: #2980b9;
+  background-color: #f7f7f7;
+  width: 100%;
+  padding: 13px 13px 13px 20px;
+  box-sizing: border-box;
+  border: 3px solid rgba(0, 0, 0, 0);
 }
 
-#tracked-stocks input:focus{
-background: #fff;
-border: 3px solid #2980b9;
-outline: none;
+#tracked-stocks input:focus {
+  background: #fff;
+  border: 3px solid #2980b9;
+  outline: none;
 }
 
 /* ----------Dashboard-Graphs------------------------ */
