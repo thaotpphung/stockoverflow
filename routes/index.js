@@ -5,6 +5,7 @@ const express = require("express"),
   StockSearch = require("../models/stocksearch"),
   middleware = require("../middleware"),
   got = require("got");
+
 require("dotenv").config();
 
 // root route
@@ -13,20 +14,22 @@ router.get("/", (req, res) => {
 });
 
 // root route
-router.get("/search", middleware.isLoggedIn, (req, res) => {
+router.get("/search", (req, res) => {
   res.render("search");
 });
 
+// db.stocksearch.find({symbol: {$regex: 'A'}})
+
 // post search route
-router.post("/search", middleware.isLoggedIn, (req, res) => {
-  StockSearch.find({ symbol: req.body.searchTerm }, (err, foundStock) => {
-    if (foundStock.length) {
-      res.render("stocks/new", { searchTerm: req.body.searchTerm });
-    } else {
-      req.flash("error", "Can't find stock, please try again");
-      res.redirect("back");
+router.post("/search", (req, res) => {
+  console.log(req.body.searchTerm);
+  StockSearch.find(
+    { symbol: { $regex: req.body.searchTerm } },
+    (err, foundStock) => {
+      // if (foundStock.length) {
+      res.json({ foundStock });
     }
-  });
+  );
 });
 
 // === AUTH ===

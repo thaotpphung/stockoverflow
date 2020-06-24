@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>StockOverflow</title>
     <!-- Required meta tags -->
-    <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -84,7 +83,7 @@
             <a class="nav-item nav-link" href="/register">SIGN UP</a>
             <% } else { %>
             <a class="nav-item nav-link" href="/users/<%=currentUser._id%>"
-              >Welcome <%= currentUser.username %></a
+              >Welcome, <%= currentUser.username %></a
             >
             <a class="nav-item nav-link" href="/logout">LOG OUT</a>
             <% } %>

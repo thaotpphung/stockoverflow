@@ -17,11 +17,42 @@ body {
 }
 
 .negative {
-  color: red;
+  color: #FF0000;
 }
 
 .possitive {
-  color: green;
+  color: #3caea3;
+}
+
+
+.mgtop {
+  padding-top: 4rem !important;
+}
+
+.user-info {
+  /* text-align: center; */
+  color: white;
+  padding-top: 1rem;
+  padding-right: 0 !important;
+  padding-left: 4rem !important;
+  font-family: "lato", sans-serif;
+  font-weight: 300;
+  font-size: 1.3rem;
+}
+
+.border-black { 
+  background-color: rgba(82, 103, 168, 0.3) !important;
+  border:black solid 1px;
+  padding-bottom: 2em;
+}
+
+.mg-2 {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.fa-edit, .fa-plus {
+  color: white;
 }
 
 /* ----------------------------Navbar---------------------------- */
@@ -64,7 +95,7 @@ background-color: #6A7E7A;
   background-color: #1a2a5a !important;
   /* background: url("https://wallpapercave.com/wp/wp2128226.jpg"); */
   /* background-size: cover;
-background-position: center; */
+  background-position: center; */
 }
 
 #intro {
@@ -72,7 +103,7 @@ background-position: center; */
 }
 
 #stock-image {
-  background: url("https://wallpapercave.com/wp/wp2128226.jpg");
+  background: url("img/landing-stock.jpg");
   /* background-position: center; */
   background-repeat: no-repeat;
   background-size: cover;
@@ -93,21 +124,20 @@ background-position: center; */
   font-weight: 400;
 }
 
-#intro-signup {
-  padding-top: 2em;
-}
-
 #intro-signup .form-row .form-control {
   margin: 1em;
 }
 
-.btn.custom-signup-btn {
+.custom-signup-btn {
   background-color: #3caea3;
-  color: #495057;
-  width: 100%;
+  /* color: #495057; */
+  color: white;
+  font-family: "lato", sans-serif ;
+
+  /* width: 100%; */
 }
 
-#signup-button {
+.signup-button {
   margin: 0 auto;
   width: 20%;
   padding-top: 1em;
@@ -129,15 +159,26 @@ background-position: center; */
 }
 
 /* ----------Dashboard-tracked stocks------------------------ */
-#tracked-stocks,
-#graphs {
+
+.empty-mes {
+  text-align: center;
+  color: white;
+  font-family: "lato", sans-serif;
+  background-color: rgba(82, 103, 168, 0.3);
+  border:black solid 1px;
+  margin-bottom: 2em;
+  font-weight: 300;
+  font-size: 1.3rem;
+  padding: 1em;
+}
+
+#tracked-stocks {
   background-color: white;
   border: black solid 1px;
   margin-bottom: 2em;
 }
 
-#tracked-stocks h1,
-#graphs h1 {
+.header-black {
   background: #111720;
   color: white;
   margin: 0;
@@ -151,22 +192,27 @@ background-position: center; */
   margin-bottom: 0;
 }
 
+.row-header {
+  overflow: hidden;
+  height: 25px !important;
+}
+
 #tracked-stocks .table td,
 #tracked-stocks .table th {
   vertical-align: middle;
-  padding: 0.5rem !important;
 }
 
-#tracked-stocks .fa-plus,
-#graphs .fa-plus {
+#tracked-stocks .table td{
+  text-align: center;
+}
+
+.header-fa {
   float: right;
 }
 
 #tracked-stocks span {
-  background: #e74c3c;
-  margin-right: 5px;
+  color: black;
   text-align: center;
-  color: white;
   width: 0;
   display: inline-block;
   transition: 0.2s linear;
@@ -192,6 +238,27 @@ background-position: center; */
   background: #fff;
   border: 3px solid #2980b9;
   outline: none;
+}
+
+#searchResult {
+  width: 100%;
+}
+
+.search-item, .notfound-mes {
+  display: block;
+  min-width: 100%;
+  padding: .5rem 1rem;
+  margin: auto 1rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: white;
+  border-top: 1px solid #dee2e6;;
+}
+.search-item:hover, .chosen {
+  background-color: rgb(235, 235, 235);
 }
 
 /* ----------Dashboard-Graphs------------------------ */

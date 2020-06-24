@@ -1,7 +1,164 @@
 <%- include("../partials/header") %>
 
-<h1>User Profile</h1>
-<h1><%=currentUser.username%></h1>
-<a class="btn btn-xs btn-warning" href="/users/<%=currentUser._id %>/edit">Edit</a>
+<form action="/users/<%=currentUser._id %>/edit%>" method="GET">
+<div class="container mgtop">
+  <div class="row justify-content-center">
+    <div class="col 10 col-lg-8">
+
+      <div id="intro-signup" class="border-black">
+        <h1 class="header-black">Basic Infomation</h1>
+        <div class="form-row pt-3">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">User Name:</div>
+              <div class="col-7 user-info">
+                <%=currentUser.username %>
+                <!-- <input
+                  type="text"
+                  class="form-control"
+                  name="username"
+                  value=<%=currentUser.username %>
+                  readonly="readonly"
+                /> -->
+              </div>
+              <div class="col-2 signup-button">
+                <a href="/users/<%=currentUser._id %>/edit">
+                  <i class="fas fa-edit fa-lg"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Email:</div>
+              <div class="col-7 user-info">
+                <%=currentUser.email %>
+              </div>
+              <div class="col-2 signup-button">
+                <a href="/users/<%=currentUser._id %>/edit">
+                  <i class="fas fa-edit fa-lg"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">First Name:</div>
+              <div class="col-7 user-info">
+                <%=currentUser.firstname %>
+              </div>
+              <div class="col-2 signup-button">
+                <a href="/users/<%=currentUser._id %>/edit">
+                  <i class="fas fa-edit fa-lg"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Last Name:</div>
+              <div class="col-7 user-info">
+                <%=currentUser.lastname %>
+              </div>
+              <div class="col-2 signup-button">
+                <a href="/users/<%=currentUser._id %>/edit">
+                  <i class="fas fa-edit fa-lg"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div id="intro-signup" class="border-black mg-2">
+        <h1 class="header-black">Account Balance</h1>
+        <div class="form-row pt-2">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-5 user-info">Current Balance</div>
+              <div class="col-6 user-info">
+                <%=currentUser.firstname %>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-5 user-info">New Balance:</div>
+              <div class="col-6 ">
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-9"> </div>
+              <div class="col-2 signup-button">
+                <button class="btn custom-signup-btn">
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+      <div id="intro-signup" class="border-black mg-2">
+        <h1 class="header-black">Password</h1>
+        <div class="form-row pt-3">
+          <div class="col-12">
+            <div class="row">
+              <div class="col-5 user-info">Current Password:</div>
+              <div class="col-6 ">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="lastname"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-5 user-info">New Password:</div>
+              <div class="col-6 ">
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-5 user-info">Re-type New Password:</div>
+              <div class="col-6 ">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="firstname"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="row">
+              <div class="col-9"> </div>
+              <div class="col-2 signup-button">
+                <button class="btn custom-signup-btn">
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%- include("../partials/footer") %>

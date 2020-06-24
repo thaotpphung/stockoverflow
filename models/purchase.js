@@ -8,6 +8,7 @@ var purchaseSchema = mongoose.Schema({
     },
   },
   symbol: String,
+  name: String,
   price: Number,
   time: String,
   quantity: Number,

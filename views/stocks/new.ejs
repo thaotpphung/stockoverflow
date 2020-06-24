@@ -1,20 +1,71 @@
 <%- include("../partials/header") %>
 
-<form action="/search" method="GET">
-  <button>Search</button>
-</form>
+<!-- <input id="searchStock" type="text" placeholder="Search stock by tick symbol" />
+<div id="searchResult"></div> -->
 
-<h1>Add a new stock</h1>
 <form action="/stocks/<%=currentUser._id%>" method="POST">
-  <input
-    type="text"
-    name="stock[symbol]"
-    placeholder="symbol for new stock"
-    value="<%=searchTerm%>"
-  />
-  <button>Submit!</button>
+  <div class="container mgtop">
+    <div class="row justify-content-center">
+      <div class="col 4 col-lg-4">
+        <div class="pl-3 text-center" id="banner">
+          ADD A NEW STOCK
+        </div>
+        <div id="intro-signup">
+          <div class="form-row">
+            <div class="col-12">
+              <input
+                id="searchStock"
+                class="form-control mb-0"
+                type="text"
+                name="stock[symbol]"
+                placeholder="Enter tick symbol"
+                value="<%=searchTerm%>"
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="col-12" id="searchResult"></div>
+            <div class="signup-button">
+              <button class="btn custom-signup-btn">
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>
 
-<a href="/stocks/<%=currentUser._id%>">Go Back</a>
+<!-- <form action="/stocks/<%=currentUser._id%>" method="POST">
+  <div class="container mgtop">
+    <div class="row justify-content-center">
+      <div class="col 4 col-lg-4">
+        <div class="pl-3 text-center" id="banner">
+          ADD A NEW STOCK
+        </div>
+        <div id="intro-signup">
+          <div class="form-row">
+            <div class="col-12 ">
+              <input
+                class="form-control"
+                type="text"
+                name="stock[symbol]"
+                placeholder="Enter Tick Symbol"
+                value="<%=searchTerm%>"
+                required
+              />
+            </div>
+            <div class="signup-button">
+              <button class="btn custom-signup-btn">
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form> -->
 
 <%- include("../partials/footer") %>

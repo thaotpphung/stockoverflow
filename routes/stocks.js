@@ -23,145 +23,109 @@ router.get("/", middleware.checkCorrectUser, (req, res) => {
 });
 
 // add tracked stocks to the stocks db
-router.post("/", middleware.checkCorrectUser, (req, res) => {
-  // find user and populate trackedstocks field
-  User.findById(req.params.userid)
-    .populate("trackedstocks")
-    .exec((err, user) => {
-      if (err) {
-        console.log(err);
-        res.redirect("/");
+router.post("/", middleware.checkCorrectUser, async (req, res) => {
+  const queryStock = req.body.stock.symbol;
+  const queryBody = req.body.stock;
+  const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/" 
+    + queryStock +
+    "?timeseries=30&apikey=" +
+    process.env.API_KEY;
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  checkUpdate(queryStock, queryBody, dd, api_url).then( newStock => {
+    User.findById(req.params.userid).populate("trackedstocks").exec((err, user) => {
+      console.log("find user here");
+      console.log("not in tracked", notInTrackedStocks(user.trackedstocks, queryStock));
+      console.log('newstock in main', newStock);
+      if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
+        user.trackedstocks.push(newStock.newStock);
+        user.save();
+        req.flash("success", "Successfully added stock");
       } else {
-        // check if the stock is in SHARED stock db
-        Stock.find({ symbol: req.body.stock.symbol }, (err, foundStock) => {
-          console.log(foundStock);
-          const queryStock = req.body.stock.symbol;
-          const api_url =
-            "https://financialmodelingprep.com/api/v3/historical-price-full/" +
-            queryStock +
-            "?timeseries=30&apikey=" +
-            process.env.API_KEY;
-          if (foundStock.length) {
-            // means that the query returns some stocks of the same name => already exists in SHARED stocks db
-            // check if the stock price is up to date
-            if (foundStock[0].time.length === 0) {
-              Stock.deleteOne({ symbol: queryStock }, (err) => {
-                console.log(err);
-                req.flash("There is an error, please try again");
-                res.redirect("back");
-              });
-            } else {
-              let stockday = foundStock[0].time[0]
-                .split(" ")[1]
-                .substring(0, 2);
-              var today = new Date();
-              let dd = String(today.getDate()).padStart(2, "0");
-              // eval(require("locus"));
+        req.flash("error", "Stock already exists");
+      }
+      res.redirect("/stocks/" + user._id);
+    });
+  })
+});
 
-              if (!(stockday === dd)) {
-                // means that the newest date is not up to date
-                // make api call to update the price,time
-                addToStock();
-                async function fetchData() {
-                  try {
-                    const response = await got(api_url);
-                    let stockdata = JSON.parse(response.body)["historical"];
-                    stockdata.forEach((aStock) => {
-                      foundStock[0].time.push(aStock["label"]);
-                      foundStock[0].price.push(aStock["open"]);
-                      foundStock[0].change.push(aStock["change"]);
-                      foundStock[0].changepercent.push(aStock["changePercent"]);
-                    });
-                    foundStock[0].save();
-                  } catch (error) {
-                    console.log(error);
-                  }
-                }
-                async function addToStock() {
-                  try {
-                    await fetchData();
-                  } catch (error) {
-                    console.log("error", error);
-                  }
-                }
-              }
-            }
-            // done update SHARED stocks if needed
-            // check if exists in trackedstocks for user, if not add it
-            let counter = 0;
-            user.trackedstocks.forEach((aStock) => {
-              if (aStock.symbol == foundStock[0].symbol) {
-                return;
-              }
-              counter++;
-            });
-            // checked all tracked stock array, can't find it then push it to the trackedstock
-            if (counter == user.trackedstocks.length) {
-              user.trackedstocks.push(foundStock[0]);
-              user.save();
-              req.flash("success", "Successfully added stock");
-            } else {
-              req.flash("error", "Stock already exists");
-            }
-            res.redirect("/stocks/" + user._id);
-          } else {
-            // not exists in the SHARED stock db, make API call and add to stock db and trackedstock array of the user
-            addToStock2();
-            async function fetchData2() {
-              try {
-                const response = await got(api_url);
-                let stockdata = JSON.parse(response.body)["historical"];
-                Stock.create(req.body.stock, (err, newStock) => {
-                  if (err) {
-                    console.log(err);
-                    req.flash(
-                      "error",
-                      "Can't get stock, please try another one"
-                    );
-                    res.redirect("back");
-                  } else {
-                    stockdata.forEach((aStock) => {
-                      newStock.time.push(aStock["label"]);
-                      newStock.price.push(aStock["open"]);
-                      newStock.change.push(aStock["change"]);
-                      newStock.changepercent.push(aStock["changePercent"]);
-                    });
-
-                    StockSearch.find({ symbol: req.body.stock.symbol })
-                      .then((foundSearchStock) => {
-                        newStock.name = foundSearchStock[0].name;
-                        newStock.save();
-                        user.trackedstocks.push(newStock);
-                        user.save();
-                        req.flash("success", "Successfully added stock");
-                        res.redirect("/stocks/" + user._id);
-                      })
-                      .catch((err) => {
-                        console.log("error in finding stock search", err);
-                        req.flash(
-                          "error",
-                          "Can't find stock, please try another one"
-                        );
-                        res.redirect("/stocks/" + user._id);
-                      });
-                  }
-                });
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            async function addToStock2() {
-              try {
-                await fetchData2();
-              } catch (error) {
-                console.log("error", error);
-              }
-            }
-          }
+function checkUpdate(queryStock, queryBody, dd, api_url){
+  return new Promise((resolve, reject) => {
+    var result;
+    Stock.findOne({symbol: queryStock}, (err, foundStock)  => {
+      if (foundStock && !(foundStock.lastupdated === dd)) {
+        console.log("not up to date");
+        Stock.deleteOne({symbol: queryStock}, () => {
+          console.log("deleted old data")
+          processData(queryBody, queryStock, api_url, dd).then(aNewStock => {
+            console.log('after process data', aNewStock);
+            result = aNewStock;
+            resolve(result);
+          }) ;
         });
+      } else if (!foundStock) {
+        processData(queryBody, queryStock, api_url, dd).then(aNewStock => {
+          console.log('after process data',aNewStock);
+          result = aNewStock;
+          resolve(result);
+        }) ;
+      } else {
+        console.log("not changed")
+        result = foundStock;
+        resolve(result);
       }
     });
-});
+  });
+}
+
+async function fetchData(api_url) {
+  try {
+    return await got(api_url);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function processData(queryBody, queryStock, api_url, dd) {
+  try {
+    var response = await fetchData(api_url);
+    return new Promise((resolve, reject) => {
+      let stockdata = JSON.parse(response.body)["historical"];
+      Stock.create(queryBody, (err, newStock) => {
+        if (err) {
+          console.log(err);
+        } else {
+          stockdata.forEach((aStock) => {
+            newStock.time.push(aStock["label"]);
+            newStock.price.push(Math.round(aStock["open"] * 100));
+            newStock.change.push(aStock["change"]);
+            newStock.changepercent.push(aStock["changePercent"]);
+            newStock.lastupdated = dd;
+          });
+          StockSearch.findOne({ symbol: queryStock}, (err, foundSearchStock)  => {
+            newStock.name = foundSearchStock.name;
+            newStock.save();
+            resolve({newStock});
+          });
+        }
+      });
+    })
+  } catch (error) {
+    console.log("error in process data", error);
+  }
+}
+
+function notInTrackedStocks(trackedstocks, queryStock){
+  let counter = 0;
+  trackedstocks.forEach((aStock) => {
+    if (aStock.symbol == queryStock) {
+      return;
+    }
+    counter++;
+  });
+  // checked all tracked stock array, can't find it => not exist in trackedStocks
+  return (counter === trackedstocks.length) ? true : false;
+}
 
 // NEW - show form to create new tracked stock
 router.get("/new", middleware.checkCorrectUser, (req, res) => {

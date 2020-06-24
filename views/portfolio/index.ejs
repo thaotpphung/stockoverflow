@@ -3,12 +3,21 @@
 <% if (currentUser) { %>
 
 <div id="dashboard-container">
+  <% if (currentUser.purchases.length === 0) { %>
+    <div>
+      <h1 class="header-black">Transaction History</h1>
+      <div class="empty-mes">
+        You haven't made any purchases
+      </div>
+    </div>
+    
+    <% } else { %>
   <div id="tracked-stocks">
-    <h1>Transaction History</h1>
+    <h1 class="header-black">Transaction History</h1>
     <table id="tracked-stock-table" class="table table-hover">
       <thead>
         <tr>
-          <!-- <th style="width: 180px !important;" scope="col">Name</th> -->
+          <th scope="col">Name</th>
           <th scope="col">Tick Symbol</th>
           <th scope="col">Bought Time</th>
           <th scope="col">Bought Price</th>
@@ -19,16 +28,22 @@
       <tbody>
         <% purchases.forEach(function(purchase){ %>
         <tr>
+          <th scope="row" >
+            <div class="row-header">
+              <%=purchase.name%>
+            </div>
+          </th>
           <td><%=purchase.symbol%></td>
           <td><%=purchase.time%></td>
-          <td><%=purchase.price%></td>
+          <td><%=Math.floor(purchase.price/100)%>.<%=(purchase.price)%100%></td>
           <td><%=purchase.quantity%></td>
-          <td><%=(purchase.quantity*purchase.price).toFixed(2)%></td>
+          <td><%=Math.floor((purchase.quantity*purchase.price)/100)%>.<%=(purchase.quantity*purchase.price)%100%></td>
         </tr>
         <% }); %>
       </tbody>
     </table>
   </div>
+  <% } %>
   </div>
 </div>
 

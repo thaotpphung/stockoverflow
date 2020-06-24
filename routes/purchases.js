@@ -42,6 +42,7 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
               purchase.user.id = req.user._id; // user purchase
               // info from stock table
               purchase.symbol = stock.symbol;
+              purchase.name = stock.name;
               purchase.price = stock.price[0];
               purchase.time = new Date().toJSON().slice(0, 10);
               purchase.save();

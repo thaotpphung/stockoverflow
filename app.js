@@ -11,7 +11,7 @@ let express = require("express"),
   User = require("./models/user");
 // Purchase        = require("./models/purchase"),
 // StockSearch     = require("./models/stocksearch")
-// seedDB          = require("./seeds")
+seedDB          = require("./seeds")
 
 // requring routes
 let purchaseRoutes = require("./routes/purchases"),
@@ -26,12 +26,13 @@ mongoose.connect("mongodb://127.0.0.1/stockapp", {
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.use(flash());
-// seedDB();
+seedDB();
 
 // PASSPORT CONFIGURATION
 app.use(

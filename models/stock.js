@@ -7,6 +7,7 @@ var StockSchema = new mongoose.Schema({
   price: [Number], // open price
   change: [Number],
   changepercent: [Number],
+  lastupdated: String
 });
 
 module.exports = mongoose.model("Stock", StockSchema);
