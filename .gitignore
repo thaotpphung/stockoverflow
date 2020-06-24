@@ -7,3 +7,12 @@ node_modules/
 .env
 
 draft.html
+
+frontend/
+
+realsearch.json
+
+search.json
+
+seeds.js 
+
