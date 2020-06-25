@@ -39,8 +39,6 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
             if (err) {
               console.log(err);
             } else {
-              purchase.user.id = req.user._id; // user purchase
-              // info from stock table
               purchase.symbol = stock.symbol;
               purchase.name = stock.name;
               purchase.price = stock.price[0];

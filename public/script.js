@@ -108,3 +108,24 @@ function renderHTML(found) {
   }
   searchResult.innerHTML = htmlString;
 }
+
+$(".editEmail").click((event) => {
+  fadeForm($("#editEmailForm"));
+  
+});
+
+$(".editFirst").click((event) => {
+  fadeForm($("#editFirstForm"));
+});
+
+$(".editLast").click((event) => {
+  fadeForm($("#editLastForm"));
+});
+
+function fadeForm($edit) {
+  if ($edit.is(':visible')) {
+    $edit.fadeOut(300, () => $edit.hide());
+  } else {
+    $edit.fadeIn(300, () => $edit.show());
+  }
+}

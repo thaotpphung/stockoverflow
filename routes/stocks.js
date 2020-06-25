@@ -1,3 +1,5 @@
+const stock = require("../models/stock");
+
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
   Stock = require("../models/stock"),
@@ -26,95 +28,67 @@ router.get("/", middleware.checkCorrectUser, (req, res) => {
 router.post("/", middleware.checkCorrectUser, async (req, res) => {
   const queryStock = req.body.stock.symbol;
   const queryBody = req.body.stock;
-  const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/" 
-    + queryStock +
-    "?timeseries=30&apikey=" +
-    process.env.API_KEY;
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, "0");
-  checkUpdate(queryStock, queryBody, dd, api_url).then( newStock => {
-    User.findById(req.params.userid).populate("trackedstocks").exec((err, user) => {
-      console.log("find user here");
-      console.log("not in tracked", notInTrackedStocks(user.trackedstocks, queryStock));
-      console.log('newstock in main', newStock);
-      if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
-        user.trackedstocks.push(newStock.newStock);
-        user.save();
-        req.flash("success", "Successfully added stock");
-      } else {
-        req.flash("error", "Stock already exists");
-      }
-      res.redirect("/stocks/" + user._id);
-    });
-  })
+  const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ queryStock + "?timeseries=30&apikey=" + process.env.API_KEY;
+  const dd = String((new Date()).getDate()).padStart(2, "0");
+
+  var newStock = await checkSharedStockDB(queryStock, queryBody, dd, api_url);
+  
+  var user = await User.findById(req.params.userid).populate("trackedstocks");
+    if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
+      user.trackedstocks.push(newStock);
+      user.save();
+      req.flash("success", "Successfully added stock");
+    } else { // stock already in trackedstocks
+      req.flash("error", "Stock already exists");
+    }
+    res.redirect("/stocks/" + user._id);
 });
 
-function checkUpdate(queryStock, queryBody, dd, api_url){
-  return new Promise((resolve, reject) => {
-    var result;
-    Stock.findOne({symbol: queryStock}, (err, foundStock)  => {
-      if (foundStock && !(foundStock.lastupdated === dd)) {
-        console.log("not up to date");
-        Stock.deleteOne({symbol: queryStock}, () => {
-          console.log("deleted old data")
-          processData(queryBody, queryStock, api_url, dd).then(aNewStock => {
-            console.log('after process data', aNewStock);
-            result = aNewStock;
-            resolve(result);
-          }) ;
-        });
-      } else if (!foundStock) {
-        processData(queryBody, queryStock, api_url, dd).then(aNewStock => {
-          console.log('after process data',aNewStock);
-          result = aNewStock;
-          resolve(result);
-        }) ;
-      } else {
-        console.log("not changed")
-        result = foundStock;
-        resolve(result);
-      }
-    });
-  });
-}
-
-async function fetchData(api_url) {
-  try {
-    return await got(api_url);
-  } catch (error) {
-    console.log(error);
+/* 
+check if stock is in shared db 
+return foundstock if already exists
+return newly created stock if not 
+*/
+async function checkSharedStockDB(queryStock, queryBody, dd, api_url){
+  try{
+    var newstock;
+    var foundStock = await Stock.findOne({symbol: queryStock});
+    if (foundStock && !(foundStock.lastupdated === dd)) {
+      await Stock.deleteOne({symbol: queryStock});
+      newstock = await processData(queryBody, queryStock, api_url, dd);
+    } else if (!foundStock) {
+      newstock = await processData(queryBody, queryStock, api_url, dd);
+    } else {
+      newstock = foundStock;
+    }
+    return newstock;
+  } catch (err) {
+    console.log(err);
   }
 }
 
 async function processData(queryBody, queryStock, api_url, dd) {
   try {
-    var response = await fetchData(api_url);
-    return new Promise((resolve, reject) => {
-      let stockdata = JSON.parse(response.body)["historical"];
-      Stock.create(queryBody, (err, newStock) => {
-        if (err) {
-          console.log(err);
-        } else {
-          stockdata.forEach((aStock) => {
-            newStock.time.push(aStock["label"]);
-            newStock.price.push(Math.round(aStock["open"] * 100));
-            newStock.change.push(aStock["change"]);
-            newStock.changepercent.push(aStock["changePercent"]);
-            newStock.lastupdated = dd;
-          });
-          StockSearch.findOne({ symbol: queryStock}, (err, foundSearchStock)  => {
-            newStock.name = foundSearchStock.name;
-            newStock.save();
-            resolve({newStock});
-          });
-        }
-      });
-    })
-  } catch (error) {
-    console.log("error in process data", error);
+    var response = await got(api_url);
+    let stockdata = JSON.parse(response.body)["historical"];
+    var newStock = await Stock.create(queryBody);
+    stockdata.forEach((aStock) => {
+      newStock.time.push(aStock["label"]);
+      newStock.price.push(Math.round(aStock["open"] * 100));
+      newStock.change.push(aStock["change"]);
+      newStock.changepercent.push(aStock["changePercent"]);
+      newStock.lastupdated = dd;
+    });
+    var foundSearchStock = await StockSearch.findOne({ symbol: queryStock});
+    newStock.name = foundSearchStock.name;
+    newStock.save();
+    return newStock;
+  } catch (err) {
+    console.log(err);
   }
 }
 
+// checked all tracked stock array, can't find it => not exist in trackedStocks
 function notInTrackedStocks(trackedstocks, queryStock){
   let counter = 0;
   trackedstocks.forEach((aStock) => {
@@ -123,7 +97,6 @@ function notInTrackedStocks(trackedstocks, queryStock){
     }
     counter++;
   });
-  // checked all tracked stock array, can't find it => not exist in trackedStocks
   return (counter === trackedstocks.length) ? true : false;
 }
 
@@ -162,5 +135,17 @@ router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
     }
   });
 });
+
+// function updateDB() {
+//   Stock.find({}, (err, stocks) =>  {
+//     stocks.forEach(stock => {
+//       Stock.findOneAndUpdate({ symbol: stock.symbol }, {$set: { time: ["July 1", "July 2", "July 3"] } }, {new: true}, (err, updatedStock) => {
+//         console.log(updatedStock);
+//       });
+//     });
+//   });
+// }
+
+// setInterval(updateDB, 5000);
 
 module.exports = router;

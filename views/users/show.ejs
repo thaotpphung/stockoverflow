@@ -1,6 +1,6 @@
 <%- include("../partials/header") %>
 
-<form action="/users/<%=currentUser._id %>/edit%>" method="GET">
+<div id="user-link" class="d-none">localhost:3000/users/<%=currentUser._id %></div>
 <div class="container mgtop">
   <div class="row justify-content-center">
     <div class="col 10 col-lg-8">
@@ -8,26 +8,18 @@
       <div id="intro-signup" class="border-black">
         <h1 class="header-black">Basic Infomation</h1>
         <div class="form-row pt-3">
+
+          <!-- username -->
           <div class="col-12">
             <div class="row">
               <div class="col-3 user-info">User Name:</div>
               <div class="col-7 user-info">
                 <%=currentUser.username %>
-                <!-- <input
-                  type="text"
-                  class="form-control"
-                  name="username"
-                  value=<%=currentUser.username %>
-                  readonly="readonly"
-                /> -->
-              </div>
-              <div class="col-2 signup-button">
-                <a href="/users/<%=currentUser._id %>/edit">
-                  <i class="fas fa-edit fa-lg"></i>
-                </a>
               </div>
             </div>
           </div>
+
+          <!-- email -->
           <div class="col-12">
             <div class="row">
               <div class="col-3 user-info">Email:</div>
@@ -35,12 +27,33 @@
                 <%=currentUser.email %>
               </div>
               <div class="col-2 signup-button">
-                <a href="/users/<%=currentUser._id %>/edit">
-                  <i class="fas fa-edit fa-lg"></i>
-                </a>
+                <i class="fas fa-edit fa-lg editEmail"></i>
               </div>
             </div>
+
+            <div id="editEmailForm" class="editForm">
+              <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+              <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-6 pl-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="email"
+                      value=<%=currentUser.email %>
+                    />
+                  </div>
+                  <div class="col-2 signup-button">
+                    <button class="btn custom-signup-btn">
+                      Confirm
+                    </button>
+                  </div>
+              </div>
+              </form>
+            </div>
           </div>
+
+          <!-- firstname -->
           <div class="col-12">
             <div class="row">
               <div class="col-3 user-info">First Name:</div>
@@ -48,12 +61,33 @@
                 <%=currentUser.firstname %>
               </div>
               <div class="col-2 signup-button">
-                <a href="/users/<%=currentUser._id %>/edit">
-                  <i class="fas fa-edit fa-lg"></i>
-                </a>
+                <i class="fas fa-edit fa-lg editFirst"></i>
               </div>
             </div>
+
+            <div id="editFirstForm" class="editForm">
+              <form  action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-6 pl-5">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="firstname"
+                        value=<%=currentUser.firstname %>
+                      />
+                    </div>
+                    <div class="col-2 signup-button">
+                      <button class="btn custom-signup-btn">
+                        Confirm
+                      </button>
+                    </div>
+                </div>
+              </form>
+            </div>
           </div>
+
+          <!-- lasstname -->
           <div class="col-12">
             <div class="row">
               <div class="col-3 user-info">Last Name:</div>
@@ -61,90 +95,85 @@
                 <%=currentUser.lastname %>
               </div>
               <div class="col-2 signup-button">
-                <a href="/users/<%=currentUser._id %>/edit">
-                  <i class="fas fa-edit fa-lg"></i>
-                </a>
+                <i class="fas fa-edit fa-lg editLast"></i>
               </div>
             </div>
+            <div id="editLastForm" class="editForm">
+              <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+              <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-6 pl-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="lastname"
+                      value=<%=currentUser.lastname %>
+                    />
+                  </div>
+                  <div class="col-2 signup-button">
+                    <button class="btn custom-signup-btn">
+                      Confirm
+                    </button>
+                  </div>
+              </div>
+              </form>
+            </div>
           </div>
+          
         </div>
       </div>
 
-      <!-- <div id="intro-signup" class="border-black mg-2">
-        <h1 class="header-black">Account Balance</h1>
-        <div class="form-row pt-2">
-          <div class="col-12">
-            <div class="row">
-              <div class="col-5 user-info">Current Balance</div>
-              <div class="col-6 user-info">
-                <%=currentUser.firstname %>
-              </div>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="row">
-              <div class="col-5 user-info">New Balance:</div>
-              <div class="col-6 ">
-                <input
-                  type="email"
-                  class="form-control"
-                  name="email"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="row">
-              <div class="col-9"> </div>
-              <div class="col-2 signup-button">
-                <button class="btn custom-signup-btn">
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
+      <!-- Password -->
+
+      <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
 
       <div id="intro-signup" class="border-black mg-2">
         <h1 class="header-black">Password</h1>
+        
         <div class="form-row pt-3">
+
           <div class="col-12">
             <div class="row">
               <div class="col-5 user-info">Current Password:</div>
               <div class="col-6 ">
                 <input
-                  type="text"
+                  type="password"
                   class="form-control"
-                  name="lastname"
+                  name="oldpassword"
+                  required
                 />
               </div>
             </div>
           </div>
+
           <div class="col-12">
             <div class="row">
               <div class="col-5 user-info">New Password:</div>
               <div class="col-6 ">
                 <input
-                  type="email"
+                  type="password"
                   class="form-control"
-                  name="email"
+                  name="newpassword"
+                  required
                 />
               </div>
             </div>
           </div>
+
           <div class="col-12">
             <div class="row">
               <div class="col-5 user-info">Re-type New Password:</div>
               <div class="col-6 ">
                 <input
-                  type="text"
+                  type="password"
                   class="form-control"
-                  name="firstname"
+                  name="confirmnewpassword"
+                  required
                 />
               </div>
             </div>
           </div>
+
           <div class="col-12">
             <div class="row">
               <div class="col-9"> </div>
@@ -155,8 +184,11 @@
               </div>
             </div>
           </div>
+          
         </div>
       </div>
+    </form>
+
     </div>
   </div>
 </div>

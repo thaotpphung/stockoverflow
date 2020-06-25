@@ -5,17 +5,26 @@
     <h1 style="text-align: center;">Change User Info</h1>
     <div style="width: 30%; margin: 25px auto;">
       <h1>Basic Info</h1>
+      
       <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
         <input
           type="text"
-          name="user[username]"
+          name="username"
           value="<%= currentUser.username %>"
         />
+        <button>Confirm Change</button>
+      </form>
+
+      <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
         <input
           type="text"
-          name="user[firstname]"
+          name="firstname"
           value="<%= currentUser.firstname %>"
         />
+        <button>Confirm Change</button>
+      </form>
+
+      <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
         <input
           type="text"
           name="user[lastname]"
@@ -26,7 +35,6 @@
           name="user[email]"
           value="<%= currentUser.email %>"
         />
-        <button>Confirm Change</button>
       </form>
 
       <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">

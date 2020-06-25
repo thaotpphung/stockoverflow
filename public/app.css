@@ -276,3 +276,8 @@ margin-bottom: 3em;
 #testing {
   background-color: white;
 }
+
+/* ----------Users----------------------- */
+.editForm {
+  display: none;
+}
