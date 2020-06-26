@@ -6,6 +6,7 @@ var purchaseSchema = mongoose.Schema({
   price: Number,
   time: String,
   quantity: Number,
+  
 });
 
 module.exports = mongoose.model("Purchase", purchaseSchema);

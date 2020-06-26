@@ -5,7 +5,7 @@
     </h1>
     <div style="width: 30%; margin: 25px auto;">
       <form
-        action="/stocks/<%=user._id%>/<%=stock._id%>/purchases"
+        action="/purchases/<%=user._id%>/<%=stock._id%>"
         method="POST"
       >
         <div class="form-group">
@@ -22,7 +22,6 @@
           </button>
         </div>
       </form>
-      <a href="/stocks/<%=user._id%>">Go Back</a>
     </div>
   </div>
 </div>

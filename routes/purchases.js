@@ -5,8 +5,25 @@ const express = require("express"),
   Stock = require("../models/stock"),
   middleware = require("../middleware");
 
+// index route
+router.get("/", middleware.checkCorrectUser, (req, res) => {
+  // get all tracked stocks from DB
+  User.findById(req.params.userid)
+    .populate("purchases")
+    .exec((err, foundUser) => {
+      if (err) {
+        console.log(err);
+        res.redirect("/");
+      } else {
+        res.render("purchases/index", {
+          purchases: foundUser.purchases,
+        });
+      }
+    });
+});
+
 // New purchase - form to add purchase
-router.get("/new", middleware.checkCorrectUser, (req, res) => {
+router.get("/:stockid/new", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid, (err, user) => {
     if (err || !user) {
       req.flash("error", "User not found");
@@ -24,8 +41,8 @@ router.get("/new", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
-//  creat - add purchase to db
-router.post("/", middleware.checkCorrectUser, (req, res) => {
+//  create - add purchase to db
+router.post("/:stockid/", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid, (err, user) => {
     if (err || !user) {
       req.flash("error", "User not found");
@@ -47,7 +64,7 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
               user.purchases.push(purchase);
               user.save();
               req.flash("success", "Successfully purchased stock");
-              res.redirect("/portfolio/" + user._id);
+              res.redirect("/purchases/" + user._id);
             }
           });
         }

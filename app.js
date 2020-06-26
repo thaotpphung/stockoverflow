@@ -17,7 +17,7 @@ let express = require("express"),
 // requring routes
 let purchaseRoutes = require("./routes/purchases"),
   stockRoutes = require("./routes/stocks"),
-  portfolioRoutes = require("./routes/portfolio"),
+  // portfolioRoutes = require("./routes/portfolio"),
   userRoutes = require("./routes/users"),
   indexRoutes = require("./routes/index");
 
@@ -59,8 +59,8 @@ app.use((req, res, next) => {
 
 app.use("/stocks/:userid", stockRoutes);
 app.use("/users/:userid", userRoutes);
-app.use("/portfolio/:userid", portfolioRoutes);
-app.use("/stocks/:userid/:stockid/purchases", purchaseRoutes);
+// app.use("/portfolio/:userid", portfolioRoutes);
+app.use("/purchases/:userid", purchaseRoutes);
 app.use("/", indexRoutes);
 
 let port = process.env.PORT || 3000;
