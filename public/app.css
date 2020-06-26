@@ -51,7 +51,7 @@ body {
   margin-bottom: 2em;
 }
 
-.fa-edit, .fa-plus {
+.fa-edit, .fa-plus, .fa-sync-alt{
   color: white;
 }
 
@@ -208,6 +208,7 @@ background-color: #6A7E7A;
 
 .header-fa {
   float: right;
+  padding-left: 1rem;
 }
 
 #tracked-stocks span {

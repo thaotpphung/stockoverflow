@@ -1,10 +1,14 @@
+const { response } = require("express");
+const { resolveInclude } = require("ejs");
+
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
   passport = require("passport"),
   User = require("../models/user"),
   StockSearch = require("../models/stocksearch"),
   middleware = require("../middleware"),
-  got = require("got");
+  got = require("got"),
+  Stock = require("../models/stock");
 
 require("dotenv").config();
 
@@ -14,13 +18,11 @@ router.get("/", (req, res) => {
 });
 
 // root route
-router.get("/search", (req, res) => {
-  res.render("search");
-});
+// router.get("/search", (req, res) => {
+//   res.render("search");
+// });
 
-// db.stocksearch.find({symbol: {$regex: 'A'}})
-
-// post search route
+// get search route
 router.post("/search", (req, res) => {
   console.log(req.body.searchTerm);
   StockSearch.find(
@@ -31,6 +33,27 @@ router.post("/search", (req, res) => {
     }
   );
 });
+
+// router.post("/update", async (req, res) => {
+//   console.log(req.body);
+//   let query = req.body.query.split(",");
+//   let response = await getStocks(query);
+//   res.json(response);
+// });
+
+// function getStocks (query) {
+//   return new Promise( async (resolve, reject) => {
+//     var re = [];
+//     for (i = 0; i < query.length; i ++){
+//       var foundStock = await Stock.findOne({symbol: query[i]});
+//       re.push(foundStock);
+//       if (i === (query.length - 1)) {
+//         resolve(re);
+//       }
+//     }
+//   });
+// }
+
 
 // === AUTH ===
 // show register form

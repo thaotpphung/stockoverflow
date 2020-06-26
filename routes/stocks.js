@@ -31,17 +31,19 @@ router.post("/", middleware.checkCorrectUser, async (req, res) => {
   const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ queryStock + "?timeseries=30&apikey=" + process.env.API_KEY;
   const dd = String((new Date()).getDate()).padStart(2, "0");
 
+  // return the stock in db, create new one if neccessary
   var newStock = await checkSharedStockDB(queryStock, queryBody, dd, api_url);
-  
+
   var user = await User.findById(req.params.userid).populate("trackedstocks");
-    if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
-      user.trackedstocks.push(newStock);
-      user.save();
-      req.flash("success", "Successfully added stock");
-    } else { // stock already in trackedstocks
-      req.flash("error", "Stock already exists");
-    }
-    res.redirect("/stocks/" + user._id);
+
+  if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
+    user.trackedstocks.push(newStock);
+    user.save();
+    req.flash("success", "Successfully added stock");
+  } else { // stock already in trackedstocks
+    req.flash("error", "Stock already exists");
+  }
+  res.redirect("/stocks/" + user._id);
 });
 
 /* 
@@ -52,37 +54,13 @@ return newly created stock if not
 async function checkSharedStockDB(queryStock, queryBody, dd, api_url){
   try{
     var newstock;
-    var foundStock = await Stock.findOne({symbol: queryStock});
-    if (foundStock && !(foundStock.lastupdated === dd)) {
-      await Stock.deleteOne({symbol: queryStock});
-      newstock = await processData(queryBody, queryStock, api_url, dd);
-    } else if (!foundStock) {
-      newstock = await processData(queryBody, queryStock, api_url, dd);
-    } else {
+    const foundStock = await Stock.findOne({symbol: queryStock});
+    if (foundStock) { // if found the stock, return it
       newstock = foundStock;
+    } else { // if not, create the stock
+      newstock = await createNewStock(queryBody, queryStock, api_url, dd, true);
     }
     return newstock;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-async function processData(queryBody, queryStock, api_url, dd) {
-  try {
-    var response = await got(api_url);
-    let stockdata = JSON.parse(response.body)["historical"];
-    var newStock = await Stock.create(queryBody);
-    stockdata.forEach((aStock) => {
-      newStock.time.push(aStock["label"]);
-      newStock.price.push(Math.round(aStock["open"] * 100));
-      newStock.change.push(aStock["change"]);
-      newStock.changepercent.push(aStock["changePercent"]);
-      newStock.lastupdated = dd;
-    });
-    var foundSearchStock = await StockSearch.findOne({ symbol: queryStock});
-    newStock.name = foundSearchStock.name;
-    newStock.save();
-    return newStock;
   } catch (err) {
     console.log(err);
   }
@@ -136,16 +114,50 @@ router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
-// function updateDB() {
-//   Stock.find({}, (err, stocks) =>  {
-//     stocks.forEach(stock => {
-//       Stock.findOneAndUpdate({ symbol: stock.symbol }, {$set: { time: ["July 1", "July 2", "July 3"] } }, {new: true}, (err, updatedStock) => {
-//         console.log(updatedStock);
-//       });
-//     });
-//   });
-// }
+async function updateDB() {
+  var stocks = await Stock.find({});
+  stocks.forEach( async (stock) => {
+    var stock = await Stock.findOne({symbol: stock.symbol});
+    const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.API_KEY;
+    const dd = String((new Date()).getDate()).padStart(2, "0");
+    createNewStock({symbol: stock.symbol}, stock.symbol, api_url, dd, false);
+  });
+  console.log("just updated!");
+}
 
-// setInterval(updateDB, 5000);
+// update daily every 1 hour
+setInterval(updateDB, 1000 * 60 * 55);
+// setInterval(updateDB, 1000 );
+
+async function createNewStock(queryBody, queryStock, api_url, dd, flag) {
+  try {
+    var response = await got(api_url);
+    let stockdata = JSON.parse(response.body)["historical"];
+    var newStock;
+    if (flag) {
+      newStock = await Stock.create(queryBody);
+    } else {
+      newStock = await Stock.findOne(queryBody);
+      newStock.time = [];
+      newStock.price = [];
+      newStock.change = [];
+      newStock.changepercent = [];
+    }
+    stockdata.forEach((aStock) => {
+      newStock.time.push(aStock["label"]);
+      newStock.price.push(Math.round(aStock["open"] * 100));
+      newStock.change.push(aStock["change"]);
+      newStock.changepercent.push(aStock["changePercent"]);
+      newStock.lastupdated = dd;
+    });
+    var foundSearchStock = await StockSearch.findOne({ symbol: queryStock});
+    newStock.name = foundSearchStock.name;
+    newStock.save();
+    return newStock;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 
 module.exports = router;

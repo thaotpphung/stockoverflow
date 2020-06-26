@@ -8,10 +8,11 @@ let express = require("express"),
   LocalStrategy = require("passport-local"),
   // passportLocalMongoose = require("passport-local-mongoose"),
   // Stock           = require("./models/stock"),
-  User = require("./models/user");
+  User = require("./models/user"),
 // Purchase        = require("./models/purchase"),
 // StockSearch     = require("./models/stocksearch")
-seedDB          = require("./seeds")
+  seedDB          = require("./seeds");
+
 
 // requring routes
 let purchaseRoutes = require("./routes/purchases"),
@@ -32,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.use(flash());
-seedDB();
+// seedDB();
 
 // PASSPORT CONFIGURATION
 app.use(

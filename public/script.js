@@ -53,6 +53,7 @@ $(document).ready(function () {
 //   }
 // });
 
+// -----------------------search-----------------------
 var searchResult = document.getElementById("searchResult");
 var searchStock = document.getElementById("searchStock");
 $("#searchStock").keyup(function (event) {
@@ -109,6 +110,7 @@ function renderHTML(found) {
   searchResult.innerHTML = htmlString;
 }
 
+// -----------------------User-----------------------
 $(".editEmail").click((event) => {
   fadeForm($("#editEmailForm"));
   
@@ -129,3 +131,39 @@ function fadeForm($edit) {
     $edit.fadeIn(300, () => $edit.show());
   }
 }
+
+// -----------------------Update Stock price dynamically-----------------------
+
+// $(".fa-sync-alt").click((event) => {
+//   $prices = $("td.price");
+//   // console.log($prices);
+//   if ($prices.length > 0) {
+//     var url = "http://localhost:3000/update";
+//     var symbolList = [];
+//     var params = "query=";
+//     console.log(document.getElementsByClassName("symbol"));
+//     for (i = 0; i < document.getElementsByClassName("symbol").length; i++) {
+//       params += document.getElementsByClassName("symbol")[i].textContent + ","
+//       symbolList.push({symbol: document.getElementsByClassName("symbol")[i].textContent});
+//     }
+//     params = params.substring(0, params.length - 1);
+//     console.log(symbolList);
+//     console.log(params);
+
+//     var http = new XMLHttpRequest();
+//     http.open("POST", url, true);
+//     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//     http.onreadystatechange = function () {
+//       if (http.readyState == 4 && http.status == 200) {
+//         console.log(http.responseText);
+//         var parsed = JSON.parse(http.responseText);
+//         console.log(parsed);
+//         $price = parseFloat(document.getElementsByClassName("price")[0].innerText).toFixed(2) * 100;
+//         if ($price !== parsed[0].price[0]){
+//           document.getElementsByClassName("price")[0].innerText = Math.floor(parsed[0].price[0]/100) + "." + parsed[0].price[0] %100;
+//         }
+//       }
+//     };
+//     http.send(params);
+//   }
+// });

@@ -12,7 +12,7 @@
       
       <% } else { %>
   <div id="tracked-stocks">
-    <h1 class="header-black">Tracked Stocks <a href="/stocks/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1>
+    <h1 class="header-black">Tracked Stocks <a href="/stocks/<%=currentUser._id%>"><i class="fa fa-sync-alt header-fa"></i></a><a href="/stocks/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1> 
     <!-- <input type="text" placeholder="Search stock by tick symbol" /> -->
     <table id="tracked-stock-table" class="table table-hover">
       <thead>
@@ -33,8 +33,8 @@
               <span><a href="/stocks/<%=currentUser._id%>/<%=stock._id%>"><i class="text-dark fa fa-info"></i></a></span><%=stock.name%>
             </div>
           </th>
-          <td><%=stock.symbol%></td>
-          <td><%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%></td>
+          <td class="symbol"><%=stock.symbol%></td>
+          <td class="price"><%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%></td>
           <td <% if (stock.changepercent[0] < 0) { %>
             class="negative" <% } else { %> class="possitive" <% } %>
             >
