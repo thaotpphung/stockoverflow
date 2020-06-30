@@ -1,11 +1,11 @@
 <div class="container">
   <div class="row">
     <h1 style="text-align: center;">
-      Add New Purchase to <%= user.username %>
+      Add New Purchase to <%= currentUser.username %>
     </h1>
     <div style="width: 30%; margin: 25px auto;">
       <form
-        action="/purchases/<%=user._id%>/<%=stock._id%>"
+        action="/purchases/<%=currentUser._id%>/<%=stock._id%>"
         method="POST"
       >
         <div class="form-group">

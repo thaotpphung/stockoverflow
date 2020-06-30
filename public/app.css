@@ -30,7 +30,6 @@ body {
 }
 
 .user-info {
-  /* text-align: center; */
   color: white;
   padding-top: 1rem;
   padding-right: 0 !important;
@@ -188,10 +187,6 @@ background-color: #6A7E7A;
   font-weight: normal;
 }
 
-#tracked-stock-table {
-  margin-bottom: 0;
-}
-
 .row-header {
   overflow: hidden;
   height: 25px !important;
@@ -200,9 +195,6 @@ background-color: #6A7E7A;
 #tracked-stocks .table td,
 #tracked-stocks .table th {
   vertical-align: middle;
-}
-
-#tracked-stocks .table td{
   text-align: center;
 }
 
@@ -211,7 +203,7 @@ background-color: #6A7E7A;
   padding-left: 1rem;
 }
 
-#tracked-stocks span {
+#tracked-stocks span.hover{
   color: black;
   text-align: center;
   width: 0;
@@ -220,12 +212,12 @@ background-color: #6A7E7A;
   opacity: 0;
 }
 
-#tracked-stocks th:hover span {
+#tracked-stocks th:hover span.hover {
   width: 40px;
   opacity: 1;
 }
 
-#tracked-stocks input {
+/* #tracked-stocks input {
   font-size: 18px;
   color: #2980b9;
   background-color: #f7f7f7;
@@ -239,8 +231,9 @@ background-color: #6A7E7A;
   background: #fff;
   border: 3px solid #2980b9;
   outline: none;
-}
+} */
 
+/* ----------Search------------------------ */
 #searchResult {
   width: 100%;
 }
@@ -274,11 +267,47 @@ color: #495057;
 margin-bottom: 3em;
 } */
 
-#testing {
-  background-color: white;
-}
 
 /* ----------Users----------------------- */
 .editForm {
   display: none;
+}
+
+
+/* ---------------- */
+#testing {
+  background-color: white;
+}
+
+/* ----------Show stock----------------------- */
+#stock-banner {
+  font-family: "lato", sans-serif;
+  font-weight: 500;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.big-fontsize {
+  font-size: 40px;
+}
+
+.small-fontsize {
+  font-size: 25px;
+}
+
+#price-banner {
+  width: 100px;
+}
+
+.stat-table {
+  background-color: white;
+  border: black solid 1px;
+  margin-bottom: 2em;
+  overflow: scroll;
+  height: 200px;
+}
+
+.stat-table td, .stat-table th {
+  padding: .2rem !important;
+  padding-left: 1rem !important;
 }

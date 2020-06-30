@@ -159,5 +159,4 @@ async function createNewStock(queryBody, queryStock, api_url, dd, flag) {
   }
 }
 
-
 module.exports = router;

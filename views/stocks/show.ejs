@@ -1,19 +1,175 @@
 <%- include("../partials/header") %>
 
-<div id="testing">
-  <h1>SHOW.EJS</h1>
+<div id="dashboard-container">
+  <div id="tracked-stocks">
+    <h1 class="header-black">Overall <i></i></h1> 
+    <div id="stock-banner" class="row">
+      <div class="col-6">
+        <div class="big-fontsize"><%=stock.name%></div>
+        <div class="small-fontsize"><%=stock.symbol%> - <%=stock.time[0]%></div>
+        <div class="small-fontsize">
+          <%=stock.price[0]%> USD - 
+          <span id="price-banner" ></span>
+          <span 
+            <% if (stock.change[0] < 0) { %>
+              class="negative" > <i class="fa fa-arrow-down"></i> <% } else { %> class="possitive" > <i class="fa fa-arrow-up"></i> <% } %>
+              <%=stock.change[0]%> (<%=stock.changepercent[0]%>  %)
+          </span>
+        </div>
+      </div>
+    </div>
 
-  <h1>Symbol: <%=stock.symbol%></h1>
-  <h2>Name: <%=stock.name%></h2>
+    <canvas id="chart" class="pb-3"></canvas>
+    <script>
+      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+      var ctx = document.getElementById('chart').getContext('2d');
+      ctx.canvas.width = 1000;
+      ctx.canvas.height = 350;
+      var color;
+      if (stockinfo.change[0] < 0) {
+        color = ["#FF0000"];
+        backgroundcolor = ["rgb(255, 0, 0, 0.3)"];
+      } else {
+        color = ["#3caea3"];
+        backgroundcolor = ["rgb(98, 222, 208, 0.5)"];
+      }
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: stockinfo.time.slice().reverse(),
+          datasets: [
+            {
+              label: "Stock Price of " + stockinfo.symbol,
+              data: stockinfo.price.slice().reverse().map(bigprice => (bigprice/100).toFixed(2)),
+              borderColor: color,
+              borderWidth: 2,
+              // fill: false,
+              backgroundColor: backgroundcolor ,
+              lineTension: 0,
+              pointRadius: 0.5,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  callback: function (value, index, values) {
+                    return value + "$";
+                  },
+                  // suggestedMin: 0
+                  // stepSize: 1,
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: "Openning Price ($)",
+                },
+              },
+            ],
+            xAxes: [
+              {}
+            ],
+          },
+        },
+      });
+    </script>
+  </div>
 
-  <h2><%=stock.price[0]%></h2>
+  <div class="row">
+    <div class = "col-6">
+      <h1 class="header-black">Basic Stats <i></i></h1> 
+      <div class="stat-table">
+        <table class="table table-striped mb-0">
+          <tbody>
+            <tr>
+              <th scope="row">High</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Low</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Open</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Close</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Adjust Close</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Volumn</th>
+              <td>1.2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class = "col-6">
+      <h1 class="header-black">Key Stats <i></i></h1> 
+      <div class="stat-table">
+        <table class="table table-striped mb-0">
+          <tbody>
+            <tr>
+              <th scope="row">High</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Low</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Open</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Close</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Adjust Close</th>
+              <td>1.2</td>
+            </tr>
+            <tr>
+              <th scope="row">Volumn</th>
+              <td>1.2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
 
-  <h2><%=stock.time[0]%></h2>
+<div id="tracked-stocks">
+  <h1 class="header-black">Asset Management <i></i></h1> 
+  <table class="table table-striped mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Current Balance</th>
+        <th scope="col">Quantity Owned</th>
+        <th scope="col">Purchased Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>10000</td>
+        <td>44</td>
+        <td>$1000</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-  <h2><%=stock.change[0]%></h2>
 
-  <h2><%=stock.changepercent[0]%></h2>
+</div>
 
+<!-- 
   <a
     class="btn btn-success"
     href="/purchases/<%=currentUser._id%>/<%= stock._id %>/new"
@@ -26,6 +182,6 @@
   >
     <button class="btn btn-danger">Delete</button>
   </form>
-</div>
+</div> -->
 
 <%- include("../partials/footer") %>

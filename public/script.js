@@ -167,3 +167,5 @@ function fadeForm($edit) {
 //     http.send(params);
 //   }
 // });
+
+// -----------------------stock show-----------------------

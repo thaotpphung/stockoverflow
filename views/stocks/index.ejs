@@ -14,7 +14,7 @@
   <div id="tracked-stocks">
     <h1 class="header-black">Tracked Stocks <a href="/stocks/<%=currentUser._id%>"><i class="fa fa-sync-alt header-fa"></i></a><a href="/stocks/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1> 
     <!-- <input type="text" placeholder="Search stock by tick symbol" /> -->
-    <table id="tracked-stock-table" class="table table-hover">
+    <table class="table table-hover mb-0">
       <thead>
         <tr>
           <th style="width: 180px !important;" scope="col">Name</th>
@@ -30,7 +30,7 @@
         <tr>
           <th scope="row" >
             <div class="row-header">
-              <span><a href="/stocks/<%=currentUser._id%>/<%=stock._id%>"><i class="text-dark fa fa-info"></i></a></span><%=stock.name%>
+              <span class="hover"><a href="/stocks/<%=currentUser._id%>/<%=stock._id%>"><i class="text-dark fa fa-info"></i></a></span><%=stock.name%>
             </div>
           </th>
           <td class="symbol"><%=stock.symbol%></td>
@@ -65,9 +65,11 @@
       ctx.canvas.height = 350;
       var color;
       if (stockinfo.change[0] < 0) {
-        color = ["#FF0000"]
+        color = ["#FF0000"];
+        backgroundcolor = ["rgb(255, 0, 0, 0.3)"];
       } else {
-        color = ["#3caea3"]
+        color = ["#3caea3"];
+        backgroundcolor = ["rgb(98, 222, 208, 0.5)"];
       }
       var chart = new Chart(ctx, {
         type: 'line',
@@ -79,7 +81,8 @@
               data: stockinfo.price.slice().reverse().map(bigprice => (bigprice/100).toFixed(2)),
               borderColor: color,
               borderWidth: 2,
-              fill: false,
+              // fill: false,
+              backgroundColor: backgroundcolor ,
               lineTension: 0,
               pointRadius: 0.5,
             },

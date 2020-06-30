@@ -1,5 +1,6 @@
 const { response } = require("express");
 const { resolveInclude } = require("ejs");
+const { update } = require("../models/purchase");
 
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
@@ -8,9 +9,38 @@ const express = require("express"),
   StockSearch = require("../models/stocksearch"),
   middleware = require("../middleware"),
   got = require("got"),
-  Stock = require("../models/stock");
+  Stock = require("../models/stock"),
+  StockNasdaq = require("../models/stockNasdaq"),
+  StockNyse = require("../models/stockNyse.js");
 
 require("dotenv").config();
+
+// router.get("/test", (req, res) => {
+//   StockNasdaq.find({}, (err, stocks) => {
+//     stocks.forEach( async (stock) => {
+//       const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.API_KEY;
+//       const rawData = await got(api_url);
+//       const data = JSON.parse(rawData.body);
+//       if (Object.keys(data).length === 0) {
+//         await StockNasdaq.remove({symbol: stock.symbol});
+//         console.log(stock.symbol);
+//       }
+//     });
+//   });
+// });
+
+router.get("/test", async (req, res) => {
+  const stocks = await StockNyse.find({});
+  stocks.forEach( async (stock) => {
+    const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.API_KEY;
+    const rawData = await got(api_url);
+    const data = JSON.parse(rawData.body);
+    if (Object.keys(data).length === 0) {
+      await StockNyse.remove({symbol: stock.symbol});
+      console.log(stock.symbol);
+    }
+  });
+});
 
 // root route
 router.get("/", (req, res) => {

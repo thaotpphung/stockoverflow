@@ -3,6 +3,32 @@
 <% if (currentUser) { %>
 
 <div id="dashboard-container">
+  <div id="tracked-stocks">
+    <h1 class="header-black">Assets</h1>
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Tick Symbol</th>
+          <th scope="col">Purchased Price</th>
+          <th scope="col">Purchases Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% purchases.forEach(function(purchase){ %>
+        <tr>
+          <th scope="row" >
+            <div class="row-header"><%=purchase.name%></div>
+          </th>
+          <td><%=purchase.symbol%></td>
+          <td><%=Math.floor(purchase.totalprice/100)%>.<%=(purchase.totalprice)%100%></td>
+          <td><%=purchase.totalquantity%></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  
   <% if (currentUser.purchases.length === 0) { %>
     <div>
       <h1 class="header-black">Transaction History</h1>
@@ -12,41 +38,10 @@
     </div>
     
     <% } else { %>
-  <div id="tracked-stocks">
-    <h1 class="header-black">Assets</h1>
-    <table id="tracked-stock-table" class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Tick Symbol</th>
-          <th scope="col">Bought Price</th>
-          <th scope="col">Quantity</th>
-          <th scope="col"></th>
-          <th scope="col">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% purchases.forEach(function(purchase){ %>
-        <tr>
-          <th scope="row" >
-            <div class="row-header">
-              <%=purchase.name%>
-            </div>
-          </th>
-          <td><%=purchase.symbol%></td>
-          <td><%=purchase.time%></td>
-          <td><%=Math.floor(purchase.price/100)%>.<%=(purchase.price)%100%></td>
-          <td><%=purchase.quantity%></td>
-          <td><%=Math.floor((purchase.quantity*purchase.price)/100)%>.<%=(purchase.quantity*purchase.price)%100%></td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
-  </div>
     
   <div id="tracked-stocks">
     <h1 class="header-black">Transaction History</h1>
-    <table id="tracked-stock-table" class="table table-hover">
+    <table class="table table-hover mb-0">
       <thead>
         <tr>
           <th scope="col">Name</th>
@@ -59,6 +54,7 @@
       </thead>
       <tbody>
         <% purchases.forEach(function(purchase){ %>
+          <% purchase.history.forEach(function(history){ %>
         <tr>
           <th scope="row" >
             <div class="row-header">
@@ -66,15 +62,18 @@
             </div>
           </th>
           <td><%=purchase.symbol%></td>
-          <td><%=purchase.time%></td>
-          <td><%=Math.floor(purchase.price/100)%>.<%=(purchase.price)%100%></td>
-          <td><%=purchase.quantity%></td>
-          <td><%=Math.floor((purchase.quantity*purchase.price)/100)%>.<%=(purchase.quantity*purchase.price)%100%></td>
+          <td><%=history.time%></td>
+          <td><%=Math.floor(history.price/100)%>.<%=(history.price)%100%></td>
+          <td><%=history.quantity%></td>
+          <td><%=Math.floor((history.quantity*history.price)/100)%>.<%=(history.quantity*history.price)%100%></td>
         </tr>
+          <% }); %>
         <% }); %>
       </tbody>
     </table>
   </div>
+
+  
 
   <% } %>
 </div>

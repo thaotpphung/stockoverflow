@@ -10,9 +10,8 @@ var UserSchema = new mongoose.Schema({
   trackedstocks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Stock",
-    },
-    
+      ref: "Stock"
+    }
   ],
   purchases: [
     {

@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.use(flash());
-// seedDB();
+seedDB();
 
 // PASSPORT CONFIGURATION
 app.use(
