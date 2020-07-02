@@ -1,4 +1,5 @@
 const stock = require("../models/stock");
+const { query } = require("express");
 
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
@@ -26,24 +27,29 @@ router.get("/", middleware.checkCorrectUser, (req, res) => {
 
 // add tracked stocks to the stocks db
 router.post("/", middleware.checkCorrectUser, async (req, res) => {
-  const queryStock = req.body.stock.symbol;
-  const queryBody = req.body.stock;
-  const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ queryStock + "?timeseries=30&apikey=" + process.env.API_KEY;
-  const dd = String((new Date()).getDate()).padStart(2, "0");
+  const queryStock = req.body.stock.symbol.toUpperCase();
+  const foundStockName = await StockSearch.findOne({symbol: queryStock});
+  if (foundStockName) {
+    const queryBody = req.body.stock;
+    const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ queryStock + "?timeseries=30&apikey=" + process.env.API_KEY;
+    const dd = String((new Date()).getDate()).padStart(2, "0");
 
-  // return the stock in db, create new one if neccessary
-  var newStock = await checkSharedStockDB(queryStock, queryBody, dd, api_url);
+    // return the stock in db, create new one if neccessary
+    var newStock = await checkSharedStockDB(queryStock, queryBody, dd, api_url);
 
-  var user = await User.findById(req.params.userid).populate("trackedstocks");
-
-  if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
-    user.trackedstocks.push(newStock);
-    user.save();
-    req.flash("success", "Successfully added stock");
-  } else { // stock already in trackedstocks
-    req.flash("error", "Stock already exists");
+    var user = await User.findById(req.params.userid).populate("trackedstocks");
+    
+    if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
+      user.trackedstocks.push(newStock);
+      user.save();
+      req.flash("success", "Successfully added stock");
+    } else { // stock already in trackedstocks
+      req.flash("error", "Stock already exists");
+    }
+  } else {
+    req.flash("error", "Can't find stock, please try another one");
   }
-  res.redirect("/stocks/" + user._id);
+  res.redirect("/stocks/" + req.params.userid);
 });
 
 /* 
@@ -151,7 +157,7 @@ async function createNewStock(queryBody, queryStock, api_url, dd, flag) {
       newStock.lastupdated = dd;
     });
     var foundSearchStock = await StockSearch.findOne({ symbol: queryStock});
-    newStock.name = foundSearchStock.name;
+    newStock.name = foundSearchStock.name.replace(/'/g, '`');
     newStock.save();
     return newStock;
   } catch (err) {

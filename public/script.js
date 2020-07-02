@@ -4,72 +4,47 @@ $(document).ready(function () {
     $("a.nav-item.nav-link").each(function () {
       var $nav = $("#mainNav");
       if (window.location.href.includes($(this).prop("href"))) {
-        $nav.find("a").removeClass("active");
-        $(this).addClass("active");
+        $nav.find("a").removeClass("activeLink");
+        $(this).addClass("activeLink");
       }
     });
   });
 });
 
-// function collapseNavbar() {
-// 	$(document).scroll(function () {
-// 		var $nav = $("#mainNav");
-// 		$nav.toggleClass("scrolled", $nav.offset().top > 50);
-//     });
-// };
-// $(window).scroll(collapseNavbar);
-// $(document).ready(collapseNavbar);
-
-// Show/ unshow the add stock option
-// $(".fa-plus").click(function () {
-//   $("input[type='text']").fadeToggle();
-// });
-
 // Delete a stock from table
-// $("#tracked-stocks table").on("click", "span", function (event) {
-//   console.log($(this).parent());
-//   $(this)
-//     .parent()
-//     .parent()
-//     .fadeOut(500, function () {
-//       $(this).remove();
-//     });
-//   event.stopPropagation();
-// });
-
-// Add a stock to table
-// $("input[type='text']").keypress(function (event) {
-//   if (event.which === 13) {
-//     //grabbing new stock text from input
-//     var newStock = $(this).val();
-//     // empty search box
-//     $(this).val("");
-//     //create a new table row
-//     $("table").append(
-//       "<tr><th scope='row'><span><i class='fa fa-trash'></i></span>" +
-//         newStock +
-//         "</th><td>APL</td><td>20.5</td><td>0.5</td><td>10</td><td><input type='checkbox'></td></tr>"
-//     );
-//   }
-// });
+$(".fa-trash").click (function (event) {
+  // await fadeRow($(this));
+  $(this).parent().parent().parent().parent().fadeOut(500, function () {
+    $(this).addClass("d-none");
+    $("#deleteButton").trigger("click");
+  });
+  event.stopPropagation();
+});
 
 // -----------------------search-----------------------
 var searchResult = document.getElementById("searchResult");
 var searchStock = document.getElementById("searchStock");
+
+// send request whenever user enter a valid string
 $("#searchStock").keyup(function (event) {
   $("#searchResult").removeClass("d-none");
   if (event.which == 8 || (event.which >= 65 && event.which <= 90)) {
     var searchTerm = $(this).val().toUpperCase();
     searchQuery(searchTerm);
+  } else if (event.which == 13) {
+    $("#newButton").trigger("click");
   }
 });
 
+
+// listen for click on div to fill the search box with that value
 $("#searchResult").delegate("div", "click", function (event) {
   var found = $(this).text();
   searchStock.value = found.split("-")[0].trim();
   $(this).parent().addClass("d-none");
 });
 
+// send request to server API for search query and return result
 function searchQuery(searchTerm) {
   var url = "http://localhost:3000/search";
   var params = "searchTerm=" + searchTerm;
@@ -82,7 +57,6 @@ function searchQuery(searchTerm) {
       var parsed = JSON.parse(obj);
       var found = parsed.foundStock;
       if (found.length == 0) {
-        // searchResult.innerHTML = "Can't find stock, search another term";
         searchResult.innerHTML =
           '<div class="notfound-mes">Can\'t find stock, search another term </div>';
       } else {
@@ -94,6 +68,7 @@ function searchQuery(searchTerm) {
   http.send(params);
 }
 
+// display search result
 function renderHTML(found) {
   var htmlString = "";
   for (i = 0; i < found.length; i++) {
@@ -132,6 +107,12 @@ function fadeForm($edit) {
   }
 }
 
+// -----------------------Test-----------------------
+function togglePopup(){
+  document.getElementById("popup-1").classList.toggle("active");
+}
+
+
 // -----------------------Update Stock price dynamically-----------------------
 
 // $(".fa-sync-alt").click((event) => {
@@ -168,4 +149,39 @@ function fadeForm($edit) {
 //   }
 // });
 
-// -----------------------stock show-----------------------
+
+// function collapseNavbar() {
+// 	$(document).scroll(function () {
+// 		var $nav = $("#mainNav");
+// 		$nav.toggleClass("scrolled", $nav.offset().top > 50);
+//     });
+// };
+// $(window).scroll(collapseNavbar);
+// $(document).ready(collapseNavbar);
+
+// Show/ unshow the add stock option
+// $(".fa-plus").click(function () {
+//   $("input[type='text']").fadeToggle();
+// });
+
+// $(".fa-trash").click(function (event) {
+//   $(this).fadeOut(500, function () {
+//     $(this).remove();
+//   })
+// })
+
+// Add a stock to table
+// $("input[type='text']").keypress(function (event) {
+//   if (event.which === 13) {
+//     //grabbing new stock text from input
+//     var newStock = $(this).val();
+//     // empty search box
+//     $(this).val("");
+//     //create a new table row
+//     $("table").append(
+//       "<tr><th scope='row'><span><i class='fa fa-trash'></i></span>" +
+//         newStock +
+//         "</th><td>APL</td><td>20.5</td><td>0.5</td><td>10</td><td><input type='checkbox'></td></tr>"
+//     );
+//   }
+// });

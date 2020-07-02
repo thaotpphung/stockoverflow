@@ -1,8 +1,173 @@
+<%- include("../partials/header") %>
+
+<div class="container mgtop">
+  <div class="row justify-content-center">
+    <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-md">
+      <div id="intro-signup" class="border-black">
+
+        <h1 class="header-black">Purchase Stock</h1>
+        <div class="form-row pt-3">
+          <!-- username -->
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Tick Symbol:</div>
+              <div class="col-7 user-info">
+              </div>
+            </div>
+          </div>
+
+          <!-- email -->
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Price:</div>
+              <div class="col-7 user-info">
+              </div>
+              <div class="col-2 signup-button">
+                <i class="fas fa-edit fa-lg editEmail"></i>
+              </div>
+            </div>
+
+            <div id="editEmailForm" class="editForm">
+              <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+              <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-6 pl-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="email"
+                      value=<%=currentUser.email %>
+                    />
+                  </div>
+                  <div class="col-2 signup-button">
+                    <button class="btn custom-signup-btn">
+                      Confirm
+                    </button>
+                  </div>
+              </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- lasstname -->
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Quantity:</div>
+              <div class="col-7 user-info">
+                <%=currentUser.lastname %>
+              </div>
+              <div class="col-2 signup-button">
+                <i class="fas fa-edit fa-lg editLast"></i>
+              </div>
+            </div>
+            <div id="editLastForm" class="editForm">
+              <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+              <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-6 pl-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="lastname"
+                      value=<%=currentUser.lastname %>
+                    />
+                  </div>
+                  <div class="col-2 signup-button">
+                    <button class="btn custom-signup-btn">
+                      Confirm
+                    </button>
+                  </div>
+              </div>
+              </form>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- Password -->
+
+      <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+
+      <div id="intro-signup" class="border-black mg-2">
+        <h1 class="header-black">Purchase Stock</h1>
+        
+        <div class="form-row pt-3">
+
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Tick Symbol:</div>
+              <div class="col-7 ">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="purchase[symbol]"
+                  required
+                />
+              </div>
+              <div class="col-1 signup-button">
+                <i class="fas fa-edit fa-lg editLast"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Price</div>
+              <div class="col-7 ">
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="purchase[price]"
+                  required
+                />
+              </div>
+              <div class="col-1 signup-button">
+                <i class="fas fa-edit fa-lg editLast"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="row">
+              <div class="col-3 user-info">Quantity:</div>
+              <div class="col-7 ">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="purchase[quantity]"
+                  required
+                />
+              </div>
+              <div class="col-1 signup-button">
+                <i class="fas fa-edit fa-lg editLast"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="row">
+              <div class="col-9"> </div>
+              <div class="col-2 signup-button">
+                <button class="btn custom-signup-btn">
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </form>
+
+    </div>
+  </div>
+</div>
+
+
 <div class="container">
   <div class="row">
-    <h1 style="text-align: center;">
-      Add New Purchase to <%= currentUser.username %>
-    </h1>
     <div style="width: 30%; margin: 25px auto;">
       <form
         action="/purchases/<%=currentUser._id%>/<%=stock._id%>"
@@ -25,3 +190,5 @@
     </div>
   </div>
 </div>
+
+<%- include("../partials/footer") %>

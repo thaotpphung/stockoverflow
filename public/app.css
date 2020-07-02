@@ -3,6 +3,10 @@
   padding: 0;
 }
 
+*:focus {
+  outline: 0 !important;
+}
+
 html {
   font-size: 100%;
 }
@@ -76,7 +80,7 @@ a.navbar-brand {
   color: #3caea3 !important;
 }
 
-.active {
+.activeLink {
   color: #3caea3 !important;
 }
 
@@ -192,10 +196,15 @@ background-color: #6A7E7A;
   height: 25px !important;
 }
 
-#tracked-stocks .table td,
+#tracked-stocks .table tbody td,
 #tracked-stocks .table th {
   vertical-align: middle;
   text-align: center;
+}
+
+#tracked-stocks .table thead tr th.first-th, #tracked-stocks .table tbody tr th {
+  text-align: left;
+  width: 180px !important;
 }
 
 .header-fa {
@@ -203,8 +212,7 @@ background-color: #6A7E7A;
   padding-left: 1rem;
 }
 
-#tracked-stocks span.hover{
-  color: black;
+#tracked-stocks span.delete{
   text-align: center;
   width: 0;
   display: inline-block;
@@ -212,10 +220,37 @@ background-color: #6A7E7A;
   opacity: 0;
 }
 
-#tracked-stocks th:hover span.hover {
+#tracked-stocks th:hover span.delete {
   width: 40px;
   opacity: 1;
 }
+
+.fa-trash {
+  color: red !important;
+  cursor: pointer;
+}
+
+.fa-button {
+  background: none;
+  padding: 0px;
+  border: none;
+}
+
+
+#tracked-stocks span.show{
+  color: black;
+  text-align: center;
+  display: inline-block;
+  transition: 0.2s linear;
+  opacity: 0;
+  width: 5px !important;
+  /* font-size: 18px; */
+}
+
+#tracked-stocks tbody tr:hover span.show {
+  opacity: 1;
+}
+
 
 /* #tracked-stocks input {
   font-size: 18px;
@@ -233,26 +268,8 @@ background-color: #6A7E7A;
   outline: none;
 } */
 
-/* ----------Search------------------------ */
-#searchResult {
-  width: 100%;
-}
-
-.search-item, .notfound-mes {
-  display: block;
-  min-width: 100%;
-  padding: .5rem 1rem;
-  margin: auto 1rem;
-  clear: both;
-  font-weight: 400;
-  color: #212529;
-  text-align: inherit;
-  white-space: nowrap;
-  background-color: white;
-  border-top: 1px solid #dee2e6;;
-}
-.search-item:hover, .chosen {
-  background-color: rgb(235, 235, 235);
+hr {
+  margin-bottom: 0 !important;
 }
 
 /* ----------Dashboard-Graphs------------------------ */
@@ -273,10 +290,8 @@ margin-bottom: 3em;
   display: none;
 }
 
-
-/* ---------------- */
-#testing {
-  background-color: white;
+.min-md {
+  min-width: 720px;
 }
 
 /* ----------Show stock----------------------- */
@@ -310,4 +325,127 @@ margin-bottom: 3em;
 .stat-table td, .stat-table th {
   padding: .2rem !important;
   padding-left: 1rem !important;
+}
+
+#button-right {
+  float: right;
+  padding: 1rem;
+  font-size: 20px;
+}
+
+#button-right a {
+  color: black;
+}
+
+
+/* ----------Search------------------------ */
+#searchResult {
+  width: 100%;
+}
+
+.search-item, .notfound-mes {
+  display: block;
+  min-width: 100%;
+  padding: .5rem 0rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: white;
+  border-top: 1px solid #dee2e6;;
+}
+.search-item:hover, .chosen {
+  background-color: rgb(235, 235, 235);
+}
+
+.fixed {
+  position: fixed;
+  top: 29%;
+  left: 47%;
+  z-index: -1;
+}
+
+
+
+/* -------------test--- */
+#testing {
+  background-color: white;
+}
+
+.popup .overlay {
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100vw;
+  height:100vh;
+  background:rgba(0,0,0,0.7);
+  z-index:1;
+  display:none;
+}
+
+.popup .content {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  /* background:#fff; */
+  width:500px;
+  height:500px;
+  z-index:2;
+  text-align:center;
+  box-sizing:border-box;
+  border-radius: 1%;
+}
+
+.overlay .closebtn:hover {
+  color: #ccc;
+}
+
+
+.popup .fa-times {
+  position: absolute;
+  top: 80px;
+  right: 50px;
+  font-size: 30px;
+  cursor: pointer;
+  color: white ;
+
+  /* width:30px;
+  height:30px;
+  background:#222;
+  color:#fff;
+  font-size:20px;
+  font-weight:600;
+  line-height:30px;
+  text-align:center;
+  border-radius:50%; */
+}
+
+/* .popup #searchStock {
+  position: absolute;
+  top: 30px;
+} */
+
+.popup.active .overlay {
+  display:block;
+}
+
+.popup.active .content {
+  transition:all 300ms ease-in-out;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+#searchButton {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  padding:15px;
+  font-size:18px;
+  border:2px solid #222;
+  color:#222;
+  text-transform:uppercase;
+  font-weight:600;
+  background:#fff;
 }

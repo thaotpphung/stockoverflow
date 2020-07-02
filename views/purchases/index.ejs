@@ -3,12 +3,23 @@
 <% if (currentUser) { %>
 
 <div id="dashboard-container">
+  <% if (currentUser.purchases.length === 0) { %>
+    <div>
+      <h1 class="header-black">Assets <a href="/purchases/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1>
+      <div class="empty-mes">
+        You don't own any stock
+      </div>
+    </div>
+    
+    <% } else { %>
   <div id="tracked-stocks">
-    <h1 class="header-black">Assets</h1>
+    <h1 class="header-black">Assets <a href="/purchases/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1>
+
+    <!-- <h1 class="header-black">Assets</h1> -->
     <table class="table table-hover mb-0">
       <thead>
         <tr>
-          <th scope="col">Name</th>
+          <th scope="col" class="first-th" >Name</th>
           <th scope="col">Tick Symbol</th>
           <th scope="col">Purchased Price</th>
           <th scope="col">Purchases Quantity</th>
@@ -28,6 +39,8 @@
       </tbody>
     </table>
   </div>
+  <% } %>
+
   
   <% if (currentUser.purchases.length === 0) { %>
     <div>
@@ -44,7 +57,7 @@
     <table class="table table-hover mb-0">
       <thead>
         <tr>
-          <th scope="col">Name</th>
+          <th scope="col" class="first-th">Name</th>
           <th scope="col">Tick Symbol</th>
           <th scope="col">Bought Time</th>
           <th scope="col">Bought Price</th>

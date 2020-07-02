@@ -4,7 +4,7 @@
   <div id="tracked-stocks">
     <h1 class="header-black">Overall <i></i></h1> 
     <div id="stock-banner" class="row">
-      <div class="col-6">
+      <div class="col-7">
         <div class="big-fontsize"><%=stock.name%></div>
         <div class="small-fontsize"><%=stock.symbol%> - <%=stock.time[0]%></div>
         <div class="small-fontsize">
@@ -17,18 +17,32 @@
           </span>
         </div>
       </div>
-    </div>
 
+      <div class="col-5" >
+        <div id="button-right">
+          <label class="btn btn-light">
+            <a href="/purchases/<%=currentUser._id%>/<%=stock._id%>/new">
+              <i class="fas fa-chart-line small-fontsize"></i>
+              <span>Trade Options</span>
+            </a>
+          </label>
+        </div>
+      </div>
+    </div>
     <canvas id="chart" class="pb-3"></canvas>
     <script>
-      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+      var str = '<%- JSON.stringify(stock) %>';
+      var stockinfo = JSON.parse(str);
+      console.log(stockinfo);
+      console.log(typeof(stockinfo));
+
       var ctx = document.getElementById('chart').getContext('2d');
       ctx.canvas.width = 1000;
       ctx.canvas.height = 350;
       var color;
       if (stockinfo.change[0] < 0) {
         color = ["#FF0000"];
-        backgroundcolor = ["rgb(255, 0, 0, 0.3)"];
+        backgroundcolor = ["rgb(255, 0, 0, 0.2)"];
       } else {
         color = ["#3caea3"];
         backgroundcolor = ["rgb(98, 222, 208, 0.5)"];
@@ -146,7 +160,7 @@
   </div>
 </div>
 
-<div id="tracked-stocks">
+<!-- <div id="tracked-stocks">
   <h1 class="header-black">Asset Management <i></i></h1> 
   <table class="table table-striped mb-0">
     <thead>
@@ -164,7 +178,7 @@
       </tr>
     </tbody>
   </table>
-</div>
+</div> -->
 
 
 </div>
