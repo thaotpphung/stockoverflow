@@ -10,7 +10,7 @@ $(document).ready(function () {
     });
   });
 });
-
+ 
 // Delete a stock from table
 $(".fa-trash").click (function (event) {
   // await fadeRow($(this));
