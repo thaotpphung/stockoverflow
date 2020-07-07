@@ -135,13 +135,12 @@
 <div id="test">
 
   <div class="popup" id="popup-1">
-
     <div class="overlay">
       <div class="fa fa-times" onclick="togglePopup()"></div>
     </div>
     
     <div class="content">
-      <form action="/stocks/<%=currentUser._id%>" method="POST">
+      <form id="searchStockForm" action="/stocks/<%=currentUser._id%>" method="POST">
         <input
           id="searchStock"
           class="form-control mb-0"
@@ -152,13 +151,10 @@
           autocomplete="off"
         />
         <div id="searchResult"></div>
-          <button id="newButton" class="d-none">
-            Confirm
-          </button>
       </form>
     </div>
-
   </div>
+
 </div>
 
 

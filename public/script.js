@@ -26,21 +26,40 @@ var searchResult = document.getElementById("searchResult");
 var searchStock = document.getElementById("searchStock");
 
 // send request whenever user enter a valid string
-$("#searchStock").keyup(function (event) {
+$("#searchStock").keyup( async function (event) {
   $("#searchResult").removeClass("d-none");
   if (event.which == 8 || (event.which >= 65 && event.which <= 90)) {
     var searchTerm = $(this).val().toUpperCase();
     searchQuery(searchTerm);
   } else if (event.which == 13) {
-    $("#newButton").trigger("click");
+    if (!(searchResult.innerHTML.includes("notfound-mes"))) {
+      // if in the purchase stock page
+      if ($("#tickSymbolDiv").html()) {
+        $(".fa-search").click();
+        var searchVal = $("#searchStock").val();
+        var price = await getPrice(searchVal);
+        $("#purchase-symbol").val(searchVal.toUpperCase());
+        $("#purchase-price").val(Math.floor(price/100) + "." + price%100);
+        document.getElementById('purchase-time').valueAsDate = new Date();
+      } else {
+        $("#searchStockForm").submit();
+      }
+    } 
   }
 });
 
+$("#searchStockForm").keydown(function (event) {
+  if (event.which == 13) {
+    event.preventDefault(); 
+    return false;
+  }
+});
 
 // listen for click on div to fill the search box with that value
 $("#searchResult").delegate("div", "click", function (event) {
   var found = $(this).text();
   searchStock.value = found.split("-")[0].trim();
+  $("#searchStockForm").submit();
   $(this).parent().addClass("d-none");
 });
 
@@ -59,7 +78,15 @@ function searchQuery(searchTerm) {
       if (found.length == 0) {
         searchResult.innerHTML =
           '<div class="notfound-mes">Can\'t find stock, search another term </div>';
+          $("#searchResult").css({
+            "cursor": "wait",
+            "pointer-events": "none"
+          });
       } else {
+        $("#searchResult").css({
+          "cursor": "pointer",
+          "pointer-events": "auto"
+        });
         searchResult.innerHTML = "";
         renderHTML(found);
       }
@@ -67,6 +94,7 @@ function searchQuery(searchTerm) {
   };
   http.send(params);
 }
+
 
 // display search result
 function renderHTML(found) {
@@ -85,6 +113,30 @@ function renderHTML(found) {
   searchResult.innerHTML = htmlString;
 }
 
+// -----------------------Pop up search bar-----------------------
+function togglePopup(){
+  document.getElementById("popup-1").classList.toggle("active");
+}
+
+function getPrice(searchVal) {
+  return new Promise( (resolve, reject) =>  {
+    var url = "http://localhost:3000/getPrice";
+    var params = "symbol=" + searchVal;
+    var http = new XMLHttpRequest();
+    http.open("POST", url, true);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.onreadystatechange = function () {
+      if (http.readyState == 4 && http.status == 200) {
+        var obj = http.responseText;
+        var parsed = JSON.parse(obj);
+        console.log(parsed);
+        resolve(parsed.foundStock.price[0]);
+      }
+    };
+    http.send(params);
+  })  
+}
+
 // -----------------------User-----------------------
 $(".editEmail").click((event) => {
   fadeForm($("#editEmailForm"));
@@ -99,6 +151,10 @@ $(".editLast").click((event) => {
   fadeForm($("#editLastForm"));
 });
 
+// $(".editPrice").click((event) => {
+//   fadeForm($("#customPriceForm"));
+// });
+
 function fadeForm($edit) {
   if ($edit.is(':visible')) {
     $edit.fadeOut(300, () => $edit.hide());
@@ -107,10 +163,7 @@ function fadeForm($edit) {
   }
 }
 
-// -----------------------Test-----------------------
-function togglePopup(){
-  document.getElementById("popup-1").classList.toggle("active");
-}
+
 
 
 // -----------------------Update Stock price dynamically-----------------------

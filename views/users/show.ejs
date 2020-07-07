@@ -31,24 +31,25 @@
 
             <div id="editEmailForm" class="editForm">
               <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
-              <div class="row">
-                  <div class="col-3"></div>
-                  <div class="col-6 pl-5">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="email"
-                      value=<%=currentUser.email %>
-                    />
-                  </div>
-                  <div class="col-2 signup-button">
-                    <button class="btn custom-signup-btn">
-                      Confirm
-                    </button>
-                  </div>
-              </div>
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-6 pl-5">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="email"
+                        value=<%=currentUser.email %>
+                      />
+                    </div>
+                    <div class="col-2 signup-button">
+                      <button class="btn custom-signup-btn">
+                        Confirm
+                      </button>
+                    </div>
+                </div>
               </form>
             </div>
+            
           </div>
 
           <!-- firstname -->

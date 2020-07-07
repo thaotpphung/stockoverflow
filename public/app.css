@@ -22,7 +22,7 @@ body {
 
 .negative {
   color: #FF0000;
-}
+}  
 
 .possitive {
   color: #3caea3;
@@ -54,7 +54,7 @@ body {
   margin-bottom: 2em;
 }
 
-.fa-edit, .fa-plus, .fa-sync-alt{
+.fa-edit, .fa-plus, .fa-sync-alt, .fa-search{
   color: white;
 }
 
@@ -272,6 +272,16 @@ hr {
   margin-bottom: 0 !important;
 }
 
+.not-clickable {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.clickable {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 /* ----------Dashboard-Graphs------------------------ */
 
 /* #graph-button {
@@ -292,6 +302,10 @@ margin-bottom: 3em;
 
 .min-md {
   min-width: 720px;
+}
+
+.vertical-middle {
+  vertical-align: middle !important;
 }
 
 /* ----------Show stock----------------------- */
@@ -367,7 +381,6 @@ margin-bottom: 3em;
 }
 
 
-
 /* -------------test--- */
 #testing {
   background-color: white;
@@ -385,8 +398,8 @@ margin-bottom: 3em;
 }
 
 .popup .content {
-  position:absolute;
-  top:50%;
+  position: absolute;;
+  top:60%;
   left:50%;
   transform:translate(-50%,-50%) scale(0);
   /* background:#fff; */
@@ -420,6 +433,11 @@ margin-bottom: 3em;
   line-height:30px;
   text-align:center;
   border-radius:50%; */
+}
+
+
+.popup .fa-times:hover {
+  color: #bbb;
 }
 
 /* .popup #searchStock {
