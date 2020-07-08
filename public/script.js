@@ -37,10 +37,29 @@ $("#searchStock").keyup( async function (event) {
       if ($("#tickSymbolDiv").html()) {
         $(".fa-search").click();
         var searchVal = $("#searchStock").val();
-        var price = await getPrice(searchVal);
-        $("#purchase-symbol").val(searchVal.toUpperCase());
-        $("#purchase-price").val(Math.floor(price/100) + "." + price%100);
-        document.getElementById('purchase-time').valueAsDate = new Date();
+        var foundStock = await getStock(searchVal);
+        if (foundStock === "not found") {
+          $("#stock-symbol").val(searchVal.toUpperCase());
+          $("#stock-page").val("purchase");
+          var answer = window.confirm("Add to Tracked Stocks List?")
+          if (answer) { 
+            $("#stock-addToTrackedStocks").val("true");
+            // click button to send form to add with tracked stock
+            // redirect back to new with information
+          } else {
+            $("#stock-addToTrackedStocks").val("false");
+            // click button to send form to add without tracked stock
+            // redirect back to new with information
+          }
+          $("#addStockForm").submit();
+
+
+        } else {
+          $("#purchase-symbol").val(searchVal.toUpperCase());
+          $("#purchase-name").val(foundStock.name);
+          $("#purchase-price").val(Math.floor(foundStock.price[0]/100) + "." + foundStock.price[0]%100);
+          document.getElementById('purchase-time').valueAsDate = new Date();
+        }
       } else {
         $("#searchStockForm").submit();
       }
@@ -59,7 +78,7 @@ $("#searchStockForm").keydown(function (event) {
 $("#searchResult").delegate("div", "click", function (event) {
   var found = $(this).text();
   searchStock.value = found.split("-")[0].trim();
-  $("#searchStockForm").submit();
+  // $("#searchStockForm").submit();
   $(this).parent().addClass("d-none");
 });
 
@@ -95,7 +114,6 @@ function searchQuery(searchTerm) {
   http.send(params);
 }
 
-
 // display search result
 function renderHTML(found) {
   var htmlString = "";
@@ -118,9 +136,9 @@ function togglePopup(){
   document.getElementById("popup-1").classList.toggle("active");
 }
 
-function getPrice(searchVal) {
+function getStock(searchVal) {
   return new Promise( (resolve, reject) =>  {
-    var url = "http://localhost:3000/getPrice";
+    var url = "http://localhost:3000/getStock";
     var params = "symbol=" + searchVal;
     var http = new XMLHttpRequest();
     http.open("POST", url, true);
@@ -129,8 +147,13 @@ function getPrice(searchVal) {
       if (http.readyState == 4 && http.status == 200) {
         var obj = http.responseText;
         var parsed = JSON.parse(obj);
-        console.log(parsed);
-        resolve(parsed.foundStock.price[0]);
+        if (parsed.foundStock === null) {
+          console.log("null");
+          resolve("not found");
+        } else {
+          console.log(parsed);
+          resolve(parsed.foundStock);
+        }
       }
     };
     http.send(params);

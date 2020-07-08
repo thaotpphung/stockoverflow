@@ -398,9 +398,9 @@ margin-bottom: 3em;
 }
 
 .popup .content {
-  position: absolute;;
-  top:60%;
-  left:50%;
+  position: fixed;
+  top: 450px;
+  left: 50%;
   transform:translate(-50%,-50%) scale(0);
   /* background:#fff; */
   width:500px;
@@ -415,9 +415,8 @@ margin-bottom: 3em;
   color: #ccc;
 }
 
-
 .popup .fa-times {
-  position: absolute;
+  position: fixed;
   top: 80px;
   right: 50px;
   font-size: 30px;

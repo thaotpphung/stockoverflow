@@ -39,30 +39,38 @@ router.get("/:stockid/new", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
+// New purchase - form to add purchase
+// 
+router.get("/new", middleware.checkCorrectUser, (req, res) => {
+  User.findById(req.params.userid, (err, user) => {
+    if (err || !user) {
+      req.flash("error", "User not found");
+      res.redirect("back");
+    } else {  // wrond here 
+      res.render("purchases/new" , {stock: null});
+    }
+  });
+});
+
 //  create - add purchase to db
-router.post("/:stockid/", middleware.checkCorrectUser, (req, res) => {
+router.post("/", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid, async (err, user) => {
     if (err || !user) {
       req.flash("error", "User not found");
       res.redirect("back");
     } else {
-      var stock = await Stock.findById(req.params.stockid);
-      var foundPurchase = await Purchase.findOne({symbol: stock.symbol , userid : user._id});
-
+      var foundPurchase = await Purchase.findOne({symbol: req.body.purchase.symbol , userid : user._id});
       if (!foundPurchase) {  // if purchase of this stock has not been made b4
-        console.log("not found purchase");
-
-        var purchase =  await Purchase.create({symbol: stock.symbol});
-        purchase.name = stock.name;
+        var purchase =  await Purchase.create({symbol: req.body.purchase.symbol});
         purchase.userid = req.params.userid;
-        await updatePurchase(purchase, stock, req);
+        purchase.name = req.body.purchase.name;
+        await updatePurchase(purchase, req.body.purchase);
         user.purchases.push(purchase);
         user.save();
         req.flash("success", "Successfully purchased stock");
         res.redirect("/purchases/" + user._id);
       } else {
-        console.log("found purchase");
-        await updatePurchase(foundPurchase, stock, req);
+        await updatePurchase(foundPurchase, req.body.purchase);
         req.flash("success", "Successfully purchased stock");
         res.redirect("/purchases/" + user._id);
       }
@@ -70,11 +78,11 @@ router.post("/:stockid/", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
-async function updatePurchase(purchase, stock, req) {
-  let history = {price: stock.price[0], time: new Date().toJSON().slice(0, 10), quantity: req.body.purchase.quantity };
+async function updatePurchase(purchase, purchaseReq) {
+  let history = {price: purchaseReq.price * 100, time: purchaseReq.time, quantity: purchaseReq.quantity };
   purchase.history.push(history); 
-  purchase.totalprice += (stock.price[0]);
-  purchase.totalquantity += parseInt(req.body.purchase.quantity);
+  purchase.totalprice += (purchaseReq.price * 100);
+  purchase.totalquantity += parseInt(purchaseReq.quantity);
   purchase.save();
   return;
 }

@@ -65,8 +65,8 @@ router.post("/search", (req, res) => {
 });
 
 // get price route
-router.post("/getPrice", (req, res) => {
-  console.log("getPrice", req.body.symbol);
+router.post("/getStock", (req, res) => {
+  console.log("getStock", req.body.symbol);
   Stock.findOne(
     { symbol: req.body.symbol.toUpperCase() },
     (err, foundStock) => {
