@@ -53,7 +53,7 @@ async function checkSharedStockDB(queryStock, queryBody, api_url){
   } catch (err) {
     console.log(err);
   }
-}
+} 
 
 // Checked if the query stock is in the tracked stock list by symbol
 function notInTrackedStocks(trackedstocks, queryStock){
