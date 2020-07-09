@@ -1,132 +1,130 @@
 <%- include("../partials/header") %>
 
-<div class="container mgtop">
+<div id="body-container">
   <div class="row justify-content-center">
-    <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-md">
-      <div id="intro-signup" class="border-black">
+    <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-width-md">">
+      
+      <div class="card-container">
         <h1 class="header-black">Purchase Stock</h1>
         <form action="/purchases/<%=currentUser._id%>" method="POST">
         
-        <div class="form-row pt-3">
-          <div class="col-12">
-            <div class="row">
-              <div id="tickSymbolDiv" class="col-3 user-info">Tick Symbol:</div>
-              <div class="col-7 ">
-                <input 
-                  id="purchase-symbol"
-                  type="text"
-                  class="form-control"
-                  name="purchase[symbol]"
-                  <% if(stock) { %>
-                    value = <%=stock.symbol%> 
-                  <% } %>
-                  required
-                  readonly="readonly" 
-                />
+          <div class="form-row pt-3">
+            <div class="col-12">
+              <div class="row">
+                <div id="tickSymbolDiv" class="col-3 card-row">Tick Symbol:</div>
+                <div class="col-7 ">
+                  <input 
+                    id="purchase-symbol"
+                    type="text"
+                    class="form-control"
+                    name="purchase[symbol]"
+                    <% if(stock) { %>
+                      value = <%=stock.symbol%> 
+                    <% } %>
+                    required
+                    readonly="readonly" 
+                  />
+                </div>
+                <div class="col-1 button-container">
+                  <i onclick="togglePopup()" class="fas fa fa-search fa-lg vertical-middle"></i>
+                </div>
               </div>
-              <div class="col-1 signup-button">
-                <i onclick="togglePopup()" class="fas fa-search fa-lg vertical-middle"></i>
+            </div>
+
+            <div class="col-12">
+              <div class="row">
+                <div class="col-3 card-row">Name:</div>
+                <div class="col-7 ">
+                  <input 
+                    id="purchase-name"
+                    type="text"
+                    class="form-control"
+                    name="purchase[name]"
+                    <% if(stock) { %>
+                      value = "<%=stock.name%>"
+                    <% } %>
+                    required
+                    readonly="readonly" 
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="d-none">
+              <input 
+                type="text"
+                id="purchase-stockid"
+                type="text"
+                name="purchase[stockid]"
+                <% if(stock) { %>
+                  value = "<%=stock._id%>"
+                <% } %>
+              />
+            </div>
+
+            <div class="col-12">
+              <div class="row">
+                <div class="col-3 card-row">Price</div>
+                <div class="col-7 ">
+                  <input
+                    id="purchase-price"
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    name="purchase[price]"
+                    <% if(stock) { %>
+                      value= <%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%> 
+                    <% } %>
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="row">
+                <div class="col-3 card-row">Time:</div>
+                <div class="col-7 ">
+                  <input
+                    id="purchase-time"
+                    type="date"
+                    class="form-control"
+                    name="purchase[time]"
+                    <% if(stock) { %>
+                      value = <%- new Date().toISOString().substring(0, 10); %> 
+                    <% } %>
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="row">
+                <div class="col-3 card-row">Quantity:</div>
+                <div class="col-7 ">
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="purchase[quantity]"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="row">
+                <div class="col-7"> </div>
+                <div class="col-2 button-container">
+                  <button class="btn green-button">
+                    Confirm
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-
-          <div class="col-12">
-            <div class="row">
-              <div class="col-3 user-info">Name:</div>
-              <div class="col-7 ">
-                <input 
-                  id="purchase-name"
-                  type="text"
-                  class="form-control"
-                  name="purchase[name]"
-                  <% if(stock) { %>
-                    value = "<%=stock.name%>"
-                  <% } %>
-                  required
-                  readonly="readonly" 
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="d-none">
-            <input 
-              type="text"
-              id="purchase-stockid"
-              type="text"
-              name="purchase[stockid]"
-              <% if(stock) { %>
-                value = "<%=stock._id%>"
-              <% } %>
-            />
-          </div>
-
-          <div class="col-12">
-            <div class="row">
-              <div class="col-3 user-info">Price</div>
-              <div class="col-7 ">
-                <input
-                  id="purchase-price"
-                  type="number"
-                  step="0.01"
-                  class="form-control"
-                  name="purchase[price]"
-                  <% if(stock) { %>
-                    value= <%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%> 
-                  <% } %>
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12">
-            <div class="row">
-              <div class="col-3 user-info">Time:</div>
-              <div class="col-7 ">
-                <input
-                  id="purchase-time"
-                  type="date"
-                  class="form-control"
-                  name="purchase[time]"
-                  <% if(stock) { %>
-                    value = <%- new Date().toISOString().substring(0, 10); %> 
-                  <% } %>
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12">
-            <div class="row">
-              <div class="col-3 user-info">Quantity:</div>
-              <div class="col-7 ">
-                <input
-                  type="number"
-                  class="form-control"
-                  name="purchase[quantity]"
-                  required
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12">
-            <div class="row">
-              <div class="col-9"> </div>
-              <div class="col-2 signup-button">
-                <button class="btn custom-signup-btn">
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-        
         </form>
-
       </div>
 
     </div>
@@ -142,7 +140,7 @@
   
   <div class="content">
     <input
-      id="searchStock"
+      id="searchKey"
       class="form-control mb-0"
       type="text"
       name="stock[symbol]"
@@ -165,12 +163,6 @@
   type="text"
   name="stock[page]"
   />
-  <input
-  id="stock-addToTrackedStocks"
-  type="text"
-  name="stock[addToTrackedStocks]"
-  />
-
 </form>
 
 <%- include("../partials/footer") %>

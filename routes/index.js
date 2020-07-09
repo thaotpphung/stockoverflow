@@ -15,20 +15,6 @@ const express = require("express"),
 
 require("dotenv").config();
 
-// router.get("/test", (req, res) => {
-//   StockNasdaq.find({}, (err, stocks) => {
-//     stocks.forEach( async (stock) => {
-//       const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.API_KEY;
-//       const rawData = await got(api_url);
-//       const data = JSON.parse(rawData.body);
-//       if (Object.keys(data).length === 0) {
-//         await StockNasdaq.remove({symbol: stock.symbol});
-//         console.log(stock.symbol);
-//       }
-//     });
-//   });
-// });
-
 router.get("/test", async (req, res) => {
   const stocks = await StockNyse.find({});
   stocks.forEach( async (stock) => {
@@ -47,33 +33,28 @@ router.get("/", (req, res) => {
   res.render("landing");
 });
 
-// root route
-// router.get("/search", (req, res) => {
-//   res.render("search");
-// });
-
 // get search route
 router.post("/search", (req, res) => {
-  console.log(req.body.searchTerm);
-  StockSearch.find(
-    { symbol: { $regex: req.body.searchTerm } },
-    (err, foundStock) => {
-      // if (foundStock.length) {
+  console.log('search', req.body.symbol);
+  StockSearch.find({ symbol: { $regex: req.body.symbol } }, (err, foundStock) => {
+    if (foundStock.length > 0) {
       res.json({ foundStock });
+    } else {
+      res.json ({ foundStock: null });
     }
-  );
+  });
 });
 
 // get price route
 router.post("/getStock", (req, res) => {
   console.log("getStock", req.body.symbol);
-  Stock.findOne(
-    { symbol: req.body.symbol.toUpperCase() },
-    (err, foundStock) => {
-      // if (foundStock.length) {
+  Stock.findOne({ symbol: req.body.symbol.toUpperCase() }, (err, foundStock) => {
+    if (foundStock == null) {
+      res.json ({ foundStock: null });
+    } else {
       res.json({ foundStock });
     }
-  );
+  });
 });
 
 // router.post("/update", async (req, res) => {

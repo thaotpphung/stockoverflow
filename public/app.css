@@ -1,3 +1,23 @@
+/* ----------Javascript------------------------ */
+.not-clickable {
+  cursor: wait;
+  pointer-events: none;
+}
+
+.clickable {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.negative {
+  color: #FF0000 !important;
+}  
+
+.possitive {
+  color: #3caea3 !important;
+}
+
+/* ----------Shared------------------------ */
 * {
   margin: 0;
   padding: 0;
@@ -14,69 +34,128 @@ html {
 body {
   background-color: #1a2a5a !important;
   background-size: cover;
+  font-family: "lato", sans-serif !important;
 }
 
 #flash-mes {
   margin-top: 62px;
 }
 
-.negative {
-  color: #FF0000;
-}  
-
-.possitive {
-  color: #3caea3;
+#body-container {
+  padding: 4rem 12em !important ;
+  min-width: 720px;
 }
 
 
-.mgtop {
-  padding-top: 4rem !important;
+.margin-top-2rem {
+  margin-top: 2rem; 
 }
 
-.user-info {
-  color: white;
+.card-row {
   padding-top: 1rem;
   padding-right: 0 !important;
   padding-left: 4rem !important;
-  font-family: "lato", sans-serif;
+}
+
+.card-container { 
+  background-color: rgba(82, 103, 168, 0.3) !important;
+  border:black solid 1px;
+  padding-bottom: 1.5em;
+  color: white;
   font-weight: 300;
   font-size: 1.3rem;
 }
 
-.border-black { 
-  background-color: rgba(82, 103, 168, 0.3) !important;
-  border:black solid 1px;
-  padding-bottom: 2em;
+.card-center {
+  text-align: center;
+  padding-top: 1.2em;
 }
 
-.mg-2 {
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
-.fa-edit, .fa-plus, .fa-sync-alt, .fa-search{
+.green-button {
+  background-color: #3caea3;
   color: white;
+}
+
+.button-container {
+  margin: 0 auto;
+  width: 20%;
+  padding-top: 1em;
+}
+
+.table-container {
+  background-color: white;
+  border: black solid 1px;
+  min-width: 720px;
+}
+
+.header-black {
+  background: #111720;
+  color: white;
+  margin: 0;
+  padding: 10px 20px;
+  /* text-transform: uppercase; */
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.fa, .fas{
+  cursor: pointer;
+}
+
+.fa-edit, .fa-plus, .fa-sync-alt, .fa-search {
+  color: white;
+}
+
+.fa-eye {
+  color: black;
+}
+
+/* ----------------------table----------- */
+.row-header {
+  overflow: hidden;
+  height: 25px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table tbody td,
+.table-container .table th {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table-container .table thead tr th.first-th, .table-container .table tbody tr th {
+  text-align: left;
+  max-width: 280px !important;
+  width: 280px !important;
+}
+
+.table-container span.delete, .table-container span.add-to-tracked{
+  text-align: center;
+  width: 0;
+  display: inline-block;
+  transition: 0.2s linear;
+  opacity: 0;
+}
+
+.table-container th:hover span.delete, .table-container th:hover span.add-to-tracked {
+  width: 40px;
+  opacity: 1;
 }
 
 /* ----------------------------Navbar---------------------------- */
 a.navbar-brand {
-  font-family: "lato", sans-serif;
   font-weight: bold;
   font-size: 1.5rem;
 }
 
 .navbar-dark .navbar-nav .nav-link {
   color: white;
-  font-family: "lato", sans-serif;
   font-weight: 300;
   font-size: 1.1rem;
 }
 
-#mainNav {
-  background-color: #111720;
-}
-
-#mainNav .nav-link:hover {
+.navbar .nav-link:hover {
   color: #3caea3 !important;
 }
 
@@ -90,7 +169,7 @@ background-color: #6A7E7A;
 /* transition: background 1s; */
 /* }  
 
-/* ----------------------Home-header section---------------------------- */
+/* ----------------------Home-header -------------------------- */
 .jumbotron {
   height: 100vh;
   padding-top: 4rem !important;
@@ -99,10 +178,6 @@ background-color: #6A7E7A;
   /* background: url("https://wallpapercave.com/wp/wp2128226.jpg"); */
   /* background-size: cover;
   background-position: center; */
-}
-
-#intro {
-  height: 70vh;
 }
 
 #stock-image {
@@ -116,34 +191,19 @@ background-color: #6A7E7A;
   max-width: 100%;
 }
 
-#banner {
+#landing-banner {
   color: white;
   font-size: 1.8em;
   font-family: "Roboto", sans-serif;
   font-weight: 100;
 }
 
-#main-name {
+#logo {
   font-weight: 400;
 }
 
-#intro-signup .form-row .form-control {
+.form-row .form-control {
   margin: 1em;
-}
-
-.custom-signup-btn {
-  background-color: #3caea3;
-  /* color: #495057; */
-  color: white;
-  font-family: "lato", sans-serif ;
-
-  /* width: 100%; */
-}
-
-.signup-button {
-  margin: 0 auto;
-  width: 20%;
-  padding-top: 1em;
 }
 
 #password-warning {
@@ -154,109 +214,16 @@ background-color: #6A7E7A;
   padding-left: 10%;
 }
 
-/* ----------------------------Dashboard---------------------------- */
-#dashboard-container {
-  padding-top: 4rem !important;
-  margin: 0 12em;
-  min-width: 700px;
-}
-
-/* ----------Dashboard-tracked stocks------------------------ */
-
-.empty-mes {
-  text-align: center;
-  color: white;
-  font-family: "lato", sans-serif;
-  background-color: rgba(82, 103, 168, 0.3);
-  border:black solid 1px;
-  margin-bottom: 2em;
-  font-weight: 300;
-  font-size: 1.3rem;
-  padding: 1em;
-}
-
-#tracked-stocks {
-  background-color: white;
-  border: black solid 1px;
-  margin-bottom: 2em;
-}
-
-.header-black {
-  background: #111720;
-  color: white;
-  margin: 0;
-  padding: 10px 20px;
-  text-transform: uppercase;
-  font-size: 24px;
-  font-weight: normal;
-}
-
-.row-header {
-  overflow: hidden;
-  height: 25px !important;
-}
-
-#tracked-stocks .table tbody td,
-#tracked-stocks .table th {
-  vertical-align: middle;
-  text-align: center;
-}
-
-#tracked-stocks .table thead tr th.first-th, #tracked-stocks .table tbody tr th {
-  text-align: left;
-  width: 180px !important;
-}
-
-.header-fa {
-  float: right;
-  padding-left: 1rem;
-}
-
-#tracked-stocks span.delete, #tracked-stocks span.add-to-tracked{
-  text-align: center;
-  width: 0;
-  display: inline-block;
-  transition: 0.2s linear;
-  opacity: 0;
-}
-
-#tracked-stocks th:hover span.delete, #tracked-stocks th:hover span.add-to-tracked {
-  width: 40px;
-  opacity: 1;
-}
-
+/* ----------------------tracked stocks----------- */
 .fa-trash {
   color: red !important;
-  cursor: pointer;
-}
-
-.fa-button {
-  background: none;
-  padding: 0px;
-  border: none;
-}
-
-
-#tracked-stocks span.show{
-  color: black;
-  text-align: center;
-  display: inline-block;
-  transition: 0.2s linear;
-  opacity: 0;
-  width: 5px !important;
-  /* font-size: 18px; */
-}
-
-#tracked-stocks tbody tr:hover span.show {
-  opacity: 1;
 }
 
 #tracked-list tbody tr:hover {
   cursor: pointer;
 }
 
-
-/* #tracked-stocks input {
+/* .table-container input {
   font-size: 18px;
   color: #2980b9;
   background-color: #f7f7f7;
@@ -266,70 +233,37 @@ background-color: #6A7E7A;
   border: 3px solid rgba(0, 0, 0, 0);
 }
 
-#tracked-stocks input:focus {
+.table-container input:focus {
   background: #fff;
   border: 3px solid #2980b9;
   outline: none;
 } */
-
-hr {
-  margin-bottom: 0 !important;
-}
-
-.not-clickable {
-  cursor: wait;
-  pointer-events: none;
-}
-
-.clickable {
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-/* ----------Dashboard-Graphs------------------------ */
-
-/* #graph-button {
-display:flex;
-justify-content:flex-end;
-}
-.btn.custom-graph-btn {
-background-color: #3CAEA3;
-color: #495057;
-margin-bottom: 3em;
-} */
-
 
 /* ----------Users----------------------- */
 .editForm {
   display: none;
 }
 
-.min-md {
+.min-width-md {
   min-width: 720px;
 }
 
-.vertical-middle {
-  vertical-align: middle !important;
+.display-none {
+  display: none;
 }
-
 /* ----------Show stock----------------------- */
 #stock-banner {
-  font-family: "lato", sans-serif;
   font-weight: 500;
   padding-left: 1rem !important;
   padding-right: 1rem !important;
 }
 
-.big-fontsize {
+.font-size-lg {
   font-size: 40px;
 }
 
-.small-fontsize {
+.font-size-sm {
   font-size: 25px;
-}
-
-#price-banner {
-  width: 100px;
 }
 
 .stat-table {
@@ -345,22 +279,17 @@ margin-bottom: 3em;
   padding-left: 1rem !important;
 }
 
-#button-right {
+#button-light {
   float: right;
   padding: 1rem;
   font-size: 20px;
 }
 
-#button-right a {
+#button-light a {
   color: black;
 }
 
-
 /* ----------Search------------------------ */
-#searchResult {
-  width: 100%;
-}
-
 .search-item, .notfound-mes {
   display: block;
   min-width: 100%;
@@ -377,19 +306,7 @@ margin-bottom: 3em;
   background-color: rgb(235, 235, 235);
 }
 
-.fixed {
-  position: fixed;
-  top: 29%;
-  left: 47%;
-  z-index: -1;
-}
-
-
-/* -------------test--- */
-#testing {
-  background-color: white;
-}
-
+/* -------------Overlay Search Box-- */
 .popup .overlay {
   position:fixed;
   top:0px;
@@ -406,7 +323,6 @@ margin-bottom: 3em;
   top: 450px;
   left: 50%;
   transform:translate(-50%,-50%) scale(0);
-  /* background:#fff; */
   width:500px;
   height:500px;
   z-index:2;
@@ -426,27 +342,11 @@ margin-bottom: 3em;
   font-size: 30px;
   cursor: pointer;
   color: white ;
-
-  /* width:30px;
-  height:30px;
-  background:#222;
-  color:#fff;
-  font-size:20px;
-  font-weight:600;
-  line-height:30px;
-  text-align:center;
-  border-radius:50%; */
 }
-
 
 .popup .fa-times:hover {
   color: #bbb;
 }
-
-/* .popup #searchStock {
-  position: absolute;
-  top: 30px;
-} */
 
 .popup.active .overlay {
   display:block;
@@ -457,42 +357,8 @@ margin-bottom: 3em;
   transform:translate(-50%,-50%) scale(1);
 }
 
-#searchButton {
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  padding:15px;
-  font-size:18px;
-  border:2px solid #222;
-  color:#222;
-  text-transform:uppercase;
-  font-weight:600;
-  background:#fff;
+/* -------------test--- */
+#testing {
+  background-color: white;
 }
-
-/* ------------tooltip--- */
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-  /* border-bottom: 1px dotted black; */
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
+/* ---------------- */

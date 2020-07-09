@@ -1,25 +1,23 @@
 <%- include("partials/header") %>
 
 <form action="/login" method="POST">
-  <div class="container mgtop">
+  <div id="body-container">
     <div class="row justify-content-center">
-      <div class="col 4 col-lg-4">
-        <div class="pl-3 text-center" id="banner">
-          Welcome to <span id="main-name">STOCKOVERFLOW</span>
+      <div class="col-4 col-lg-4">
+        <div class="pl-3 text-center" id="landing-banner">
+          Welcome to <span id="logo">STOCKOVERFLOW</span>
         </div>
-        <div id="intro-signup">
-          <div class="form-row">
-            <div class="col-12">
-              <input type="text" name="username" class="form-control" placeholder="username" />
-            </div>
-            <div class="col-12">
-              <input type="password" name="password" class="form-control" placeholder="password" />
-            </div>
-            <div class="signup-button">
-              <button class="btn custom-signup-btn">
-                Sign In
-              </button>
-            </div>
+        <div class="form-row">
+          <div class="col-12">
+            <input type="text" name="username" class="form-control" placeholder="username" />
+          </div>
+          <div class="col-12">
+            <input type="password" name="password" class="form-control" placeholder="password" />
+          </div>
+          <div class="button-container">
+            <button class="btn green-button">
+              Sign In
+            </button>
           </div>
         </div>
       </div>

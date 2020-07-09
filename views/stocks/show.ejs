@@ -1,15 +1,14 @@
 <%- include("../partials/header") %>
 
-<div id="dashboard-container">
-  <div id="tracked-stocks">
-    <h1 class="header-black">Overall <i></i></h1> 
+<div id="body-container">
+  <div class="table-container">
+    <h1 class="header-black">OVERALL <i></i></h1> 
     <div id="stock-banner" class="row">
       <div class="col-7">
-        <div class="big-fontsize"><%=stock.name%></div>
-        <div class="small-fontsize"><%=stock.symbol%> - <%=stock.time[0]%></div>
-        <div class="small-fontsize">
-          <%=stock.price[0]%> USD - 
-          <span id="price-banner" ></span>
+        <div class="font-size-lg"><%=stock.name%></div>
+        <div class="font-size-sm"><%=stock.symbol%> - <%=stock.time[0]%></div>
+        <div class="font-size-sm">
+          <%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%> USD -
           <span 
             <% if (stock.change[0] < 0) { %>
               class="negative" > <i class="fa fa-arrow-down"></i> <% } else { %> class="possitive" > <i class="fa fa-arrow-up"></i> <% } %>
@@ -19,16 +18,10 @@
       </div>
 
       <div class="col-5" >
-        <div id="button-right">
-          <!-- <form action = "/purchases/<%=currentUser._id%>/<%=stock._id%>/new">
-            <label class="btn btn-light">
-              <i class="fas fa-chart-line small-fontsize"></i>
-              <span>Trade Options</span>
-            </label>
-          </form> -->
+        <div id="button-light">
           <label class="btn btn-light">
             <a href="/purchases/<%=currentUser._id%>/<%=stock._id%>/new">
-              <i class="fas fa-chart-line small-fontsize"></i>
+              <i class="fas fa-chart-line font-size-sm"></i>
               <span>Trade Options</span>
             </a>
           </label>
@@ -96,9 +89,9 @@
     </script>
   </div>
 
-  <div class="row">
+  <div class="row margin-top-2rem">
     <div class = "col-6">
-      <h1 class="header-black">Basic Stats <i></i></h1> 
+      <h1 class="header-black">BASIC STATS <i></i></h1> 
       <div class="stat-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -132,7 +125,7 @@
     </div>
     
     <div class = "col-6">
-      <h1 class="header-black">Key Stats <i></i></h1> 
+      <h1 class="header-black">KEY STATS <i></i></h1> 
       <div class="stat-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -166,7 +159,7 @@
   </div>
 </div>
 
-<!-- <div id="tracked-stocks">
+<!-- <div class="table-container">
   <h1 class="header-black">Asset Management <i></i></h1> 
   <table class="table table-striped mb-0">
     <thead>

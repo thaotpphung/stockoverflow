@@ -1,17 +1,16 @@
 <%- include("../partials/header") %>
 
-<div id="user-link" class="d-none">localhost:3000/users/<%=currentUser._id %></div>
-<div class="container mgtop">
+<div id="body-container">
   <div class="row justify-content-center">
-    <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-md">
-      <div id="intro-signup" class="border-black">
-        <h1 class="header-black">Basic Infomation</h1>
+    <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-width-md">
+      <h1 class="header-black">Basic Infomation</h1>
+      <div class="card-container">
         <div class="form-row pt-3">
           <!-- username -->
           <div class="col-12">
             <div class="row">
-              <div class="col-3 user-info">User Name:</div>
-              <div class="col-7 user-info">
+              <div class="col-3 card-row">User Name:</div>
+              <div class="col-7 card-row">
                 <%=currentUser.username %>
               </div>
             </div>
@@ -19,17 +18,18 @@
 
           <!-- email -->
           <div class="col-12">
+
             <div class="row">
-              <div class="col-3 user-info">Email:</div>
-              <div class="col-7 user-info">
+              <div class="col-3 card-row">Email:</div>
+              <div class="col-7 card-row">
                 <%=currentUser.email %>
               </div>
-              <div class="col-2 signup-button">
-                <i class="fas fa-edit fa-lg editEmail"></i>
+              <div class="col-2 button-container">
+                <i class="fas fa-edit fa-md"></i>
               </div>
             </div>
 
-            <div id="editEmailForm" class="editForm">
+            <div class="editForm display-none">
               <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
                 <div class="row">
                     <div class="col-3"></div>
@@ -41,30 +41,29 @@
                         value=<%=currentUser.email %>
                       />
                     </div>
-                    <div class="col-2 signup-button">
-                      <button class="btn custom-signup-btn">
+                    <div class="col-2 button-container">
+                      <button class="btn green-button">
                         Confirm
                       </button>
                     </div>
                 </div>
               </form>
             </div>
-            
           </div>
 
           <!-- firstname -->
           <div class="col-12">
             <div class="row">
-              <div class="col-3 user-info">First Name:</div>
-              <div class="col-7 user-info">
+              <div class="col-3 card-row">First Name:</div>
+              <div class="col-7 card-row">
                 <%=currentUser.firstname %>
               </div>
-              <div class="col-2 signup-button">
-                <i class="fas fa-edit fa-lg editFirst"></i>
+              <div class="col-2 button-container">
+                <i class="fas fa-edit fa-md"></i>
               </div>
             </div>
 
-            <div id="editFirstForm" class="editForm">
+            <div class="editForm display-none">
               <form  action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
                 <div class="row">
                     <div class="col-3"></div>
@@ -76,8 +75,8 @@
                         value=<%=currentUser.firstname %>
                       />
                     </div>
-                    <div class="col-2 signup-button">
-                      <button class="btn custom-signup-btn">
+                    <div class="col-2 button-container">
+                      <button class="btn green-button">
                         Confirm
                       </button>
                     </div>
@@ -89,15 +88,15 @@
           <!-- lasstname -->
           <div class="col-12">
             <div class="row">
-              <div class="col-3 user-info">Last Name:</div>
-              <div class="col-7 user-info">
+              <div class="col-3 card-row">Last Name:</div>
+              <div class="col-7 card-row">
                 <%=currentUser.lastname %>
               </div>
-              <div class="col-2 signup-button">
-                <i class="fas fa-edit fa-lg editLast"></i>
+              <div class="col-2 button-container">
+                <i class="fas fa-edit fa-md"></i>
               </div>
             </div>
-            <div id="editLastForm" class="editForm">
+            <div class="editForm display-none">
               <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
               <div class="row">
                   <div class="col-3"></div>
@@ -109,8 +108,8 @@
                       value=<%=currentUser.lastname %>
                     />
                   </div>
-                  <div class="col-2 signup-button">
-                    <button class="btn custom-signup-btn">
+                  <div class="col-2 button-container">
+                    <button class="btn green-button">
                       Confirm
                     </button>
                   </div>
@@ -126,14 +125,14 @@
 
       <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
 
-      <div id="intro-signup" class="border-black mg-2">
+      <div class="card-container margin-top-2rem">
         <h1 class="header-black">Password</h1>
         
         <div class="form-row pt-3">
 
           <div class="col-12">
             <div class="row">
-              <div class="col-5 user-info">Current Password:</div>
+              <div class="col-5 card-row">Current Password:</div>
               <div class="col-6 ">
                 <input
                   type="password"
@@ -147,7 +146,7 @@
 
           <div class="col-12">
             <div class="row">
-              <div class="col-5 user-info">New Password:</div>
+              <div class="col-5 card-row">New Password:</div>
               <div class="col-6 ">
                 <input
                   type="password"
@@ -161,7 +160,7 @@
 
           <div class="col-12">
             <div class="row">
-              <div class="col-5 user-info">Re-type New Password:</div>
+              <div class="col-5 card-row">Re-type New Password:</div>
               <div class="col-6 ">
                 <input
                   type="password"
@@ -176,8 +175,8 @@
           <div class="col-12">
             <div class="row">
               <div class="col-9"> </div>
-              <div class="col-2 signup-button">
-                <button class="btn custom-signup-btn">
+              <div class="col-2 button-container">
+                <button class="btn green-button">
                   Confirm
                 </button>
               </div>

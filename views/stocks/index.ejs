@@ -1,22 +1,18 @@
 <%- include("../partials/header") %>
 
-<div id="dashboard-container">
+<div id="body-container">
   <% if (currentUser) { %>
     <% if (currentUser.trackedstocks.length === 0) { %>
-      <div>
-    <h1 class="header-black">Tracked Stocks <i onclick="togglePopup()" class="fa fa-plus header-fa"></i></h1> 
-
-        <div class="empty-mes">
-          Start tracking stocks now!
-        </div>
-      </div>
+  <div>
+    <h1 class="header-black">Tracked Stocks <i onclick="togglePopup()" class="fa fa-plus float-right"></i></h1> 
+    <div class="card-container card-center">
+      Start tracking stocks now!
+    </div>
+  </div>
       
       <% } else { %>
-  <div id="tracked-stocks">
-    <!-- <a href="/stocks/<%=currentUser._id%>"><i class="fa fa-sync-alt header-fa"></i></a> -->
-    <!-- <h1 class="header-black">Tracked Stocks <a href="/stocks/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1>  -->
-    <h1 class="header-black">Tracked Stocks <i onclick="togglePopup()" class="fa fa-plus header-fa"></i></h1> 
-    
+  <div class="table-container">
+    <h1 class="header-black">TRACKED STOCKS <i onclick="togglePopup()" class="fa fa-plus float-right"></i></h1> 
     <table id="tracked-list" class="table table-hover mb-0">
       <thead>
         <tr>
@@ -25,12 +21,11 @@
           <th scope="col">Current Price</th>
           <th scope="col">Change(%)</th>
           <th scope="col">Change(USD)</th>
-          <!-- <th scope="col" class="d-none"></th> -->
         </tr>
       </thead>
       <tbody>
         <% stocks.forEach(stock => { %>
-        <tr title="More info">
+        <tr title="More">
           <th scope="row">
             <div class="row-header">
               <span class="delete"> 
@@ -55,25 +50,22 @@
             <%=stock.change[0]%>
             <span class="d-none"> 
               <a href="/stocks/<%=currentUser._id%>/<%=stock._id%>">
-                <i class="text-dark fa fa-info"></i>
+                <i class="fa-info"></i>
               </a>
             </span> 
           </td>
-          <!-- <td> -->
-            
-          <!-- </td> -->
         </tr>
         <% }); %>
       </tbody>
     </table>
   </div>
 
-  <div id="tracked-stocks">
-    <h1 class="header-black">Graphs</h1>
+  <div class="table-container margin-top-2rem">
+    <h1 class="header-black">GRAPHS</h1>
     <% if (stocks.length > 0) { %>
     <% stocks.forEach(stock => { %>
     <canvas id="chart<%=stock.symbol%>"></canvas>
-    <hr />
+    <hr class="mb-0"/>
     <script>
       var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
       var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
@@ -132,30 +124,25 @@
 </div>
 <% } %>
 
-<div id="test">
-
-  <div class="popup" id="popup-1">
-    <div class="overlay">
-      <div class="fa fa-times" onclick="togglePopup()"></div>
-    </div>
-    
-    <div class="content">
-      <form id="searchStockForm" action="/stocks/<%=currentUser._id%>" method="POST">
-        <input
-          id="searchStock"
-          class="form-control mb-0"
-          type="text"
-          name="stock[symbol]"
-          placeholder="Enter tick symbol"
-          required
-          autocomplete="off"
-        />
-        <div id="searchResult"></div>
-      </form>
-    </div>
+<div class="popup" id="popup-1">
+  <div class="overlay">
+    <div class="fa fa-times" onclick="togglePopup()"></div>
   </div>
-
+  
+  <div class="content">
+    <form id="searchStockForm" action="/stocks/<%=currentUser._id%>" method="POST">
+      <input
+        id="searchKey"
+        class="form-control mb-0"
+        type="text"
+        name="stock[symbol]"
+        placeholder="Enter tick symbol"
+        required
+        autocomplete="off"
+      />
+      <div id="searchResult"></div>
+    </form>
+  </div>
 </div>
-
 
 <%- include("../partials/footer") %>

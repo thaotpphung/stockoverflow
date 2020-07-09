@@ -2,20 +2,18 @@
 
 <% if (currentUser) { %>
 
-<div id="dashboard-container">
+<div id="body-container">
   <% if (currentUser.purchases.length === 0) { %>
     <div>
-      <h1 class="header-black">Assets <a href="/purchases/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1>
-      <div class="empty-mes">
+      <h1 class="header-black">Assets <a href="/purchases/<%=currentUser._id%>/new"><i class="fa fa-plus float-right"></i></a></h1>
+      <div class="card-container card-center">
         You don't own any stock
       </div>
     </div>
     
     <% } else { %>
-  <div id="tracked-stocks">
-    <h1 class="header-black">Assets <a href="/purchases/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1>
-
-    <!-- <h1 class="header-black">Assets</h1> -->
+  <div class="table-container">
+    <h1 class="header-black">ASSETS <a href="/purchases/<%=currentUser._id%>/new"><i class="fa fa-plus float-right"></i></a></h1>
     <table id="purchase" class="table table-hover mb-0">
       <thead>
         <tr>
@@ -51,17 +49,17 @@
 
   
   <% if (currentUser.purchases.length === 0) { %>
-    <div>
+    <div class="margin-top-2rem">
       <h1 class="header-black">Transaction History</h1>
-      <div class="empty-mes">
+      <div class="card-container card-center">
         You haven't made any purchases
       </div>
     </div>
     
     <% } else { %>
     
-  <div id="tracked-stocks">
-    <h1 class="header-black">Transaction History</h1>
+  <div class="table-container margin-top-2rem">
+    <h1 class="header-black">TRANSACTION HISTORY</h1>
     <table class="table table-hover mb-0">
       <thead>
         <tr>

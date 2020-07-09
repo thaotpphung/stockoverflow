@@ -1,84 +1,83 @@
 <%- include("partials/header") %>
 
 <form action="/register" method="post">
-<div class="container mgtop">
+<div id="body-container">
   <div class="row justify-content-center">
-    <div class="col 10 col-lg-6" >
-      <div class="pl-3 text-center" id="banner">
-        <span id="main-name">JOIN US TODAY</span> 
+    <div class="col-8" >
+      <div class="pl-3 text-center" id="landing-banner">
+        <span id="logo">JOIN US TODAY</span> 
       </div>
-      <div id="intro-signup">
-          <div class="form-row">
-            <div class="col-6">
+      <div class="form-row">
+        <div class="col-6">
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            placeholder="Username"
+          />
+        </div>
+        <div class="col-6">
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            placeholder="Email"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            name="firstname"
+            placeholder="First name"
+          />
+        </div>
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            name="lastname"
+            placeholder="Last name"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-12">
               <input
-                type="text"
+                type="password"
                 class="form-control"
-                name="username"
-                placeholder="Username"
+                name="password"
+                placeholder="Password"
               />
             </div>
-            <div class="col-6">
+            <div class="col-12">
               <input
-                type="email"
+                type="password"
                 class="form-control"
-                name="email"
-                placeholder="Email"
+                name="confirm-password"
+                placeholder="Confirm Password"
               />
-            </div>
-    
-            <div class="col-md-6">
-              <input
-                type="text"
-                class="form-control"
-                name="firstname"
-                placeholder="First name"
-              />
-            </div>
-            <div class="col-md-6">
-              <input
-                type="text"
-                class="form-control"
-                name="lastname"
-                placeholder="Last name"
-              />
-            </div>
-    
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-12">
-                  <input
-                    type="password"
-                    class="form-control"
-                    name="password"
-                    placeholder="Password"
-                  />
-                </div>
-                <div class="col-12">
-                  <input
-                    type="password"
-                    class="form-control"
-                    name="confirm-password"
-                    placeholder="Confirm Password"
-                  />
-                </div>
-              </div>
-            </div>
-            <div id="password-warning" class="col-md-6">
-              Password must contain:
-              <ul>
-                <li>At least 8 characters</li>
-                <li>Numeric characters</li>
-                <li>Alphabetical characters</li>
-                <li>Special characters</li>
-              </ul>
-            </div>
-    
-            <div class="signup-button">
-              <button class="btn custom-signup-btn">
-                Join Now
-              </button>
             </div>
           </div>
+        </div>
+        <div id="password-warning" class="col-md-6">
+          Password must contain:
+          <ul>
+            <li>At least 8 characters</li>
+            <li>Numeric characters</li>
+            <li>Alphabetical characters</li>
+            <li>Special characters</li>
+          </ul>
+        </div>
+
+        <div class="button-container">
+          <button class="btn green-button">
+            Join Now
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
