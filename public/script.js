@@ -10,14 +10,41 @@ $(document).ready(function () {
     });
   });
 });
- 
+
+// see info a stock from table
+$(".fa-eye").click (function (event) {
+  $(this).parent().parent().parent().parent().find('button').trigger("click");
+  event.stopPropagation();
+});
+
+// show stock info
+$(".fa-info").click (function (event) {
+  event.stopPropagation();
+});
+
+// delete a stock from table
+// $("#tracked-list").delegate("i", "click", function (event) {
+//   $(this).parent().parent().parent().parent().fadeOut(500, function () {
+//     $(this).addClass("d-none");
+//     $("#deleteButton").trigger("click");
+//   });
+//   event.stopPropagation();
+// });
+
 // Delete a stock from table
 $(".fa-trash").click (function (event) {
-  // await fadeRow($(this));
   $(this).parent().parent().parent().parent().fadeOut(500, function () {
     $(this).addClass("d-none");
-    $("#deleteButton").trigger("click");
+    console.log($(this));
+    $(this).find('button').trigger("click");
   });
+  event.stopPropagation();
+});
+
+// see info a stock from table
+$("#tracked-list tbody").delegate("tr", "click", function (event) {
+  console.log("click");
+  $(".fa-info").trigger("click");
   event.stopPropagation();
 });
 
@@ -41,22 +68,21 @@ $("#searchStock").keyup( async function (event) {
         if (foundStock === "not found") {
           $("#stock-symbol").val(searchVal.toUpperCase());
           $("#stock-page").val("purchase");
-          var answer = window.confirm("Add to Tracked Stocks List?")
-          if (answer) { 
-            $("#stock-addToTrackedStocks").val("true");
-            // click button to send form to add with tracked stock
-            // redirect back to new with information
-          } else {
-            $("#stock-addToTrackedStocks").val("false");
-            // click button to send form to add without tracked stock
-            // redirect back to new with information
-          }
+          // var answer = window.confirm("Add to Tracked Stocks List?")
+          // if (answer) { 
+          //   $("#stock-addToTrackedStocks").val("true");
+          //   // click button to send form to add with tracked stock
+          //   // redirect back to new with information
+          // } else {
+          //   $("#stock-addToTrackedStocks").val("false");
+          //   // click button to send form to add without tracked stock
+          //   // redirect back to new with information
+          // }
           $("#addStockForm").submit();
-
-
         } else {
           $("#purchase-symbol").val(searchVal.toUpperCase());
           $("#purchase-name").val(foundStock.name);
+          $("#purchase-stockid").val(foundStock._id);
           $("#purchase-price").val(Math.floor(foundStock.price[0]/100) + "." + foundStock.price[0]%100);
           document.getElementById('purchase-time').valueAsDate = new Date();
         }
@@ -173,10 +199,6 @@ $(".editFirst").click((event) => {
 $(".editLast").click((event) => {
   fadeForm($("#editLastForm"));
 });
-
-// $(".editPrice").click((event) => {
-//   fadeForm($("#customPriceForm"));
-// });
 
 function fadeForm($edit) {
   if ($edit.is(':visible')) {

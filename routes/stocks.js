@@ -32,15 +32,15 @@ router.post("/", middleware.checkCorrectUser, async (req, res) => {
   var user = await User.findById(req.params.userid).populate("trackedstocks");
   var newStock = await checkSharedStockDB(queryStock, queryBody, dd, api_url);
   // return the stock in db, create new one if neccessary
-  if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
-    if ((queryBody.addToTrackedStocks === "true") || (queryBody.addToTrackedStocks == null)) {
+  if ((queryBody.addToTrackedStocks == null)) {
+    if (notInTrackedStocks(user.trackedstocks, queryStock)) { // if it's not in trackedstocks
       user.trackedstocks.push(newStock);
       await user.save();
       req.flash("success", "Successfully added stock");
-    } 
-  } else { // stock already in trackedstocks
-    req.flash("error", "Stock already exists");
-  }
+    } else { // stock already in trackedstocks
+      req.flash("error", "Stock already exists");
+    }
+  } 
   if (!(queryBody.page === "purchase")) { // if add normally
     res.redirect("/stocks/" + req.params.userid);
   } else { // if add in purchase
@@ -95,6 +95,26 @@ router.get("/:stockid", middleware.checkCorrectUser, (req, res) => {
     } else {
       //render show template with that stock
       res.render("stocks/show", { stock: foundStock });
+    }
+  });
+});
+
+// EDIT ROUTE - edit a tracked stock
+router.put("/:stockid", middleware.checkCorrectUser, (req, res) => {
+  User.findById(req.params.userid, async (err, user) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const index = user.trackedstocks.indexOf(req.params.stockid);
+      if (index == -1) {
+        user.trackedstocks.push(req.params.stockid);
+        user.save();
+        req.flash("success", "Added to Tracked Stocks");
+        res.redirect("/stocks/" + req.params.userid);
+      } else {
+        req.flash("error", "Stock already exists");
+        res.redirect("/stocks/" + req.params.userid);
+      }
     }
   });
 });

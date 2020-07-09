@@ -4,6 +4,7 @@ var purchaseSchema = mongoose.Schema({
   userid: String,
   symbol: String,
   name: String,
+  stockid: String,
   history: [
     {
       price: Number,

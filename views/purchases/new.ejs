@@ -21,6 +21,7 @@
                     value = <%=stock.symbol%> 
                   <% } %>
                   required
+                  readonly="readonly" 
                 />
               </div>
               <div class="col-1 signup-button">
@@ -42,9 +43,22 @@
                     value = "<%=stock.name%>"
                   <% } %>
                   required
+                  readonly="readonly" 
                 />
               </div>
             </div>
+          </div>
+
+          <div class="d-none">
+            <input 
+              type="text"
+              id="purchase-stockid"
+              type="text"
+              name="purchase[stockid]"
+              <% if(stock) { %>
+                value = "<%=stock._id%>"
+              <% } %>
+            />
           </div>
 
           <div class="col-12">
@@ -110,6 +124,7 @@
           </div>
           
         </div>
+        
         </form>
 
       </div>
@@ -117,6 +132,8 @@
     </div>
   </div>
 </div>
+
+
 
 <div class="popup" id="popup-1">
   <div class="overlay">

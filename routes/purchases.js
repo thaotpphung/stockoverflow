@@ -40,7 +40,6 @@ router.get("/:stockid/new", middleware.checkCorrectUser, (req, res) => {
 });
 
 // New purchase - form to add purchase
-// 
 router.get("/new", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid, (err, user) => {
     if (err || !user) {
@@ -64,6 +63,7 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
         var purchase =  await Purchase.create({symbol: req.body.purchase.symbol});
         purchase.userid = req.params.userid;
         purchase.name = req.body.purchase.name;
+        purchase.stockid = req.body.purchase.stockid;
         await updatePurchase(purchase, req.body.purchase);
         user.purchases.push(purchase);
         user.save();
@@ -79,9 +79,9 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
 });
 
 async function updatePurchase(purchase, purchaseReq) {
-  let history = {price: purchaseReq.price * 100, time: purchaseReq.time, quantity: purchaseReq.quantity };
+  let history = {price: Math.round(purchaseReq.price * 100), time: purchaseReq.time, quantity: purchaseReq.quantity };
   purchase.history.push(history); 
-  purchase.totalprice += (purchaseReq.price * 100);
+  purchase.totalprice += (Math.round(purchaseReq.price * 100));
   purchase.totalquantity += parseInt(purchaseReq.quantity);
   purchase.save();
   return;

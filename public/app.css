@@ -212,7 +212,7 @@ background-color: #6A7E7A;
   padding-left: 1rem;
 }
 
-#tracked-stocks span.delete{
+#tracked-stocks span.delete, #tracked-stocks span.add-to-tracked{
   text-align: center;
   width: 0;
   display: inline-block;
@@ -220,7 +220,7 @@ background-color: #6A7E7A;
   opacity: 0;
 }
 
-#tracked-stocks th:hover span.delete {
+#tracked-stocks th:hover span.delete, #tracked-stocks th:hover span.add-to-tracked {
   width: 40px;
   opacity: 1;
 }
@@ -249,6 +249,10 @@ background-color: #6A7E7A;
 
 #tracked-stocks tbody tr:hover span.show {
   opacity: 1;
+}
+
+#tracked-list tbody tr:hover {
+  cursor: pointer;
 }
 
 
@@ -465,4 +469,30 @@ margin-bottom: 3em;
   text-transform:uppercase;
   font-weight:600;
   background:#fff;
+}
+
+/* ------------tooltip--- */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  /* border-bottom: 1px dotted black; */
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

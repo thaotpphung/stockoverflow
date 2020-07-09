@@ -17,7 +17,7 @@
     <!-- <h1 class="header-black">Tracked Stocks <a href="/stocks/<%=currentUser._id%>/new"><i class="fa fa-plus header-fa"></i></a></h1>  -->
     <h1 class="header-black">Tracked Stocks <i onclick="togglePopup()" class="fa fa-plus header-fa"></i></h1> 
     
-    <table class="table table-hover mb-0">
+    <table id="tracked-list" class="table table-hover mb-0">
       <thead>
         <tr>
           <th scope="col" class="first-th">Name</th>
@@ -25,12 +25,12 @@
           <th scope="col">Current Price</th>
           <th scope="col">Change(%)</th>
           <th scope="col">Change(USD)</th>
-          <th scope="col" class="last-th"></th>
+          <!-- <th scope="col" class="d-none"></th> -->
         </tr>
       </thead>
       <tbody>
         <% stocks.forEach(stock => { %>
-        <tr>
+        <tr title="More info">
           <th scope="row">
             <div class="row-header">
               <span class="delete"> 
@@ -53,14 +53,15 @@
             class="negative" <% } else { %> class="possitive" <% } %>
             >
             <%=stock.change[0]%>
-          </td>
-          <td>
-            <span class="show"> 
+            <span class="d-none"> 
               <a href="/stocks/<%=currentUser._id%>/<%=stock._id%>">
                 <i class="text-dark fa fa-info"></i>
               </a>
             </span> 
           </td>
+          <!-- <td> -->
+            
+          <!-- </td> -->
         </tr>
         <% }); %>
       </tbody>
