@@ -14,7 +14,7 @@ $(document).ready(function () {
 /* ----------------------------TrackedStocks---------------------------- */
 // Show stock info
 $("#tracked-list tbody").delegate("tr", "click", function (event) {
-  $(".fa-info").trigger("click");
+  $(this).find(".fa-info").trigger("click");
   event.stopPropagation();
 });
 
@@ -24,9 +24,8 @@ $(".fa-info").click (function (event) {
 
 // Delete a stock from table
 $(".fa-trash").click (function (event) {
-  $(this).parent().parent().parent().parent().fadeOut(500, function () {
+  $(this).closest("tr").fadeOut(500, function () {
     $(this).addClass("d-none");
-    console.log($(this));
     $(this).find('button').trigger("click");
   });
   event.stopPropagation();

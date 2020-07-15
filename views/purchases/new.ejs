@@ -73,7 +73,7 @@
                     class="form-control"
                     name="purchase[price]"
                     <% if(stock) { %>
-                      value= <%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%> 
+                      value= <%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%> 
                     <% } %>
                     required
                   />

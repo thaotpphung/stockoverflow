@@ -46,7 +46,6 @@ body {
   min-width: 720px;
 }
 
-
 .margin-top-2rem {
   margin-top: 2rem; 
 }
@@ -112,10 +111,21 @@ body {
 
 /* ----------------------table----------- */
 .row-header {
-  overflow: hidden;
-  height: 25px !important;
   text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table td, .table th {
+  overflow: hidden;
   white-space: nowrap;
+  height: 25px;
+  text-overflow: ellipsis;
 }
 
 .table tbody td,
@@ -126,8 +136,8 @@ body {
 
 .table-container .table thead tr th.first-th, .table-container .table tbody tr th {
   text-align: left;
-  max-width: 280px !important;
-  width: 280px !important;
+  max-width: 230px !important;
+  width: 230px !important;
 }
 
 .table-container span.delete, .table-container span.add-to-tracked{
@@ -250,6 +260,10 @@ background-color: #6A7E7A;
 
 .display-none {
   display: none;
+}
+
+hr {
+  margin: 0 !important;
 }
 /* ----------Show stock----------------------- */
 #stock-banner {

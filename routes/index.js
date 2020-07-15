@@ -86,26 +86,34 @@ router.get("/register", (req, res) => {
 
 //handle sign up logic
 router.post("/register", (req, res) => {
-  let newUser = new User({
-    username: req.body.username,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-  });
+  let newUser = new User(req.body
+    // username: req.body.username,
+    // firstname: req.body.firstname,
+    // lastname: req.body.lastname,
+    // email: req.body.email,
+    
+  );
   // check unique valid user name here
-  User.register(newUser, req.body.password, (err, user) => {
-    // encode the password
-    if (err) {
-      console.log("error in register", err);
-      req.flash("error", err.message);
-      return res.render("register");
+  User.findOne({username: req.body.username}, (err, foundUser) => {
+    if (!foundUser) {
+      User.register(newUser, req.body.password, (err, user) => {
+        // encode the password
+        if (err) {
+          console.log("error in register", err);
+          req.flash("error", err.message);
+          return res.render("register");
+        }
+        passport.authenticate("local")(req, res, () => {
+          // log user in, serialize session
+          req.flash("success", "Welcome to Stockoverflow " + user.firstname);
+          res.redirect("/");
+        });
+      });
+    } else {
+      req.flash("error", "Username " + req.body.username + " already exists, please choose a different one." );
+      res.redirect("/register");
     }
-    passport.authenticate("local")(req, res, () => {
-      // log user in, serialize session
-      req.flash("success", "Welcome to Stockoverflow " + user.firstname);
-      res.redirect("/");
-    });
-  });
+  })
 });
 
 // show login form

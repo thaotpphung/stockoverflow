@@ -12,9 +12,10 @@
     </div>
     
     <% } else { %>
+
   <div class="table-container">
     <h1 class="header-black">ASSETS <a href="/purchases/<%=currentUser._id%>/new"><i class="fa fa-plus float-right"></i></a></h1>
-    <table id="purchase" class="table table-hover mb-0">
+    <table class="table table-hover mb-0">
       <thead>
         <tr>
           <th scope="col" class="first-th" >Name</th>
@@ -40,11 +41,13 @@
           <td><%=purchase.symbol%></td>
           <td><%=Math.floor(purchase.totalprice/100)%>.<%=(purchase.totalprice)%100%></td>
           <td><%=purchase.totalquantity%></td>
+
         </tr>
         <% }); %>
       </tbody>
     </table>
   </div>
+
   <% } %>
 
   
@@ -75,7 +78,7 @@
         <% purchases.forEach(function(purchase){ %>
           <% purchase.history.forEach(function(history){ %>
         <tr>
-          <th scope="row" >
+          <th scope="row">
             <div class="row-header">
               <%=purchase.name%>
             </div>

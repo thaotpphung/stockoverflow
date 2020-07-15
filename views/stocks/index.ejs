@@ -31,23 +31,23 @@
               <span class="delete"> 
                 <i class="fa fa-trash"></i> 
               </span> 
-              <form class="d-none" action="/stocks/<%=currentUser._id%>/<%= stock._id%>?_method=DELETE"method="POST">
+              <form class="d-none" action="/stocks/<%=currentUser._id%>/<%=stock._id%>?_method=DELETE"method="POST">
                 <button type="submit" class="d-none" id ="deleteButton"></button>
               </form>
               <%=stock.name%>
             </div>
           </th>
           <td class="symbol"><%=stock.symbol%></td>
-          <td class="price"><%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%></td>
-          <td <% if (stock.changepercent[0] < 0) { %>
+          <td class="price"><%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%></td>
+          <td <% if (stock.history[0].changepercent < 0) { %>
             class="negative" <% } else { %> class="possitive" <% } %>
             >
-            <%=stock.changepercent[0]%>
+            <%=stock.history[0].changepercent%>
           </td>
-          <td <% if (stock.changepercent[0] < 0) { %>
+          <td <% if (stock.history[0].change < 0) { %>
             class="negative" <% } else { %> class="possitive" <% } %>
             >
-            <%=stock.change[0]%>
+            <%=stock.history[0].change%>
             <span class="d-none"> 
               <a href="/stocks/<%=currentUser._id%>/<%=stock._id%>">
                 <i class="fa-info"></i>
@@ -63,61 +63,15 @@
   <div class="table-container margin-top-2rem">
     <h1 class="header-black">GRAPHS</h1>
     <% if (stocks.length > 0) { %>
-    <% stocks.forEach(stock => { %>
-    <canvas id="chart<%=stock.symbol%>"></canvas>
-    <hr class="mb-0"/>
-    <script>
-      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-      var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
-      ctx.canvas.width = 1000;
-      ctx.canvas.height = 350;
-      var color;
-      if (stockinfo.change[0] < 0) {
-        color = ["#FF0000"];
-        backgroundcolor = ["rgb(255, 0, 0, 0.2)"];
-      } else {
-        color = ["#3caea3"];
-        backgroundcolor = ["rgb(98, 222, 208, 0.5)"];
-      }
-      var chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: stockinfo.time.slice().reverse(),
-          datasets: [
-            {
-              label: "Stock Price of " + stockinfo.symbol,
-              data: stockinfo.price.slice().reverse().map(bigprice => (bigprice/100).toFixed(2)),
-              borderColor: color,
-              borderWidth: 2,
-              // fill: false,
-              backgroundColor: backgroundcolor ,
-              lineTension: 0,
-              pointRadius: 0.5,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  callback: function (value, index, values) {
-                    return value + "$";
-                  },
-                  // stepSize: 1,
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: "Openning Price ($)",
-                },
-              },
-            ],
-            xAxes: [{}],
-          },
-        },
-      });
-    </script>
-    <% }); %>
+      <% stocks.forEach(stock => { %>
+        <canvas id="chart<%=stock.symbol%>" class="pb-3"></canvas>
+        <script>
+          var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+          var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
+          makeGraph(stockinfo, ctx);
+        </script>
+        <hr />
+      <% }); %>
     <% } %>
   </div>
   <% } %>

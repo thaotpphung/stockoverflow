@@ -6,13 +6,13 @@
     <div id="stock-banner" class="row">
       <div class="col-7">
         <div class="font-size-lg"><%=stock.name%></div>
-        <div class="font-size-sm"><%=stock.symbol%> - <%=stock.time[0]%></div>
+        <div class="font-size-sm"><%=stock.symbol%> - <%=stock.history[0].time%></div>
         <div class="font-size-sm">
-          <%=Math.floor(stock.price[0]/100)%>.<%=(stock.price[0])%100%> USD -
+          <%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%> USD -
           <span 
-            <% if (stock.change[0] < 0) { %>
+            <% if (stock.history[0].change < 0) { %>
               class="negative" > <i class="fa fa-arrow-down"></i> <% } else { %> class="possitive" > <i class="fa fa-arrow-up"></i> <% } %>
-              <%=stock.change[0]%> (<%=stock.changepercent[0]%>  %)
+              <%=stock.history[0].change%> (<%=stock.history[0].changepercent%>  %)
           </span>
         </div>
       </div>
@@ -28,64 +28,11 @@
         </div>
       </div>
     </div>
-    <canvas id="chart" class="pb-3"></canvas>
+    <canvas id="chart<%=stock.symbol%>" class="pb-3"></canvas>
     <script>
-      var str = '<%- JSON.stringify(stock) %>';
-      var stockinfo = JSON.parse(str);
-      console.log(stockinfo);
-      console.log(typeof(stockinfo));
-
-      var ctx = document.getElementById('chart').getContext('2d');
-      ctx.canvas.width = 1000;
-      ctx.canvas.height = 350;
-      var color;
-      if (stockinfo.change[0] < 0) {
-        color = ["#FF0000"];
-        backgroundcolor = ["rgb(255, 0, 0, 0.2)"];
-      } else {
-        color = ["#3caea3"];
-        backgroundcolor = ["rgb(98, 222, 208, 0.5)"];
-      }
-      var chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: stockinfo.time.slice().reverse(),
-          datasets: [
-            {
-              label: "Stock Price of " + stockinfo.symbol,
-              data: stockinfo.price.slice().reverse().map(bigprice => (bigprice/100).toFixed(2)),
-              borderColor: color,
-              borderWidth: 2,
-              // fill: false,
-              backgroundColor: backgroundcolor ,
-              lineTension: 0,
-              pointRadius: 0.5,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  callback: function (value, index, values) {
-                    return value + "$";
-                  },
-                  // suggestedMin: 0
-                  // stepSize: 1,
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: "Openning Price ($)",
-                },
-              },
-            ],
-            xAxes: [
-              {}
-            ],
-          },
-        },
-      });
+      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+      var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
+      makeGraph(stockinfo, ctx);
     </script>
   </div>
 

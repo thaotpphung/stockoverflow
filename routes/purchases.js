@@ -26,7 +26,7 @@ router.get("/:stockid/new", middleware.checkCorrectUser, (req, res) => {
     if (err || !user) {
       req.flash("error", "User not found");
       res.redirect("back");
-    } else {  // wrond here 
+    } else {  
       Stock.findById(req.params.stockid, (err, stock) => {
         if (err || !stock) {
           req.flash("error", "Stock not found");
@@ -79,8 +79,8 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
 });
 
 async function updatePurchase(purchase, purchaseReq) {
-  let history = {price: Math.round(purchaseReq.price * 100), time: purchaseReq.time, quantity: purchaseReq.quantity };
-  purchase.history.push(history); 
+  let newHistoryEntry = {price: Math.round(purchaseReq.price * 100), time: purchaseReq.time, quantity: purchaseReq.quantity };
+  purchase.history.push(newHistoryEntry); 
   purchase.totalprice += (Math.round(purchaseReq.price * 100));
   purchase.totalquantity += parseInt(purchaseReq.quantity);
   purchase.save();

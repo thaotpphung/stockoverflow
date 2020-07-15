@@ -81,16 +81,11 @@ async function createNewStock(queryBody, queryStock, api_url, flag) {
       newStock = await Stock.create(queryBody);
     } else {
       newStock = await Stock.findOne(queryBody);
-      newStock.time = [];
-      newStock.price = [];
-      newStock.change = [];
-      newStock.changepercent = [];
+      newStock.history = [];
     }
     stockdata.forEach((aStock) => {
-      newStock.time.push(aStock["label"]);
-      newStock.price.push(Math.round(aStock["open"] * 100));
-      newStock.change.push(aStock["change"]);
-      newStock.changepercent.push(aStock["changePercent"]);
+      let newHistoryEntry = {time: aStock["label"], price: Math.round(aStock["open"] * 100), change: aStock["change"], changepercent: aStock["changePercent"]};
+      newStock.history.push(newHistoryEntry);
     });
     var foundSearchStock = await StockSearch.findOne({ symbol: queryStock});
     newStock.name = foundSearchStock.name.replace(/'/g, '`');
@@ -165,6 +160,6 @@ async function updateDB() {
   console.log("just updated!");
 }
 setInterval(updateDB, 1000 * 60 * 55);
-
+// setInterval(updateDB, 3000 );
 
 module.exports = router;

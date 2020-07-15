@@ -38,9 +38,9 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,300;1,400&display=swap"
       rel="stylesheet"
     />
-
     <!-- chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="/graph-script.js"></script>
   </head>
 
   <body>
@@ -83,7 +83,7 @@
             <a class="nav-item nav-link" href="/register">SIGN UP</a>
             <% } else { %>
             <a class="nav-item nav-link" href="/users/<%=currentUser._id%>"
-              >Welcome, <%= currentUser.username %></a
+              >Welcome, <%= currentUser.firstname %></a
             >
             <a class="nav-item nav-link" href="/logout">LOG OUT</a>
             <% } %>
