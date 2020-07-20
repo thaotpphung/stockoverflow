@@ -32,7 +32,13 @@ router.get("/:stockid/new", middleware.checkCorrectUser, (req, res) => {
           req.flash("error", "Stock not found");
           res.redirect("back");
         } else {
-          res.render("purchases/new", { stock: stock });
+          Purchase.findOne({stockid: stock._id}, (err, purchase) => {
+            if (purchase == null) {
+              res.render("purchases/new", { stock: stock, purchase: {totalquantity: 0} });
+            } else {
+              res.render("purchases/new", { stock: stock, purchase: purchase });
+            }
+          })
         }
       });
     }
@@ -64,25 +70,31 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
         purchase.userid = req.params.userid;
         purchase.name = req.body.purchase.name;
         purchase.stockid = req.body.purchase.stockid;
-        await updatePurchase(purchase, req.body.purchase);
+        await updatePurchase(purchase, req.body.purchase, req.body.purchase.type);
         user.purchases.push(purchase);
         user.save();
-        req.flash("success", "Successfully purchased stock");
+        req.flash("success", "Successfully made transaction");
         res.redirect("/purchases/" + user._id);
       } else {
-        await updatePurchase(foundPurchase, req.body.purchase);
-        req.flash("success", "Successfully purchased stock");
+        await updatePurchase(foundPurchase, req.body.purchase, req.body.purchase.type);
+        req.flash("success", "Successfully made transaction");
         res.redirect("/purchases/" + user._id);
       }
     }
   });
 });
 
-async function updatePurchase(purchase, purchaseReq) {
-  let newHistoryEntry = {price: Math.round(purchaseReq.price * 100), time: purchaseReq.time, quantity: purchaseReq.quantity };
+async function updatePurchase(purchase, purchaseReq, type) {
+  let newHistoryEntry = {price: Math.round(purchaseReq.price * 100), time: purchaseReq.time, quantity: purchaseReq.quantity, transaction: type };
   purchase.history.push(newHistoryEntry); 
-  purchase.totalprice += (Math.round(purchaseReq.price * 100));
-  purchase.totalquantity += parseInt(purchaseReq.quantity);
+  if (type === "Purchase") {
+    purchase.totalprice += (Math.round(purchaseReq.price * 100 * purchaseReq.quantity)) ;
+    purchase.totalquantity += parseInt(purchaseReq.quantity);
+  } else {
+    console.log(purchase.totalprice);
+    purchase.totalprice -= (Math.round(purchaseReq.price * 100 * purchaseReq.quantity));
+    purchase.totalquantity -= parseInt(purchaseReq.quantity);
+  }
   purchase.save();
   return;
 }

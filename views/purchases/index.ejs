@@ -18,10 +18,10 @@
     <table class="table table-hover mb-0">
       <thead>
         <tr>
-          <th scope="col" class="first-th" >Name</th>
-          <th scope="col">Tick Symbol</th>
-          <th scope="col">Purchased Price</th>
-          <th scope="col">Purchases Quantity</th>
+          <th scope="col" class="first-th" >Company Name</th>
+          <th scope="col">Symbol</th>
+          <th scope="col">Total Price</th>
+          <th scope="col">Total Quantity</th>
         </tr>
       </thead>
       <tbody>
@@ -40,8 +40,14 @@
           </th>
           <td><%=purchase.symbol%></td>
           <td><%=Math.floor(purchase.totalprice/100)%>.<%=(purchase.totalprice)%100%></td>
-          <td><%=purchase.totalquantity%></td>
-
+          <td>
+            <%=purchase.totalquantity%>
+            <span class="d-none"> 
+              <a href="/stocks/<%=currentUser._id%>/<%=purchase.stockid%>">
+                <i class="fa-info"></i>
+              </a>
+            </span> 
+          </td>
         </tr>
         <% }); %>
       </tbody>
@@ -66,10 +72,11 @@
     <table class="table table-hover mb-0">
       <thead>
         <tr>
-          <th scope="col" class="first-th">Name</th>
-          <th scope="col">Tick Symbol</th>
-          <th scope="col">Bought Time</th>
-          <th scope="col">Bought Price</th>
+          <th scope="col" class="first-th">Company Name</th>
+          <th scope="col">Symbol</th>
+          <th scope="col">Type</th>
+          <th scope="col">Time</th>
+          <th scope="col">Price</th>
           <th scope="col">Quantity</th>
           <th scope="col">Total</th>
         </tr>
@@ -84,10 +91,19 @@
             </div>
           </th>
           <td><%=purchase.symbol%></td>
+          <td><%=history.transaction%></th>
           <td><%=history.time%></td>
           <td><%=Math.floor(history.price/100)%>.<%=(history.price)%100%></td>
           <td><%=history.quantity%></td>
-          <td><%=Math.floor((history.quantity*history.price)/100)%>.<%=(history.quantity*history.price)%100%></td>
+          <td
+            <% if (history.transaction === "Purchase") { %>
+              class="negative" > -<% } else { %> class="possitive" > +<% } %><%=Math.floor((history.quantity*history.price)/100)%>.<%=(history.quantity*history.price)%100%>
+            <span class="d-none"> 
+              <a href="/stocks/<%=currentUser._id%>/<%=purchase.stockid%>">
+                <i class="fa-info"></i>
+              </a>
+            </span> 
+          </td>
         </tr>
           <% }); %>
         <% }); %>

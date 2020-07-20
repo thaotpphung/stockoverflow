@@ -111,7 +111,7 @@ router.post("/register", (req, res) => {
       });
     } else {
       req.flash("error", "Username " + req.body.username + " already exists, please choose a different one." );
-      res.redirect("/register");
+      res.redirect("back");
     }
   })
 });

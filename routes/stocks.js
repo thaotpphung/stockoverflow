@@ -29,7 +29,7 @@ router.post("/", middleware.checkCorrectUser, async (req, res) => {
   var user = await User.findById(req.params.userid).populate("trackedstocks");
   var newStock = await checkSharedStockDB(queryStock, queryBody, api_url);
   if ((queryBody.page === "purchase")) { // if the current page is the purchase page
-    res.render("purchases/new", { stock: newStock });
+    res.render("purchases/new", { stock: newStock, purchase: {totalquantity: 0} });
   } else { // the current page is the tracked stocks page
     addToTrackedStocks(user, req.params.userid, notInTrackedStocks(user.trackedstocks, queryStock), newStock._id, req, res);
   }

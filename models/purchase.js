@@ -9,7 +9,8 @@ var purchaseSchema = mongoose.Schema({
     {
       price: Number,
       time: String,
-      quantity: Number
+      quantity: Number,
+      transaction: String
     }
   ],
   totalprice: {type: Number, default: 0},

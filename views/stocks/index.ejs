@@ -13,7 +13,7 @@
       <% } else { %>
   <div class="table-container">
     <h1 class="header-black">TRACKED STOCKS <i onclick="togglePopup()" class="fa fa-plus float-right"></i></h1> 
-    <table id="tracked-list" class="table table-hover mb-0">
+    <table class="table table-hover mb-0">
       <thead>
         <tr>
           <th scope="col" class="first-th">Name</th>
@@ -40,14 +40,12 @@
           <td class="symbol"><%=stock.symbol%></td>
           <td class="price"><%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%></td>
           <td <% if (stock.history[0].changepercent < 0) { %>
-            class="negative" <% } else { %> class="possitive" <% } %>
-            >
-            <%=stock.history[0].changepercent%>
+            class="negative" > <% } else { %> class="possitive" >+<%} %><%=stock.history[0].changepercent.toFixed(2)%>
           </td>
           <td <% if (stock.history[0].change < 0) { %>
             class="negative" <% } else { %> class="possitive" <% } %>
             >
-            <%=stock.history[0].change%>
+            <%=stock.history[0].change.toFixed(2)%>
             <span class="d-none"> 
               <a href="/stocks/<%=currentUser._id%>/<%=stock._id%>">
                 <i class="fa-info"></i>
@@ -78,7 +76,7 @@
 </div>
 <% } %>
 
-<div class="popup" id="popup-1">
+<div class="popup" id="popup-search-bar">
   <div class="overlay">
     <div class="fa fa-times" onclick="togglePopup()"></div>
   </div>

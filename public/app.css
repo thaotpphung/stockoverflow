@@ -229,7 +229,7 @@ background-color: #6A7E7A;
   color: red !important;
 }
 
-#tracked-list tbody tr:hover {
+.table tbody tr:hover {
   cursor: pointer;
 }
 

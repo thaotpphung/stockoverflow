@@ -13,11 +13,10 @@ $(document).ready(function () {
 
 /* ----------------------------TrackedStocks---------------------------- */
 // Show stock info
-$("#tracked-list tbody").delegate("tr", "click", function (event) {
+$(".table tbody").delegate("tr", "click", function (event) {
   $(this).find(".fa-info").trigger("click");
   event.stopPropagation();
 });
-
 $(".fa-info").click (function (event) {
   event.stopPropagation();
 });
@@ -38,6 +37,11 @@ $(".fa-eye").click (function (event) {
   event.stopPropagation();
 });
 
+// toggle the purchase/sell form
+$(".show-form").click(function(event) {
+  $(this).closest(".card-container").find("form").fadeToggle("fast", "linear");
+})
+
 /* -----------------------search----------------------- */
 var $searchResult = $("#searchResult");
 var $searchKey = $("#searchKey");
@@ -57,17 +61,20 @@ $("#searchKey").keyup( async function (event) {
         let searchVal = $("#searchKey").val();
         let url = "http://localhost:3000/getStock";
         let foundStock = await makeHttpRequest(url, searchVal);
+        // after search for stock, 
         if (foundStock === "not found") {
           $("#stock-symbol").val(searchVal.toUpperCase());
           $("#stock-page").val("purchase");
           $("#addStockForm").submit();
         } else {
-          $("#purchase-symbol").val(searchVal.toUpperCase());
-          $("#purchase-name").val(foundStock.name);
-          $("#purchase-stockid").val(foundStock._id);
-          $("#purchase-price").val(Math.floor(foundStock.price[0]/100) + "." + foundStock.price[0]%100);
-          document.getElementById('purchase-time').valueAsDate = new Date();
-          $(".fa-search").click();
+          $(".purchase-symbol").val(searchVal.toUpperCase());
+          $(".purchase-name").val(foundStock.name);
+          $(".purchase-stockid").val(foundStock._id);
+          $(".purchase-price").val(Math.floor(foundStock.history[0].price/100) + "." + foundStock.history[0].price%100);
+          // document.getElementsByClassName('purchase-time').valueAsDate = new Date();
+          var today = new Date().toISOString().split('T')[0];
+          $(".purchase-time").val(today);
+          $(".fa-times").click();
         }
       } else { // else in the add page, submit the form
         $("#searchStockForm").submit();
@@ -145,11 +152,11 @@ function displaySearchResult(found) {
 
 /* -----------------------Pop up search bar----------------------- */
 function togglePopup(){
-  document.getElementById("popup-1").classList.toggle("active");
+  $("#popup-search-bar").toggleClass("active");
 }
 
 /* -----------------------User----------------------- */
-$(".fa-edit").click( function (event) {
+$(".fa-edit").click(function (event) {
   fadeForm($(this).closest(".col-12").find(".editForm"));
 });
 
@@ -160,3 +167,4 @@ function fadeForm($edit) {
     $edit.fadeIn(300, () => $edit.show());
   }
 }
+

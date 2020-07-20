@@ -12,7 +12,7 @@
           <span 
             <% if (stock.history[0].change < 0) { %>
               class="negative" > <i class="fa fa-arrow-down"></i> <% } else { %> class="possitive" > <i class="fa fa-arrow-up"></i> <% } %>
-              <%=stock.history[0].change%> (<%=stock.history[0].changepercent%>  %)
+              <%=stock.history[0].change%> (<%=stock.history[0].changepercent.toFixed(2)%>  %)
           </span>
         </div>
       </div>
