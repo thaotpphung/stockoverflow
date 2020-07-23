@@ -8,7 +8,7 @@ function makeGraph(stockinfo, ctx) {
   var priceArray = [];
   var timeArray = [];
   for (i = (stockinfo.history.length - 1); i >= 0; i-- ) {
-    priceArray.push((stockinfo.history[i].price/100).toFixed(2));
+    priceArray.push((stockinfo.history[i].open/100).toFixed(2));
     timeArray.push(stockinfo.history[i].time);
   }
   var color;

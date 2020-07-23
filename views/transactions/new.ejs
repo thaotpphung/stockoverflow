@@ -4,9 +4,9 @@
   <div class="row justify-content-center">
     <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-width-md">">
       
-      <div id="purchaseStock" class="card-container">
+      <div class="card-container">
         <h1 class="header-black">PURCHASE STOCK <i class="fa fa-plus float-right show-form"></i></h1>
-        <form action="/purchases/<%=currentUser._id%>" method="POST">
+        <form action="/transactions/<%=currentUser._id%>" method="POST">
           <div class="form-row pt-3">
             <div class="col-12">
               <div class="row">
@@ -14,8 +14,8 @@
                 <div class="col-7 ">
                   <input 
                     type="text"
-                    class="form-control purchase-symbol"
-                    name="purchase[symbol]"
+                    class="form-control transaction-symbol"
+                    name="transaction[symbol]"
                     <% if(stock) { %>
                       value = <%=stock.symbol%> 
                     <% } %>
@@ -35,8 +35,8 @@
                 <div class="col-7 ">
                   <input 
                     type="text"
-                    class="form-control purchase-name"
-                    name="purchase[name]"
+                    class="form-control transaction-name"
+                    name="transaction[name]"
                     <% if(stock) { %>
                       value = "<%=stock.name%>"
                     <% } %>
@@ -50,8 +50,8 @@
             <div class="d-none">
               <input 
                 type="text"
-                class="purchase-stockid"
-                name="purchase[stockid] "
+                class="transaction-stockid"
+                name="transaction[stockid] "
                 <% if(stock) { %>
                   value = "<%=stock._id%>"
                 <% } %>
@@ -61,7 +61,7 @@
             <div class="d-none">
               <input 
                 type="text"
-                name="purchase[type]"
+                name="transaction[type]"
                 value = "Purchase"
               />
             </div>
@@ -73,10 +73,11 @@
                   <input
                     type="number"
                     step="0.01"
-                    class="form-control purchase-price"
-                    name="purchase[price]"
+                    min = 0
+                    class="form-control transaction-price"
+                    name="transaction[price]"
                     <% if(stock) { %>
-                      value= <%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%> 
+                      value= <%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%> 
                     <% } %>
                     required
                   />
@@ -90,8 +91,8 @@
                 <div class="col-7 ">
                   <input
                     type="date"
-                    class="form-control purchase-time"
-                    name="purchase[time]"
+                    class="form-control transaction-time"
+                    name="transaction[time]"
                     <% if(stock) { %>
                       value = <%- new Date().toISOString().substring(0, 10); %> 
                     <% } %>
@@ -109,7 +110,7 @@
                     type="number"
                     class="form-control"
                     min = 0
-                    name="purchase[quantity]"
+                    name="transaction[quantity]"
                     required
                   />
                 </div>
@@ -132,7 +133,7 @@
 
       <div id="sellStock" class="card-container margin-top-2rem">
         <h1 class="header-black">SELL STOCK <i class="fa fa-plus float-right show-form"></i></h1>
-        <form action="/purchases/<%=currentUser._id%>" method="POST" class="display-none">
+        <form action="/transactions/<%=currentUser._id%>" method="POST" class="display-none">
           <div class="form-row pt-3">
             <div class="col-12">
               <div class="row">
@@ -140,8 +141,8 @@
                 <div class="col-7 ">
                   <input 
                     type="text"
-                    class="form-control purchase-symbol"
-                    name="purchase[symbol]"
+                    class="form-control transaction-symbol"
+                    name="transaction[symbol]"
                     <% if(stock) { %>
                       value = <%=stock.symbol%> 
                     <% } %>
@@ -161,8 +162,8 @@
                 <div class="col-7 ">
                   <input 
                     type="text"
-                    class="form-control purchase-name"
-                    name="purchase[name]"
+                    class="form-control transaction-name"
+                    name="transaction[name]"
                     <% if(stock) { %>
                       value = "<%=stock.name%>"
                     <% } %>
@@ -176,8 +177,8 @@
             <div class="d-none">
               <input 
                 type="text"
-                class="purchase-stockid"
-                name="purchase[stockid]"
+                class="transaction-stockid"
+                name="transaction[stockid]"
                 <% if(stock) { %>
                   value = "<%=stock._id%>"
                 <% } %>
@@ -187,7 +188,7 @@
             <div class="d-none">
               <input 
                 type="text"
-                name="purchase[type]"
+                name="transaction[type]"
                 value = "Sell"
               />
             </div>
@@ -199,10 +200,11 @@
                   <input
                     type="number"
                     step="0.01"
-                    class="form-control purchase-price"
-                    name="purchase[price]"
+                    min = 0
+                    class="form-control transaction-price"
+                    name="transaction[price]"
                     <% if(stock) { %>
-                      value= <%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%> 
+                      value= <%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%> 
                     <% } %>
                     required
                   />
@@ -216,8 +218,8 @@
                 <div class="col-7 ">
                   <input
                     type="date"
-                    class="form-control purchase-time"
-                    name="purchase[time]"
+                    class="form-control transaction-time"
+                    name="transaction[time]"
                     <% if(stock) { %>
                       value = <%- new Date().toISOString().substring(0, 10); %> 
                     <% } %>
@@ -234,11 +236,11 @@
                   <input
                     type="number"
                     class="form-control"
-                    name="purchase[quantity]"
+                    name="transaction[quantity]"
                     min = 0
                     <% if(stock) { %>
-                      max = "<%=purchase.totalquantity%>"
-                      placeholder = "<%=purchase.totalquantity%>"
+                      max = "<%=transaction.totalquantity%>"
+                      placeholder = "Quantity owned: <%=transaction.totalquantity%>"
                     <% } %>
                     required
                   />
@@ -291,6 +293,7 @@
   <input
   id="stock-page"
   type="text"
+  value = "transaction"
   name="stock[page]"
   />
 </form>

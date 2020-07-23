@@ -1,18 +1,10 @@
-const { response } = require("express");
-const { resolveInclude } = require("ejs");
-const { update } = require("../models/purchase");
-
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
   passport = require("passport"),
   User = require("../models/user"),
   StockSearch = require("../models/stocksearch"),
-  middleware = require("../middleware"),
   got = require("got"),
-  Stock = require("../models/stock"),
-  StockNasdaq = require("../models/stockNasdaq"),
-  StockNyse = require("../models/stockNyse.js");
-
+  Stock = require("../models/stock");
 require("dotenv").config();
 
 router.get("/test", async (req, res) => {

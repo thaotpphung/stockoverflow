@@ -13,10 +13,10 @@ var UserSchema = new mongoose.Schema({
       ref: "Stock"
     }
   ],
-  purchases: [
+  transactions: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Purchase",
+      ref: "Transaction",
     },
   ],
 });

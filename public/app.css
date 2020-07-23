@@ -293,13 +293,13 @@ hr {
   padding-left: 1rem !important;
 }
 
-#button-light {
+#trade-button {
   float: right;
   padding: 1rem;
   font-size: 20px;
 }
 
-#button-light a {
+#trade-button a {
   color: black;
 }
 

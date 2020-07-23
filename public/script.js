@@ -30,14 +30,14 @@ $(".fa-trash").click (function (event) {
   event.stopPropagation();
 });
 
-/* ----------------------------Purchases---------------------------- */
+/* ----------------------------Transactions---------------------------- */
 // Add to Tracked Stocks table
 $(".fa-eye").click (function (event) {
   $(this).closest("tr").find('button').trigger("click");
   event.stopPropagation();
 });
 
-// toggle the purchase/sell form
+// toggle the transaction form
 $(".show-form").click(function(event) {
   $(this).closest(".card-container").find("form").fadeToggle("fast", "linear");
 })
@@ -56,7 +56,7 @@ $("#searchKey").keyup( async function (event) {
   } else if (event.which == 13) {
     // when user hit enter key in 
     if (!($searchResult.html().includes("notfound-mes"))) {
-      // if in the purchase stock page
+      // if in the transaction stock page
       if ($("#tickSymbolDiv").html()) {
         let searchVal = $("#searchKey").val();
         let url = "http://localhost:3000/getStock";
@@ -64,16 +64,14 @@ $("#searchKey").keyup( async function (event) {
         // after search for stock, 
         if (foundStock === "not found") {
           $("#stock-symbol").val(searchVal.toUpperCase());
-          $("#stock-page").val("purchase");
           $("#addStockForm").submit();
         } else {
-          $(".purchase-symbol").val(searchVal.toUpperCase());
-          $(".purchase-name").val(foundStock.name);
-          $(".purchase-stockid").val(foundStock._id);
-          $(".purchase-price").val(Math.floor(foundStock.history[0].price/100) + "." + foundStock.history[0].price%100);
-          // document.getElementsByClassName('purchase-time').valueAsDate = new Date();
+          $(".transaction-symbol").val(searchVal.toUpperCase());
+          $(".transaction-name").val(foundStock.name);
+          $(".transaction-stockid").val(foundStock._id);
+          $(".transaction-price").val(Math.floor(foundStock.history[0].open/100) + "." + foundStock.history[0].open%100);
           var today = new Date().toISOString().split('T')[0];
-          $(".purchase-time").val(today);
+          $(".transaction-time").val(today);
           $(".fa-times").click();
         }
       } else { // else in the add page, submit the form

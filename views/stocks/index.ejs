@@ -16,8 +16,8 @@
     <table class="table table-hover mb-0">
       <thead>
         <tr>
-          <th scope="col" class="first-th">Name</th>
-          <th scope="col">Tick Symbol</th>
+          <th scope="col" class="first-th">Company Name</th>
+          <th scope="col">Symbol</th>
           <th scope="col">Current Price</th>
           <th scope="col">Change(%)</th>
           <th scope="col">Change(USD)</th>
@@ -34,18 +34,16 @@
               <form class="d-none" action="/stocks/<%=currentUser._id%>/<%=stock._id%>?_method=DELETE"method="POST">
                 <button type="submit" class="d-none" id ="deleteButton"></button>
               </form>
-              <%=stock.name%>
+              <%=decodeURI(stock.name)%>
             </div>
           </th>
           <td class="symbol"><%=stock.symbol%></td>
-          <td class="price"><%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%></td>
+          <td class="price"><%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%></td>
           <td <% if (stock.history[0].changepercent < 0) { %>
-            class="negative" > <% } else { %> class="possitive" >+<%} %><%=stock.history[0].changepercent.toFixed(2)%>
+            class="negative"><% } else { %> class="possitive" >+<%} %><%=stock.history[0].changepercent%>
           </td>
           <td <% if (stock.history[0].change < 0) { %>
-            class="negative" <% } else { %> class="possitive" <% } %>
-            >
-            <%=stock.history[0].change.toFixed(2)%>
+            class="negative"><% } else { %> class="possitive">+<% } %><%=stock.history[0].change%>
             <span class="d-none"> 
               <a href="/stocks/<%=currentUser._id%>/<%=stock._id%>">
                 <i class="fa-info"></i>

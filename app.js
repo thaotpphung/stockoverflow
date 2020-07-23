@@ -7,17 +7,13 @@ let express = require("express"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
   // passportLocalMongoose = require("passport-local-mongoose"),
-  // Stock           = require("./models/stock"),
   User = require("./models/user"),
-// Purchase        = require("./models/purchase"),
-// StockSearch     = require("./models/stocksearch")
   seedDB          = require("./seeds");
 
 
 // requring routes
-let purchaseRoutes = require("./routes/purchases"),
+let transactionRoutes = require("./routes/transactions"),
   stockRoutes = require("./routes/stocks"),
-  // portfolioRoutes = require("./routes/portfolio"),
   userRoutes = require("./routes/users"),
   indexRoutes = require("./routes/index");
 
@@ -60,7 +56,7 @@ app.use((req, res, next) => {
 app.use("/stocks/:userid", stockRoutes);
 app.use("/users/:userid", userRoutes);
 // app.use("/portfolio/:userid", portfolioRoutes);
-app.use("/purchases/:userid", purchaseRoutes);
+app.use("/transactions/:userid", transactionRoutes);
 app.use("/", indexRoutes);
 
 let port = process.env.PORT || 3000;

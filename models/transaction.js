@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var purchaseSchema = mongoose.Schema({
+var transactionSchema = mongoose.Schema({
   userid: String,
   symbol: String,
   name: String,
@@ -10,11 +10,11 @@ var purchaseSchema = mongoose.Schema({
       price: Number,
       time: String,
       quantity: Number,
-      transaction: String
+      transactiontype: String
     }
   ],
   totalprice: {type: Number, default: 0},
   totalquantity: {type: Number, default: 0}
 });
 
-module.exports = mongoose.model("Purchase", purchaseSchema);
+module.exports = mongoose.model("Transaction", transactionSchema);

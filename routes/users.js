@@ -25,21 +25,6 @@ router.get("/edit", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
- // if (Object.keys(req.body.user).length == 1) {
-      //   foundUser.setPassword(req.body.user.password, (err, foundUser) => {
-      //     if (err) {
-      //       req.flash(
-      //         "error",
-      //         "There is an error when changing the password, please try again"
-      //       );
-      //       res.redirect("back");
-      //     } else {
-      //       foundUser.save();
-      //       req.flash("success", "Successfully changed password ");
-      //       res.render("users/show");
-      //     }
-      //   });
-
 // USER UPDATE
 router.put("/", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid, (err, foundUser) => {

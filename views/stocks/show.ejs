@@ -5,22 +5,22 @@
     <h1 class="header-black">OVERALL <i></i></h1> 
     <div id="stock-banner" class="row">
       <div class="col-7">
-        <div class="font-size-lg"><%=stock.name%></div>
+        <div class="font-size-lg"><%=decodeURI(stock.name)%></div>
         <div class="font-size-sm"><%=stock.symbol%> - <%=stock.history[0].time%></div>
         <div class="font-size-sm">
-          <%=Math.floor(stock.history[0].price/100)%>.<%=(stock.history[0].price)%100%> USD -
+          <%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%> USD -
           <span 
             <% if (stock.history[0].change < 0) { %>
               class="negative" > <i class="fa fa-arrow-down"></i> <% } else { %> class="possitive" > <i class="fa fa-arrow-up"></i> <% } %>
-              <%=stock.history[0].change%> (<%=stock.history[0].changepercent.toFixed(2)%>  %)
+              <%=stock.history[0].change%> (<%=stock.history[0].changepercent%>  %)
           </span>
         </div>
       </div>
 
       <div class="col-5" >
-        <div id="button-light">
+        <div id="trade-button">
           <label class="btn btn-light">
-            <a href="/purchases/<%=currentUser._id%>/<%=stock._id%>/new">
+            <a href="/transactions/<%=currentUser._id%>/<%=stock._id%>/new">
               <i class="fas fa-chart-line font-size-sm"></i>
               <span>Trade Options</span>
             </a>
@@ -31,6 +31,7 @@
     <canvas id="chart<%=stock.symbol%>" class="pb-3"></canvas>
     <script>
       var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+      console.log(stockinfo);
       var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
       makeGraph(stockinfo, ctx);
     </script>
@@ -44,27 +45,31 @@
           <tbody>
             <tr>
               <th scope="row">High</th>
-              <td>1.2</td>
+              <td><%=stock.history[0].high%></td>
             </tr>
             <tr>
               <th scope="row">Low</th>
-              <td>1.2</td>
+              <td><%=stock.history[0].low%></td>
             </tr>
             <tr>
               <th scope="row">Open</th>
-              <td>1.2</td>
+              <td><%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%></td>
             </tr>
             <tr>
               <th scope="row">Close</th>
-              <td>1.2</td>
+              <td><%=stock.history[0].close%></td>
             </tr>
             <tr>
               <th scope="row">Adjust Close</th>
-              <td>1.2</td>
+              <td><%=stock.history[0].adjClose%></td>
             </tr>
             <tr>
-              <th scope="row">Volumn</th>
-              <td>1.2</td>
+              <th scope="row">Volume</th>
+              <td><%=stock.history[0].volume%></td>
+            </tr>
+            <tr>
+              <th scope="row">Unadjusted Volume</th>
+              <td><%=stock.history[0].unadjustedVolume%></td>
             </tr>
           </tbody>
         </table>
@@ -103,45 +108,8 @@
           </tbody>
         </table>
       </div>
+    </div>
   </div>
 </div>
-
-<!-- <div class="table-container">
-  <h1 class="header-black">Asset Management <i></i></h1> 
-  <table class="table table-striped mb-0">
-    <thead>
-      <tr>
-        <th scope="col">Current Balance</th>
-        <th scope="col">Quantity Owned</th>
-        <th scope="col">Purchased Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>10000</td>
-        <td>44</td>
-        <td>$1000</td>
-      </tr>
-    </tbody>
-  </table>
-</div> -->
-
-
-</div>
-
-<!-- 
-  <a
-    class="btn btn-success"
-    href="/purchases/<%=currentUser._id%>/<%= stock._id %>/new"
-    >Buy Stock</a
-  >
-
-  <form
-    action="/stocks/<%=currentUser._id%>/<%= stock._id%>?_method=DELETE"
-    method="POST"
-  >
-    <button class="btn btn-danger">Delete</button>
-  </form>
-</div> -->
 
 <%- include("../partials/footer") %>
