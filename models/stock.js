@@ -66,19 +66,44 @@ var StockSchema = new mongoose.Schema({
   },
   rating: {
     date: String,  //"2020-07-17",
-    rating: String, //"S-",
-    ratingScore: Number, //5,
-    ratingRecommendation: String, // "Strong Buy",
-    ratingDetailsDCFScore: Number, // 5, // Discounted cash flow
-    ratingDetailsDCFRecommendation: String, // "Strong Buy",
-    ratingDetailsROEScore: Number, // 4, // return on equity
-    ratingDetailsROERecommendation: String, //"Buy",
-    ratingDetailsDEScore: Number, // 5, // debt to equity
-    ratingDetailsDERecommendation: String, // "Strong Buy",
-    ratingDetailsPEScore: Number, // 5, // price earning
-    ratingDetailsPERecommendation: String, //"Strong Buy",
-    ratingDetailsPBScore: Number, // 5, // price/book
-    ratingDetailsPBRecommendation: String //"Strong Buy"
+
+    "Overall Rating": String, //"S-",
+    ratingScores: [
+      {
+        type: Number
+      }
+    ],
+
+    ratingRecommendation: [
+      {
+        type: String
+      }
+    ],
+
+    ratingLabels: [
+      {
+        type: String
+      }
+    ],
+
+    // dcf, roe, de, pe, pb, overall
+    // "Overall Score": Number, //5,
+    // "Recommendation": String, // "Strong Buy",
+
+    // "DCF Score": Number, // 5, // Discounted cash flow
+    // "DCF Recommendation": String, // "Strong Buy",
+
+    // "ROE Score": Number, // 4, // return on equity
+    // "ROE Recommendation": String, //"Buy",
+
+    // "DE Score": Number, // 5, // debt to equity
+    // "DE Recommendation": String, // "Strong Buy",
+
+    // "PE Score": Number, // 5, // price earning
+    // "PE Recommendation": String, //"Strong Buy",
+
+    // "PB Score": Number, // 5, // price/book
+    // "PB Recommendation": String //"Strong Buy"
 
     // ratingDetailsROAScore: Number, // 3, // return on assets
     // ratingDetailsROARecommendation: String, // "Neutral",

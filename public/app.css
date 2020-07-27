@@ -122,7 +122,7 @@ body {
 }
 
 .table td, .table th {
-  overflow: hidden;
+  overflow: hidden; 
   white-space: nowrap;
   height: 25px;
   text-overflow: ellipsis;
@@ -293,6 +293,24 @@ hr {
   padding-left: 1rem !important;
 }
 
+
+.profile-table {
+  background-color: white;
+  border: black solid 1px;
+  margin-bottom: 2em;
+  overflow: scroll;
+  height: 200px;
+}
+
+.profile-table td, .profile-table th {
+  padding: .2rem !important;
+  padding-left: 1rem !important;
+  overflow: visible !important; 
+  white-space: normal !important;
+  height: 25px;
+  text-overflow: normal !important;
+}
+
 #trade-button {
   float: right;
   padding: 1rem;
@@ -306,16 +324,22 @@ hr {
 /* ----------Search------------------------ */
 .search-item, .notfound-mes {
   display: block;
-  min-width: 100%;
-  padding: .5rem 0rem;
-  clear: both;
+  min-width: 95%;
+  padding: .5rem .1rem;
+  /* clear: both; */
   font-weight: 400;
   color: #212529;
-  text-align: inherit;
-  white-space: nowrap;
+  /* text-align: inherit; */
+  /* white-space: nowrap; */
   background-color: white;
   border-top: 1px solid #dee2e6;;
+
+  overflow: visible !important; 
+  white-space: normal !important;
+  /* height: 25px; */
+  text-overflow: normal !important;
 }
+
 .search-item:hover, .chosen {
   background-color: rgb(235, 235, 235);
 }
@@ -372,7 +396,7 @@ hr {
 }
 
 /* -------------test--- */
-#testing {
+.testing {
   background-color: white;
 }
 /* ---------------- */

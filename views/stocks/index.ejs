@@ -63,10 +63,18 @@
         <canvas id="chart<%=stock.symbol%>" class="pb-3"></canvas>
         <script>
           var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-          var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
-          makeGraph(stockinfo, ctx);
+          makeGraph(stockinfo);
         </script>
+
+        <!-- <div id="chart<%=stock.symbol%>" class="pb-3"></div>
+        <script>
+          var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+          // var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
+          makeGraph(stockinfo);
+        </script>  -->
+
         <hr />
+
       <% }); %>
     <% } %>
   </div>

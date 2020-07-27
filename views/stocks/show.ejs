@@ -28,18 +28,24 @@
         </div>
       </div>
     </div>
+
+    <!-- <div id="chart<%=stock.symbol%>" class="pb-3"></div>
+    <script>
+      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+      makeGraph(stockinfo);
+    </script>  -->
+    
+    
     <canvas id="chart<%=stock.symbol%>" class="pb-3"></canvas>
     <script>
       var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-      console.log(stockinfo);
-      var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
-      makeGraph(stockinfo, ctx);
+      makeGraph(stockinfo);
     </script>
   </div>
 
   <div class="row margin-top-2rem">
     <div class = "col-6">
-      <h1 class="header-black">BASIC STATS <i></i></h1> 
+      <h1 class="header-black">LATEST TRADE<i></i></h1> 
       <div class="stat-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -77,38 +83,171 @@
     </div>
     
     <div class = "col-6">
-      <h1 class="header-black">KEY STATS <i></i></h1> 
-      <div class="stat-table">
+      <h1 class="header-black">PROFILE <i></i></h1> 
+      <div class="profile-table">
         <table class="table table-striped mb-0">
           <tbody>
             <tr>
-              <th scope="row">High</th>
-              <td>1.2</td>
+              <th class="w-25" scope="row">Beta</th>
+              <td class="w-50"><%=stock.profile.beta%></td>
             </tr>
             <tr>
-              <th scope="row">Low</th>
-              <td>1.2</td>
+              <th class="w-25" scope="row">Exchange</th>
+              <td class="w-50"><%=stock.profile.exchange%></td>
             </tr>
             <tr>
-              <th scope="row">Open</th>
-              <td>1.2</td>
+              <th class="w-25" scope="row">Industry</th>
+              <td class="w-50"><%=stock.profile.industry%></td>
             </tr>
             <tr>
-              <th scope="row">Close</th>
-              <td>1.2</td>
+              <th class="w-25" scope="row">Sector</th>
+              <td class="w-50"><%=stock.profile.sector%></td>
             </tr>
             <tr>
-              <th scope="row">Adjust Close</th>
-              <td>1.2</td>
+              <th class="w-25" scope="row">Website</th>
+              <td class="w-50"><%=stock.profile.website%></td>
             </tr>
-            <tr>
-              <th scope="row">Volumn</th>
-              <td>1.2</td>
+            <tr> 
+              <th class="w-25" scope="row">CEO</th>
+              <td class="w-50"><%=decodeURI(stock.profile.ceo)%></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+
+    <div class = "col-12">
+      <h1 class="header-black">KEY METRICS <i></i></h1> 
+      <div class="stat-table">
+        <table class="table table-striped mb-0">
+          <tbody>
+            <tr>
+              <th scope="row">Market Cap</th>
+              <td><%=stock.keymetrics.marketcap%></td>
+              <th scope="row">Free Cash Flow per Share</th>
+              <td><%=stock.keymetrics.FCFS%></td>
+            </tr>
+            <tr>
+              <th scope="row">Net Income</th>
+              <td><%=stock.keymetrics.netincome%></td>
+              <th scope="row">Book Value per Share</th>
+              <td><%=stock.keymetrics.BVS%></td>
+            </tr>
+            <tr>
+              <th scope="row">Revenue per Share</th>
+              <td><%=stock.keymetrics.rev%></td>
+              <th scope="row">Price to Earning ratio</th>
+              <td><%=stock.keymetrics.PEratio%></td>
+            </tr>
+            <tr>
+              <th scope="row">Enterprise Value</th>
+              <td><%=stock.keymetrics.EV%></td>
+              <th scope="row">Price to Sales Ratio</th>
+              <td><%=stock.keymetrics.PSratio%></td>
+            </tr>
+            <tr>
+              <th scope="row">Debt to Equity</th>
+              <td><%=stock.keymetrics.DE%></td>
+              <th scope="row">Price to Book ratio</th>
+              <td><%=stock.keymetrics.PBratio%></td>
+            </tr>
+            <tr>
+              <th scope="row">Net Debt-to-EBITDA</th>
+              <td><%=stock.keymetrics.netDebtToEBITDA%></td>
+              <th scope="row">Price-to-cash Flow</th>
+              <td><%=stock.keymetrics.PFCFratio%></td>
+            </tr>
+            <tr>
+              <th scope="row">Dividend Yield</th>
+              <td><%=stock.keymetrics.DY%></td>
+              <th scope="row">Return on Equity</th>
+              <td><%=stock.history[0].high%></td>
+            </tr>
+            <tr>
+              <th scope="row">Payout ratio</th>
+              <td><%=stock.keymetrics.payoutratio%></td>
+              <th scope="row">Current ratio</th>
+              <td><%=stock.keymetrics.currratio%></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class = "col-6">
+      <h1 class="header-black">ABOUT<i></i></h1> 
+      <div class="profile-table">
+        <table class="table table-striped mb-0">
+          <tbody>
+            <tr>
+              <td class="text-left"><%=decodeURI(stock.profile.description)%></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+      
+    <div class = "col-6">
+      <h1 class="header-black">FINANCIAL GROWTH <i></i></h1> 
+      <div class="profile-table">
+        <table class="table table-striped mb-0">
+          <tbody>
+            <tr>
+              <th class="w-40" scope="row">Revenue Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.revenueGrowth%></td>
+            </tr>
+            <tr>
+              <th class="w-40" scope="row">Net Income Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.netIncomeGrowth%></td>
+            </tr>
+            <tr>
+              <th class="w-40" scope="row">Dividends per Share Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.dividendsperShareGrowth%></td>
+            </tr>
+            <tr>
+              <th class="w-40" scope="row">Free Cash Flow Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.freeCashFlowGrowth%></td>
+            </tr>
+            <tr>
+              <th class="w-40" scope="row">Gross Profit Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.grossProfitGrowth%></td>
+            </tr>
+            <tr> 
+              <th class="w-40" scope="row">Earning per Share Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.epsgrowth%></td>
+            </tr>
+            <tr> 
+              <th class="w-40" scope="row">Debt Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.debtGrowth%></td>
+            </tr>
+            <tr> 
+              <th class="w-40" scope="row">Operating Cash Flow Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.operatingCashFlowGrowth%></td>
+            </tr>
+            <tr> 
+              <th class="w-40" scope="row">Operating Income Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.operatingIncomeGrowth%></td>
+            </tr>
+            <tr> 
+              <th class="w-40" scope="row">Asset Growth</th>
+              <td class="w-35"><%=stock.financialgrowth.assetGrowth%></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="table-container">
+        <h1 class="header-black">RATINGS<i></i></h1> 
+        <canvas id="ratingChart" class="pb-3" ></canvas>
+        <script>
+          var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+          makeRatingChart(stockinfo);
+        </script> 
+      </div>
+    </div>
+
   </div>
 </div>
 

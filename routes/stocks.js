@@ -40,7 +40,7 @@ router.put("/:stockid", middleware.checkCorrectUser, (req, res) => {
       console.log(err);
     } else {
       const index = user.trackedstocks.indexOf(req.params.stockid);
-      addToTrackedStocks(user, req.params.userid, (index == - 1), req.params.stockid, req, res);
+      addToTrackedStocks(user, (index != - 1), req.params.stockid, req, res);
     }
   });
 });
@@ -79,6 +79,19 @@ router.post("/", middleware.checkCorrectUser, async (req, res) => {
   }
 });
 
+// add to tracked stocks if not already exists
+async function addToTrackedStocks(user, checkStockExists, newStockId, req, res) {
+  if (!checkStockExists) { // if it's not in trackedstocks
+    user.trackedstocks.push(newStockId);
+    await user.save();
+    req.flash("success", "Successfully added stock");
+    res.redirect("/stocks/" + user._id);
+  } else { // stock already in trackedstocks
+    req.flash("error", "Stock already exists");
+    res.redirect("/stocks/" + user._id);
+  }
+}
+
 // Checked if the query stock is in the tracked stock list by symbol
 // return false if not exists in user's tracked stock
 //        true if already exists in user's tracked stock
@@ -112,18 +125,6 @@ async function addToSharedStockDB(queryStock, queryBody){
     console.log(err);
   }
 } 
-
-// add to tracked stocks if not already exists
-async function addToTrackedStocks(user, checkStockExists, newStockId, req, res) {
-  if (!checkStockExists) { // if it's not in trackedstocks
-    user.trackedstocks.push(newStockId);
-    await user.save();
-    req.flash("success", "Successfully added stock");
-  } else { // stock already in trackedstocks
-    req.flash("error", "Stock already exists");
-  }
-  res.redirect("/stocks/" + user._id);
-}
 
 const urlHead = "https://financialmodelingprep.com/api/v3/";
 const apiKey = "?apikey=" + process.env.API_KEY;
@@ -254,19 +255,46 @@ async function createNewStock(queryBody, queryStock, flag) {
       let newRatingData = 
       {
         date: ratingData["date"], //"2020-07-17",
-        rating: ratingData["rating"],
-        ratingScore: ratingData["ratingScore"],
-        ratingRecommendation: ratingData["ratingRecommendation"],
-        ratingDetailsDCFScore: ratingData["ratingDetailsDCFScore"],
-        ratingDetailsDCFRecommendation: ratingData["ratingDetailsDCFRecommendation"],
-        ratingDetailsROEScore:ratingData["ratingDetailsROEScore"],
-        ratingDetailsROERecommendation: ratingData["ratingDetailsROERecommendation"],
-        ratingDetailsDEScore: ratingData["ratingDetailsDEScore"],
-        ratingDetailsDERecommendation: ratingData["ratingDetailsDERecommendation"],
-        ratingDetailsPEScore: ratingData["ratingDetailsPEScore"],
-        ratingDetailsPERecommendation: ratingData["ratingDetailsPERecommendation"],
-        ratingDetailsPBScore: ratingData["ratingDetailsPBScore"],
-        ratingDetailsPBRecommendation: ratingData["ratingDetailsPBRecommendation"]
+        "Overall Rating": ratingData["rating"],
+
+        ratingScores: [ratingData["ratingDetailsDCFScore"], ratingData["ratingDetailsROEScore"], ratingData["ratingDetailsDEScore"],
+        ratingData["ratingDetailsPEScore"], ratingData["ratingDetailsPBScore"], ratingData["ratingScore"]],
+        
+        ratingRecommendation: [ratingData["ratingDetailsDCFRecommendation"], ratingData["ratingDetailsROERecommendation"], ratingData["ratingDetailsDERecommendation"],
+        ratingData["ratingDetailsPERecommendation"], ratingData["ratingDetailsPBRecommendation"], ratingData["ratingRecommendation"],],
+
+        ratingLabels: ["DCF", "ROE", "DE", "PE", "PB", "Overall"]
+        // "DCF Score":ratingData["ratingDetailsDCFScore"],
+        // "DCF Recommendation": ratingData["ratingDetailsDCFRecommendation"],
+    
+        // "ROE Score": ratingData["ratingDetailsROEScore"],
+        // "ROE Recommendation": ratingData["ratingDetailsROERecommendation"],
+    
+        // "DE Score": ratingData["ratingDetailsDEScore"],
+        // "DE Recommendation": ratingData["ratingDetailsDERecommendation"],
+    
+        // "PE Score": ratingData["ratingDetailsPEScore"],
+        // "PE Recommendation": ratingData["ratingDetailsPERecommendation"],
+    
+        // "PB Score": ratingData["ratingDetailsPBScore"],
+        // "PB Recommendation": ratingData["ratingDetailsPBRecommendation"]
+
+        // "Overall Score": ratingData["ratingScore"],
+        // "Recommendation": ratingData["ratingRecommendation"],
+
+        // rating: ratingData["rating"],
+        // ratingScore: ratingData["ratingScore"],
+        // ratingRecommendation: ratingData["ratingRecommendation"],
+        // ratingDetailsDCFScore: ratingData["ratingDetailsDCFScore"],
+        // ratingDetailsDCFRecommendation: ratingData["ratingDetailsDCFRecommendation"],
+        // ratingDetailsROEScore:ratingData["ratingDetailsROEScore"],
+        // ratingDetailsROERecommendation: ratingData["ratingDetailsROERecommendation"],
+        // ratingDetailsDEScore: ratingData["ratingDetailsDEScore"],
+        // ratingDetailsDERecommendation: ratingData["ratingDetailsDERecommendation"],
+        // ratingDetailsPEScore: ratingData["ratingDetailsPEScore"],
+        // ratingDetailsPERecommendation: ratingData["ratingDetailsPERecommendation"],
+        // ratingDetailsPBScore: ratingData["ratingDetailsPBScore"],
+        // ratingDetailsPBRecommendation: ratingData["ratingDetailsPBRecommendation"]
       }
       newStock.rating = newRatingData;
     }
