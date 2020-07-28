@@ -63,14 +63,14 @@
         <canvas id="chart<%=stock.symbol%>" class="pb-3"></canvas>
         <script>
           var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-          makeGraph(stockinfo);
+          makeLineChart(stockinfo);
         </script>
 
         <!-- <div id="chart<%=stock.symbol%>" class="pb-3"></div>
         <script>
           var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
           // var ctx = document.getElementById('chart<%=stock.symbol%>').getContext('2d');
-          makeGraph(stockinfo);
+          makeOHLCChart(stockinfo);
         </script>  -->
 
         <hr />

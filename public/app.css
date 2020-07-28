@@ -99,6 +99,7 @@ body {
 
 .fa, .fas{
   cursor: pointer;
+  /* font-family: "lato", sans-serif !important; */
 }
 
 .fa-edit, .fa-plus, .fa-sync-alt, .fa-search {
@@ -280,6 +281,10 @@ hr {
   font-size: 25px;
 }
 
+.font-size-xsm {
+  font-size: 20px;
+}
+
 .stat-table {
   background-color: white;
   border: black solid 1px;
@@ -311,15 +316,26 @@ hr {
   text-overflow: normal !important;
 }
 
-#trade-button {
+.trade-button {
   float: right;
   padding: 1rem;
   font-size: 20px;
 }
 
-#trade-button a {
+.trade-button a {
   color: black;
 }
+
+.trade-button a:hover {
+  color: black;
+  text-decoration: none;
+}
+
+#OHLCchart {
+  height: 350px;
+}
+
+
 
 /* ----------Search------------------------ */
 .search-item, .notfound-mes {

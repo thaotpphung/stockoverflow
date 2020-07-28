@@ -17,35 +17,46 @@
         </div>
       </div>
 
-      <div class="col-5" >
-        <div id="trade-button">
+      <div class="col-3"></div>
+      <div class="col-2" >
+        <div class="trade-button pb-0">
           <label class="btn btn-light">
             <a href="/transactions/<%=currentUser._id%>/<%=stock._id%>/new">
-              <i class="fas fa-chart-line font-size-sm"></i>
+              <i class="fas fa-chart-line font-size-sm mr-1"></i>
               <span>Trade Options</span>
             </a>
           </label>
         </div>
+
+        <div class="trade-button">
+          <label class="btn btn-light">
+            <a href="/transactions/<%=currentUser._id%>/<%=stock._id%>/new">
+              <i class="fas fa-chart-line font-size-sm mr-1"></i>
+              <span>Set Alerts</span>
+            </a>
+          </label>
+        </div>
       </div>
+
     </div>
 
-    <!-- <div id="chart<%=stock.symbol%>" class="pb-3"></div>
+    <div id="OHLCchart" class="pb-3"></div>
     <script>
       var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-      makeGraph(stockinfo);
-    </script>  -->
+      makeOHLCChart(stockinfo);
+    </script> 
     
-    
-    <canvas id="chart<%=stock.symbol%>" class="pb-3"></canvas>
+    <!-- <canvas id="chart<%=stock.symbol%>" class="pb-3"</canvas>
     <script>
       var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-      makeGraph(stockinfo);
-    </script>
+      makeLineChart(stockinfo);
+    </script> -->
+
   </div>
 
   <div class="row margin-top-2rem">
     <div class = "col-6">
-      <h1 class="header-black">LATEST TRADE<i></i></h1> 
+      <h1 class="header-black"><i class="fa fa-chart-line mr-1"></i> LATEST TRADE <span class="float-right font-size-xsm "> <%=stock.history[0].time%></span></h1> 
       <div class="stat-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -83,7 +94,7 @@
     </div>
     
     <div class = "col-6">
-      <h1 class="header-black">PROFILE <i></i></h1> 
+      <h1 class="header-black"><i class="fa fa-address-card mr-1"></i> PROFILE <span class="float-right font-size-xsm "> <%=stock.profile.date%></span></h1> 
       <div class="profile-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -117,7 +128,7 @@
     </div>
 
     <div class = "col-12">
-      <h1 class="header-black">KEY METRICS <i></i></h1> 
+      <h1 class="header-black"><i class="fa fa-star mr-1"></i> KEY METRICS<span class="float-right font-size-xsm "> <%=stock.keymetrics.date%></span></h1> 
       <div class="stat-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -175,7 +186,7 @@
     </div>
     
     <div class = "col-6">
-      <h1 class="header-black">ABOUT<i></i></h1> 
+      <h1 class="header-black"><i class="fa fa-info-circle mr-1"></i> ABOUT</h1> 
       <div class="profile-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -188,7 +199,7 @@
     </div>
       
     <div class = "col-6">
-      <h1 class="header-black">FINANCIAL GROWTH <i></i></h1> 
+      <h1 class="header-black"><i class="fa fa-heartbeat mr-1"></i> FINANCIAL GROWTH <span class="float-right font-size-xsm"> <%=stock.financialgrowth.date%></span></h1> 
       <div class="profile-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -239,7 +250,7 @@
 
     <div class="col-12">
       <div class="table-container">
-        <h1 class="header-black">RATINGS<i></i></h1> 
+        <h1 class="header-black"><i class="fa fa-chart-bar mr-1"></i> RATINGS <span class="float-right font-size-xsm "> <%=stock.rating.date%></span></h1> 
         <canvas id="ratingChart" class="pb-3" ></canvas>
         <script>
           var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');

@@ -73,11 +73,11 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
         await updateTransaction(transaction, req.body.transaction, req.body.transaction.type);
         user.transactions.push(transaction);
         user.save();
-        req.flash("success", "Successfully made transaction");
+        req.flash("success", "Successfully added transaction");
         res.redirect("/transactions/" + user._id);
       } else {
         await updateTransaction(foundTransaction, req.body.transaction, req.body.transaction.type);
-        req.flash("success", "Successfully made transaction");
+        req.flash("success", "Successfully added transaction");
         res.redirect("/transactions/" + user._id);
       }
     }

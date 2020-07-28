@@ -159,9 +159,9 @@ async function createNewStock(queryBody, queryStock, flag) {
                                        getJSON(apiProfileUrl), getJSON(apiRatingUrl),
                                        getJSON(apiFinancialGrowthUrl)
                                       ]);
-    let timeSeriesData = results[0]["historical"];  // ok
+    let timeSeriesData = results[0]["historical"];  
     let keyMetricsData= results[1][0];
-    let profileData = results[2][0];  // ok
+    let profileData = results[2][0];  
     let ratingData = results[3][0]; 
     let financialGrowthData = results[4][0];
     
@@ -170,13 +170,10 @@ async function createNewStock(queryBody, queryStock, flag) {
     console.log("profile",profileData);
     console.log("--------------------------------------");
     console.log("finance", financialGrowthData);
-    // console.log("finance type", typeof(financialGrowthData));
     console.log("--------------------------------------");
     console.log("rating", ratingData);
-    // console.log("rate type", typeof(ratingData));
     console.log("--------------------------------------");
     console.log("key metrics", keyMetricsData);
-    // console.log("key type", typeof(keyMetricsData));
     console.log("--------------------------------------");
 
     // check if stock just needs to be updated or needs to be created
@@ -195,50 +192,25 @@ async function createNewStock(queryBody, queryStock, flag) {
           time: aStock["label"], 
 
           open: Math.round(aStock["open"] * 100), 
-          high: aStock["high"],
-          low: aStock["low"],
-          close: aStock["close"],
+          high: aStock["high"].toFixed(2),
+          low: aStock["low"].toFixed(2),
+          close: aStock["close"].toFixed(2),
 
-          adjClose: aStock["adjClose"],
-          volume: aStock["volume"],
-          unadjustedVolume: aStock["unadjustedVolume"],
+          adjClose: aStock["adjClose"].toFixed(2),
+          volume: formatNum(aStock["volume"]),
+          unadjustedVolume: formatNum(aStock["unadjustedVolume"]),
 
-          change: aStock["change"], 
-          changepercent: aStock["changePercent"],
+          change: aStock["change"].toFixed(2), 
+          changepercent: aStock["changePercent"].toFixed(2),
         };
       newStock.history.push(newHistoryEntry);
     });
-
-    if ((keyMetricsData != null)) {
-      // update key metrics data
-      let newKeyMetricsData = 
-        { 
-          date : keyMetricsData["date"],
-          marketcap :  keyMetricsData["marketCap"],
-          netincome: keyMetricsData["netIncomePerShare"], //  "Net Income per Share"
-          EV:  keyMetricsData["enterpriseValue"], // Enterprise Value
-          netDebtToEBITDA:  keyMetricsData["netDebtToEBITDA"], // 0.695934725473018,
-          DE :  keyMetricsData["debtToEquity"], // Debt to Equity
-          DY : keyMetricsData["dividendYield"], //  Dividend Yield
-          payoutratio : keyMetricsData["payoutRatio"],
-          rev: keyMetricsData["revenuePerShare"],  // "Revenue per Share"
-          FCFS : keyMetricsData["freeCashFlowPerShare"], // Free Cash Flow per Share
-          BVS : keyMetricsData["bookValuePerShare"], // "Book Value per Share"
-          PEratio : keyMetricsData["peRatio"], // price to earning ratio,
-          PSratio : keyMetricsData["priceToSalesRatio"], // "Price to Sales Ratio"
-          PBratio : keyMetricsData["pbRatio"], // price to book
-          currratio: keyMetricsData["currentRatio"], // current ratio
-          PFCFratio : keyMetricsData["pfcfRatio"],  //  price-to-cash flow
-          roe: keyMetricsData["roe"] // return on equity
-        };
-      newStock.keymetrics = newKeyMetricsData;
-    }
 
     // update profile data
     if ((profileData != null)) {
       let newProfileData = 
         {
-          beta: profileData["beta"],  // => stability
+          beta: formatNum(profileData["beta"]),  // => stability
           exchange: profileData["exchange"],  // "NASDAQ"
           industry: profileData["industry"], //"Consumer Electronics",
           website: encodeURI(profileData["website"]).replace(/'/g, "%27"), // "http://www.apple.com",
@@ -257,44 +229,15 @@ async function createNewStock(queryBody, queryStock, flag) {
         date: ratingData["date"], //"2020-07-17",
         "Overall Rating": ratingData["rating"],
 
-        ratingScores: [ratingData["ratingDetailsDCFScore"], ratingData["ratingDetailsROEScore"], ratingData["ratingDetailsDEScore"],
-        ratingData["ratingDetailsPEScore"], ratingData["ratingDetailsPBScore"], ratingData["ratingScore"]],
+        ratingScores: [ratingData["ratingScore"], ratingData["ratingDetailsDCFScore"], ratingData["ratingDetailsROEScore"], 
+        ratingData["ratingDetailsROAScore"], ratingData["ratingDetailsDEScore"], ratingData["ratingDetailsPEScore"], 
+        ratingData["ratingDetailsPBScore"]],
         
-        ratingRecommendation: [ratingData["ratingDetailsDCFRecommendation"], ratingData["ratingDetailsROERecommendation"], ratingData["ratingDetailsDERecommendation"],
-        ratingData["ratingDetailsPERecommendation"], ratingData["ratingDetailsPBRecommendation"], ratingData["ratingRecommendation"],],
+        ratingRecommendation: [ratingData["ratingRecommendation"], ratingData["ratingDetailsDCFRecommendation"], ratingData["ratingDetailsROERecommendation"], 
+        ratingData["ratingDetailsROARecommendation"], ratingData["ratingDetailsDERecommendation"], ratingData["ratingDetailsPERecommendation"], 
+        ratingData["ratingDetailsPBRecommendation"]],
 
-        ratingLabels: ["DCF", "ROE", "DE", "PE", "PB", "Overall"]
-        // "DCF Score":ratingData["ratingDetailsDCFScore"],
-        // "DCF Recommendation": ratingData["ratingDetailsDCFRecommendation"],
-    
-        // "ROE Score": ratingData["ratingDetailsROEScore"],
-        // "ROE Recommendation": ratingData["ratingDetailsROERecommendation"],
-    
-        // "DE Score": ratingData["ratingDetailsDEScore"],
-        // "DE Recommendation": ratingData["ratingDetailsDERecommendation"],
-    
-        // "PE Score": ratingData["ratingDetailsPEScore"],
-        // "PE Recommendation": ratingData["ratingDetailsPERecommendation"],
-    
-        // "PB Score": ratingData["ratingDetailsPBScore"],
-        // "PB Recommendation": ratingData["ratingDetailsPBRecommendation"]
-
-        // "Overall Score": ratingData["ratingScore"],
-        // "Recommendation": ratingData["ratingRecommendation"],
-
-        // rating: ratingData["rating"],
-        // ratingScore: ratingData["ratingScore"],
-        // ratingRecommendation: ratingData["ratingRecommendation"],
-        // ratingDetailsDCFScore: ratingData["ratingDetailsDCFScore"],
-        // ratingDetailsDCFRecommendation: ratingData["ratingDetailsDCFRecommendation"],
-        // ratingDetailsROEScore:ratingData["ratingDetailsROEScore"],
-        // ratingDetailsROERecommendation: ratingData["ratingDetailsROERecommendation"],
-        // ratingDetailsDEScore: ratingData["ratingDetailsDEScore"],
-        // ratingDetailsDERecommendation: ratingData["ratingDetailsDERecommendation"],
-        // ratingDetailsPEScore: ratingData["ratingDetailsPEScore"],
-        // ratingDetailsPERecommendation: ratingData["ratingDetailsPERecommendation"],
-        // ratingDetailsPBScore: ratingData["ratingDetailsPBScore"],
-        // ratingDetailsPBRecommendation: ratingData["ratingDetailsPBRecommendation"]
+        ratingLabels: [ "Overall", "DCF", "ROE", "ROA", "DE", "PE", "PB"]
       }
       newStock.rating = newRatingData;
     }
@@ -304,18 +247,43 @@ async function createNewStock(queryBody, queryStock, flag) {
       let newFinancialGrowthData = 
         {
           date: financialGrowthData["date"], //"2019-09-28",
-          revenueGrowth: financialGrowthData["revenueGrowth"],
-          netIncomeGrowth: financialGrowthData["netIncomeGrowth"],
-          dividendsperShareGrowth: financialGrowthData["dividendsperShareGrowth"],
-          freeCashFlowGrowth: financialGrowthData["freeCashFlowGrowth"],
-          grossProfitGrowth: financialGrowthData["grossProfitGrowth"],
-          epsgrowth: financialGrowthData["epsgrowth"],
-          debtGrowth: financialGrowthData["debtGrowth"],
-          operatingCashFlowGrowth: financialGrowthData["operatingCashFlowGrowth"],
-          operatingIncomeGrowth: financialGrowthData["operatingIncomeGrowth"],
-          assetGrowth: financialGrowthData["assetGrowth"],
+          revenueGrowth: formatNum(financialGrowthData["revenueGrowth"]),
+          netIncomeGrowth: formatNum(financialGrowthData["netIncomeGrowth"]),
+          dividendsperShareGrowth: formatNum(financialGrowthData["dividendsperShareGrowth"]),
+          freeCashFlowGrowth: formatNum(financialGrowthData["freeCashFlowGrowth"]),
+          grossProfitGrowth: formatNum(financialGrowthData["grossProfitGrowth"]),
+          epsgrowth: formatNum(financialGrowthData["epsgrowth"]),
+          debtGrowth: formatNum(financialGrowthData["debtGrowth"]),
+          operatingCashFlowGrowth: formatNum(financialGrowthData["operatingCashFlowGrowth"]),
+          operatingIncomeGrowth: formatNum(financialGrowthData["operatingIncomeGrowth"]),
+          assetGrowth: formatNum(financialGrowthData["assetGrowth"]),
         }
       newStock.financialgrowth = newFinancialGrowthData;
+    }
+
+    // update key metrics data
+    if ((keyMetricsData != null)) {
+      let newKeyMetricsData = 
+        { 
+          date : keyMetricsData["date"],
+          marketcap :  formatNum(keyMetricsData["marketCap"]),
+          netincome: formatNum(keyMetricsData["netIncomePerShare"]), //  "Net Income per Share"
+          EV:  formatNum(keyMetricsData["enterpriseValue"]), // Enterprise Value
+          netDebtToEBITDA:  formatNum(keyMetricsData["netDebtToEBITDA"]), // 0.695934725473018,
+          DE :  formatNum(keyMetricsData["debtToEquity"]), // Debt to Equity
+          DY : formatNum(keyMetricsData["dividendYield"]), //  Dividend Yield
+          payoutratio : formatNum(keyMetricsData["payoutRatio"]),
+          rev: formatNum(keyMetricsData["revenuePerShare"]),  // "Revenue per Share"
+          FCFS : formatNum(keyMetricsData["freeCashFlowPerShare"]), // Free Cash Flow per Share
+          BVS : formatNum(keyMetricsData["bookValuePerShare"]), // "Book Value per Share"
+          PEratio : formatNum(keyMetricsData["peRatio"]), // price to earning ratio,
+          PSratio : formatNum(keyMetricsData["priceToSalesRatio"]), // "Price to Sales Ratio"
+          PBratio : formatNum(keyMetricsData["pbRatio"]), // price to book
+          currratio: formatNum(keyMetricsData["currentRatio"]), // current ratio
+          PFCFratio : formatNum(keyMetricsData["pfcfRatio"]),  //  price-to-cash flow
+          roe: formatNum(keyMetricsData["roe"]) // return on equity
+        };
+      newStock.keymetrics = newKeyMetricsData;
     }
 
     var foundSearchStock = await StockSearch.findOne({ symbol: queryStock});
@@ -328,6 +296,44 @@ async function createNewStock(queryBody, queryStock, flag) {
   } catch (err) {
     console.log(err);
   }
+}
+
+function formatNum(num) {
+  if (num == null) {
+    return "-";
+  } else {
+    if (num >= 1000) {
+      return abbrNum(num, 2);
+    }
+    return num.toFixed(2);
+  }
+}
+
+function abbrNum(number, decPlaces) {
+  // 2 decimal places => 100, 3 => 1000, etc
+  decPlaces = Math.pow(10,decPlaces);
+  // Enumerate number abbreviations
+  var abbrev = [ "k", "M", "B", "T" ];
+  // Go through the array backwards, so we do the largest first
+  for (var i=abbrev.length-1; i>=0; i--) {
+      // Convert array index to "1000", "1000000", etc
+      var size = Math.pow(10,(i+1)*3);
+      // If the number is bigger or equal do the abbreviation
+      if(size <= number) {
+           // Here, we multiply by decPlaces, round, and then divide by decPlaces.
+           // This gives us nice rounding to a particular decimal place.
+           number = Math.round(number*decPlaces/size)/decPlaces;
+           // Handle special case where we round up to the next abbreviation
+           if((number == 1000) && (i < abbrev.length - 1)) {
+               number = 1;
+               i++;
+           }
+           // Add the letter for the abbreviation
+           number += abbrev[i];
+           break;
+      }
+  }
+  return number;
 }
 
 // Update Stock db every 55 mins
