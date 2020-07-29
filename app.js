@@ -8,7 +8,6 @@ let express = require("express"),
   LocalStrategy = require("passport-local"),
   // passportLocalMongoose = require("passport-local-mongoose"),
   User = require("./models/user");
-  // seedDB          = require("./seeds");
 
 
 // requring routes
@@ -17,11 +16,15 @@ let transactionRoutes = require("./routes/transactions"),
   userRoutes = require("./routes/users"),
   indexRoutes = require("./routes/index");
 
-mongoose.connect("mongodb://127.0.0.1/stockapp", {
+mongoose.connect("mongodb+srv://stockapp:" + process.env.MONGO_PW + "@cluster0.7ahwf.mongodb.net/<dbname>?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false,
+}).then(() => {
+  console.log("Connected to DB!")
+}).catch(err => {
+  console.log(err.message);
 });
 
 app.use(express.static("public"));
@@ -29,7 +32,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.use(flash());
-// seedDB();
 
 // PASSPORT CONFIGURATION
 app.use(
@@ -59,7 +61,7 @@ app.use("/users/:userid", userRoutes);
 app.use("/transactions/:userid", transactionRoutes);
 app.use("/", indexRoutes);
 
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log("Stock App Server Has Started!");
 });
