@@ -5,13 +5,15 @@ var StockSchema = new mongoose.Schema({
   name: String, 
   history: [
     {
-      time: String,
+      date: String,
+      label: String,
       open: Number,
       high: Number,
       low: Number,
       close: Number,
-      adjClose: Number,
 
+      vwap: String,
+      adjClose: String,
       volume: String,
       unadjustedVolume: String,
 

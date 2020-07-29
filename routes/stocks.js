@@ -189,14 +189,16 @@ async function createNewStock(queryBody, queryStock, flag) {
     timeSeriesData.forEach((aStock) => {
       let newHistoryEntry = 
         {
-          time: aStock["label"], 
+          date: aStock["date"],
+          label: aStock["label"], 
 
           open: Math.round(aStock["open"] * 100), 
           high: aStock["high"].toFixed(2),
           low: aStock["low"].toFixed(2),
           close: aStock["close"].toFixed(2),
 
-          adjClose: aStock["adjClose"].toFixed(2),
+          vwap: formatNum(aStock["vwap"]),
+          adjClose: formatNum(aStock["adjClose"]),
           volume: formatNum(aStock["volume"]),
           unadjustedVolume: formatNum(aStock["unadjustedVolume"]),
 

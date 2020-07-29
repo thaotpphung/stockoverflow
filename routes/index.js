@@ -114,13 +114,10 @@ router.get("/login", (req, res) => {
 });
 
 // handling login logic
-router.post(
-  "/login",
-  passport.authenticate("local", {
+router.post("/login", passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
-  }),
-  (req, res) => {
+  }), (req, res) => {
     res.redirect("/");
   }
 );

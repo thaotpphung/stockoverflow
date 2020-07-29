@@ -5,8 +5,9 @@
     <h1 class="header-black">OVERALL <i></i></h1> 
     <div id="stock-banner" class="row">
       <div class="col-7">
-        <div class="font-size-lg"><%=decodeURI(stock.name)%></div>
-        <div class="font-size-sm"><%=stock.symbol%> - <%=stock.history[0].time%></div>
+        <div class="font-size-lg"><img src=<%=stock.profile.image%> alt="Stock Image" class="stock-image">
+          <%=decodeURI(stock.name)%></div>
+        <div class="font-size-sm"><%=stock.symbol%> - <%=stock.history[0].date%></div>
         <div class="font-size-sm">
           <%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%> USD -
           <span 
@@ -31,7 +32,7 @@
         <div class="trade-button">
           <label class="btn btn-light">
             <a href="/transactions/<%=currentUser._id%>/<%=stock._id%>/new">
-              <i class="fas fa-chart-line font-size-sm mr-1"></i>
+              <i class="far fa-bell font-size-sm mr-1"></i>
               <span>Set Alerts</span>
             </a>
           </label>
@@ -56,7 +57,7 @@
 
   <div class="row margin-top-2rem">
     <div class = "col-6">
-      <h1 class="header-black"><i class="fa fa-chart-line mr-1"></i> LATEST TRADE <span class="float-right font-size-xsm "> <%=stock.history[0].time%></span></h1> 
+      <h1 class="header-black"><i class="fa fa-chart-line mr-1"></i> LATEST TRADE <span class="float-right font-size-xsm "> <%=stock.history[0].date%></span></h1> 
       <div class="stat-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -87,6 +88,10 @@
             <tr>
               <th scope="row">Unadjusted Volume</th>
               <td><%=stock.history[0].unadjustedVolume%></td>
+            </tr>
+            <tr>
+              <th scope="row">VWAP</th>
+              <td><%=stock.history[0].vwap%></td>
             </tr>
           </tbody>
         </table>
@@ -205,43 +210,155 @@
           <tbody>
             <tr>
               <th class="w-40" scope="row">Revenue Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.revenueGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.revenueGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.revenueGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive"> + 
+                <% } %>
+                <% } else {%>
+                  ">
+                <% } %> 
+                  <%=stock.financialgrowth.revenueGrowth%>
+
+              </td>
             </tr>
             <tr>
               <th class="w-40" scope="row">Net Income Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.netIncomeGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.netIncomeGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.netIncomeGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive">
+                <% } %>
+                <% } else {%>
+                  "> 
+                <% } %> 
+                <%=stock.financialgrowth.netIncomeGrowth%>
+
+              </td>
             </tr>
             <tr>
               <th class="w-40" scope="row">Dividends per Share Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.dividendsperShareGrowth%></td>
+              <td class="w-35
+                <% if (!(stock.financialgrowth.dividendsperShareGrowth == null)) { %>
+                  <% if (parseFloat(stock.financialgrowth.dividendsperShareGrowth) < 0) { %>
+                    negative"> 
+                  <% } else { %> 
+                    possitive"> 
+                  <% } %>
+                <% } else {%>
+                  ">
+                <% } %>    
+                <%=stock.financialgrowth.dividendsperShareGrowth%>
+              </td>
             </tr>
             <tr>
               <th class="w-40" scope="row">Free Cash Flow Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.freeCashFlowGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.netIncomeGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.netIncomeGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive"> 
+                <% } %>
+              <% } else {%>
+                ">
+              <% } %>    
+              <%=stock.financialgrowth.freeCashFlowGrowth%>
+              </td>
             </tr>
             <tr>
               <th class="w-40" scope="row">Gross Profit Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.grossProfitGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.grossProfitGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.grossProfitGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive"> 
+                <% } %>
+              <% } else {%>
+                ">
+              <% } %>    
+              <%=stock.financialgrowth.grossProfitGrowth%>
+              </td>
             </tr>
             <tr> 
               <th class="w-40" scope="row">Earning per Share Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.epsgrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.epsgrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.epsgrowth) < 0) { %>
+                  negative">
+                <% } else { %> 
+                  possitive"> 
+                <% } %>
+              <% } else {%>
+                ">
+              <% } %>   
+              <%=stock.financialgrowth.epsgrowth%>
+              </td>
             </tr>
             <tr> 
               <th class="w-40" scope="row">Debt Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.debtGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.debtGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.debtGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive">
+                <% } %>
+              <% } else {%>
+                ">
+              <% } %>   
+              <%=stock.financialgrowth.debtGrowth%>
+              </td>
             </tr>
             <tr> 
               <th class="w-40" scope="row">Operating Cash Flow Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.operatingCashFlowGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.operatingCashFlowGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.operatingCashFlowGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive">
+                <% } %>
+              <% } else {%>
+                ">
+              <% } %>   
+              <%=stock.financialgrowth.operatingCashFlowGrowth%>
+              </td>
             </tr>
             <tr> 
               <th class="w-40" scope="row">Operating Income Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.operatingIncomeGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.operatingIncomeGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.operatingIncomeGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive">
+                <% } %>
+              <% } else {%>
+                ">
+              <% } %>   
+              <%=stock.financialgrowth.operatingIncomeGrowth%>
+              </td>
             </tr>
             <tr> 
               <th class="w-40" scope="row">Asset Growth</th>
-              <td class="w-35"><%=stock.financialgrowth.assetGrowth%></td>
+              <td class="w-35
+              <% if (!(stock.financialgrowth.assetGrowth == null)) { %>
+                <% if (parseFloat(stock.financialgrowth.assetGrowth) < 0) { %>
+                  negative"> 
+                <% } else { %> 
+                  possitive"> 
+                <% } %>
+              <% } else {%>
+                ">
+              <% } %>   
+              <%=stock.financialgrowth.assetGrowth%>
+              </td>
             </tr>
           </tbody>
         </table>

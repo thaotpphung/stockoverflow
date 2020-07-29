@@ -76,8 +76,15 @@ body {
 }
 
 .button-container {
+  text-align: center;
   margin: 0 auto;
-  width: 20%;
+  /* width: 20%; */
+  padding-top: 1em;
+}
+
+.button-container-30 {
+  margin: 0 auto;
+  width: 30%;
   padding-top: 1em;
 }
 

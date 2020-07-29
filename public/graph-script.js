@@ -7,12 +7,12 @@ function makeOHLCChart(stockinfo) {
     var highArray = [];
     var lowArray = [];
     var timeArray = [];
-    for (i = (stockinfo.history.length - 1); i >= 0; i-- ) {
+    for (i = 0; i < stockinfo.history.length; i++ ) {
       openArray.push((stockinfo.history[i].open/100).toFixed(2));
-      closeArray.push((stockinfo.history[i].close).toFixed(2));
-      highArray.push((stockinfo.history[i].high).toFixed(2));
-      lowArray.push((stockinfo.history[i].low).toFixed(2));
-      timeArray.push(stockinfo.history[i].time);
+      closeArray.push((stockinfo.history[i].close));
+      highArray.push((stockinfo.history[i].high));
+      lowArray.push((stockinfo.history[i].low));
+      timeArray.push(stockinfo.history[i].date);
     }
 
     var data = [];
@@ -68,7 +68,7 @@ function makeLineChart(stockinfo) {
     closeArray.push((stockinfo.history[i].close).toFixed(2));
     highArray.push((stockinfo.history[i].high).toFixed(2));
     lowArray.push((stockinfo.history[i].low).toFixed(2));
-    timeArray.push(stockinfo.history[i].time);
+    timeArray.push(stockinfo.history[i].label);
   }
   var color;
   if (stockinfo.history[0].change < 0) {
