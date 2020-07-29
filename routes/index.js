@@ -1,10 +1,6 @@
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
   passport = require("passport"),
-  async = require("async"),
-
-  // nodemailer = require("nodemailer"),
-
   // require sendgrid/mail
   sgMail = require('@sendgrid/mail'),
 
@@ -160,8 +156,6 @@ router.post('/forgot', async (req, res) => {
 	try {
 		// generate reset token to send.
 		let reset_token = await generateResetToken();
-		console.log(reset_token);
-
 		// find the specified user by email.
 		let user = await User.findOne({email: req.body.email});
 		if (!user) {

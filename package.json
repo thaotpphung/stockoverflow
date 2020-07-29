@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.2.2",
-    "async": "^3.2.0",
     "body-parser": "^1.19.0",
     "chart.js": "^2.9.3",
     "connect-flash": "^0.1.1",
@@ -23,7 +22,6 @@
     "locus": "^2.0.4",
     "method-override": "^3.0.0",
     "mongoose": "^5.9.16",
-    "nodemailer": "^6.4.10",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1"
