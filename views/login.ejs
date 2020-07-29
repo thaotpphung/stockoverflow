@@ -6,23 +6,22 @@
       <div class="pl-3 text-center" id="landing-banner">
         Welcome to <span id="logo">STOCKOVERFLOW</span>
       </div>
-      <form action="/login" method="POST">
       <div class="form-row">
-        <div class="col-12">
-          <input type="text" name="username" class="form-control" placeholder="username" />
-        </div>
-        <div class="col-12">
-          <input type="password" name="password" class="form-control" placeholder="password" />
-        </div>
-        
-        <div class="button-container pt-0">
+        <form action="/login" method="POST">
+          <div class="col-12">
+            <input type="text" name="username" class="form-control" placeholder="username" />
+          </div>
+          <div class="col-12">
+            <input type="password" name="password" class="form-control" placeholder="password" />
+          </div>
+          
+          <div class="button-container pt-0 ml-4">
             <div class="button-container">
               <button class="btn green-button">
                 Sign In
               </button>
             </div>
-        <div>
-      </form>
+        </form>
         <div class="button-container pt-0">
           <form action="/forgot" method="GET">
             <div class="button-container">
@@ -32,7 +31,7 @@
             </div>
           </form>
         </div>
-      </form>
+      </div>
 
     </div>
   </div>

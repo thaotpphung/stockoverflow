@@ -3,7 +3,7 @@ const express = require("express"),
   passport = require("passport"),
   async = require("async"),
 
-  nodemailer = require("nodemailer"),
+  // nodemailer = require("nodemailer"),
 
   // require sendgrid/mail
   sgMail = require('@sendgrid/mail'),
@@ -174,28 +174,24 @@ router.post('/forgot', async (req, res) => {
 		await user.save();
 
     // create transport
-		var smtpTransport = nodemailer.createTransport({
-			service: 'Gmail',
-			auth: {
-				user: 'stockoverflow.stockapp@gmail.com',
-				pass: process.env.GMAIL_PW
-			}
-		});
-		// set options
-		var mailOptions = {
-			to: user.email,
-			from: 'stockoverflow.stockapp@gmail.com',
-			subject: 'StackOverflow Password Reset',
+    const msg = {
+      to: user.email,
+      from: 'stockoverflow.stockapp@gmail.com',
+      subject: 'StackOverflow Password Reset',
 			text: 'You are receiving this because you (or someone else) have requested the reset of the password linked to your Yelpcamp account.' +
 				'Please click on the following link, or paste this into your browser to complete the process.' + '\n\n' +
-				'http://' + req.headers.host + '/users/reset/' + reset_token + '\n\n' + 
-				'If you did not request this, please ignore this email and your password will remain unchanged.'
-		};
-		// send mail uses promise if no callback is specified.
-		await	smtpTransport.sendMail(mailOptions);
-		console.log('mail sent');
-		req.flash('success', 'an email has been sent to ' + user.email + ' with further instructions.');
-		res.redirect('/forgot');
+				'http://' + req.headers.host + '/reset/' + reset_token + '\n\n' + 
+				'If you did not request this, please ignore this email and your password will remain unchanged.',
+    };
+    try {
+      await sgMail.send(msg);
+      req.flash('success', 'An email has been sent to ' + user.email + ' with further instructions.');
+      res.redirect('/forgot');
+    } catch (error) {
+      console.log(error);
+      req.flash('error', 'Sorry, something went wrong, please contact admin@website.com');
+      res.redirect('back');
+    }
 	} catch (error) {
 		console.log(error);
 		res.redirect('/forgot');
@@ -222,40 +218,43 @@ router.post('/reset/:token', async function(req, res) {
       return res.redirect('back');
     }
     if(req.body.password === req.body.confirm) {
-      await user.setPassword(req.body.password);
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpires = undefined;
-      await user.save();
-      req.login();
+      try {
+        await user.setPassword(req.body.password);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+        const msg = {
+          to: user.email,
+          from: 'stockoverflow.stockapp@gmail.com',
+          subject: 'Your password has been changed',
+          text: 'Hello,\n\n' +
+            'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+        };
+        await sgMail.send(msg);
+        req.login(user, function(err) {
+          if (err) {   
+            console.log(err);
+            req.flash('error', 'Sorry, something went wrong, please contact admin@website.com');
+            return res.redirect('back');
+          } else {
+            req.flash('success', 'Success! Your password has been changed.');
+            return res.redirect('/');
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        req.flash('error', 'Sorry, something went wrong, please contact admin@website.com');
+        return res.redirect('back');
+      }
     } else {
       req.flash("error", "Passwords do not match.");
       return res.redirect('back');
     }
-
-    var smtpTransport = nodemailer.createTransport({
-      service: 'Gmail', 
-      auth: {
-        user: 'stockoverflow.stockapp@gmail.com',
-        pass: process.env.GMAIL_PW
-      }
-    });
-    var mailOptions = {
-      to: user.email,
-      from: 'stockoverflow.stockapp@gmail.com',
-      subject: 'Your password has been changed',
-      text: 'Hello,\n\n' +
-        'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
-    };
-
-    // send mail uses promise if no callback is specified.
-		await	smtpTransport.sendMail(mailOptions);
-    console.log('mail sent');
-    req.flash('success', 'Success! Your password has been changed.');
-		res.redirect('/');
-  } catch (error) {
-		console.log(error);
-		res.redirect('/');
-  }	
+	} catch (error) {
+    console.log(error);
+    req.flash('error', 'Sorry, something went wrong, please contact stockoverflow.stockapp@gmail.com');
+		return res.redirect('/forgot');
+	}	
 });
 
 router.get("*", function (req, res) {
