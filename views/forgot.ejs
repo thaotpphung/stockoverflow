@@ -1,44 +1,28 @@
 <%- include("partials/header") %>
 
-<!-- <form action="/login" method="POST"> -->
-  <div id="body-container">
-    <div class="row justify-content-center">
-      <div class="col-4 col-lg-4">
-        <div class="pl-3 text-center" id="landing-banner">
-          Welcome to <span id="logo">STOCKOVERFLOW</span>
+<div id="body-container">
+  <div class="row justify-content-center">
+    <div class="col-4 col-lg-4">
+      <div class="pl-3 text-center" id="landing-banner">
+        Forgot Password
+      </div>
+      <form action="/forgot" method="POST">
+      <div class="form-row">
+        <div class="col-12">
+          <input type="text" name="email" class="form-control" placeholder="Email" />
         </div>
-        <form action="/login" method="POST">
-        <div class="form-row">
-          <div class="col-12">
-            <input type="text" name="username" class="form-control" placeholder="username" />
-          </div>
-          <div class="col-12">
-            <input type="password" name="password" class="form-control" placeholder="password" />
-          </div>
-          
-          <div class="button-container pt-0">
-              <div class="button-container">
-                <button class="btn green-button">
-                  Sign In
-                </button>
-              </div>
-          <div>
-        </form>
 
-          <div class="button-container pt-0">
-            <form action="/forgotpassword" method="POST">
-              <div class="button-container">
-                <button class="btn green-button">
-                  Forgot Password?
-                </button>
-              </div>
-            </form>
+        <div class="button-container pt-0">
+          <div class="button-container">
+            <button class="btn green-button">
+              Reset Password
+            </button>
           </div>
-  
         </div>
+
       </div>
     </div>
   </div>
-<!-- </form> -->
+</div>
 
 <%- include("partials/footer") %>
