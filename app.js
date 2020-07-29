@@ -7,8 +7,8 @@ let express = require("express"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
   // passportLocalMongoose = require("passport-local-mongoose"),
-  User = require("./models/user"),
-  seedDB          = require("./seeds");
+  User = require("./models/user");
+  // seedDB          = require("./seeds");
 
 
 // requring routes
