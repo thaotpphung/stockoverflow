@@ -9,14 +9,14 @@ let express = require("express"),
   // passportLocalMongoose = require("passport-local-mongoose"),
   User = require("./models/user");
 
-
+  
 // requring routes
 let transactionRoutes = require("./routes/transactions"),
   stockRoutes = require("./routes/stocks"),
   userRoutes = require("./routes/users"),
   indexRoutes = require("./routes/index");
 
-mongoose.connect("mongodb+srv://stockapp:" + process.env.MONGO_PW + "@cluster0.7ahwf.mongodb.net/<dbname>?retryWrites=true&w=majority", {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

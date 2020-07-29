@@ -164,18 +164,6 @@ async function createNewStock(queryBody, queryStock, flag) {
     let profileData = results[2][0];  
     let ratingData = results[3][0]; 
     let financialGrowthData = results[4][0];
-    
-    console.log("time", timeSeriesData);
-    console.log("--------------------------------------");
-    console.log("profile",profileData);
-    console.log("--------------------------------------");
-    console.log("finance", financialGrowthData);
-    console.log("--------------------------------------");
-    console.log("rating", ratingData);
-    console.log("--------------------------------------");
-    console.log("key metrics", keyMetricsData);
-    console.log("--------------------------------------");
-
     // check if stock just needs to be updated or needs to be created
     var newStock;
     if (flag) {
@@ -191,17 +179,14 @@ async function createNewStock(queryBody, queryStock, flag) {
         {
           date: aStock["date"],
           label: aStock["label"], 
-
           open: Math.round(aStock["open"] * 100), 
           high: aStock["high"].toFixed(2),
           low: aStock["low"].toFixed(2),
           close: aStock["close"].toFixed(2),
-
           vwap: formatNum(aStock["vwap"]),
           adjClose: formatNum(aStock["adjClose"]),
           volume: formatNum(aStock["volume"]),
           unadjustedVolume: formatNum(aStock["unadjustedVolume"]),
-
           change: aStock["change"].toFixed(2), 
           changepercent: aStock["changePercent"].toFixed(2),
         };
@@ -230,15 +215,12 @@ async function createNewStock(queryBody, queryStock, flag) {
       {
         date: ratingData["date"], //"2020-07-17",
         "Overall Rating": ratingData["rating"],
-
         ratingScores: [ratingData["ratingScore"], ratingData["ratingDetailsDCFScore"], ratingData["ratingDetailsROEScore"], 
         ratingData["ratingDetailsROAScore"], ratingData["ratingDetailsDEScore"], ratingData["ratingDetailsPEScore"], 
         ratingData["ratingDetailsPBScore"]],
-        
         ratingRecommendation: [ratingData["ratingRecommendation"], ratingData["ratingDetailsDCFRecommendation"], ratingData["ratingDetailsROERecommendation"], 
         ratingData["ratingDetailsROARecommendation"], ratingData["ratingDetailsDERecommendation"], ratingData["ratingDetailsPERecommendation"], 
         ratingData["ratingDetailsPBRecommendation"]],
-
         ratingLabels: [ "Overall", "DCF", "ROE", "ROA", "DE", "PE", "PB"]
       }
       newStock.rating = newRatingData;
