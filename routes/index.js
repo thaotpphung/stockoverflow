@@ -13,19 +13,6 @@ require("dotenv").config();
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-router.get("/test", async (req, res) => {
-  const stocks = await StockNyse.find({});
-  stocks.forEach( async (stock) => {
-    const api_url = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.API_KEY;
-    const rawData = await got(api_url);
-    const data = JSON.parse(rawData.body);
-    if (Object.keys(data).length === 0) {
-      await StockNyse.remove({symbol: stock.symbol});
-      console.log(stock.symbol);
-    }
-  });
-});
-
 // root route
 router.get("/", (req, res) => {
   res.render("landing");
@@ -84,11 +71,10 @@ router.get("/register", (req, res) => {
 
 //handle sign up logic
 router.post("/register", (req, res) => {
-  let newUser = new User(req.body
-  );
   // check unique valid user name here
-  User.findOne({username: req.body.username}, (err, foundUser) => {
-    if (!foundUser) {
+  User.find( {$or: [ {username: req.body.username},{email: req.body.email}]}, (err, foundUser) => {
+    if (foundUser.length == 0) {
+      let newUser = new User(req.body);
       User.register(newUser, req.body.password, (err, user) => {
         // encode the password
         if (err) {
@@ -103,7 +89,7 @@ router.post("/register", (req, res) => {
         });
       });
     } else {
-      req.flash("error", "Username " + req.body.username + " already exists, please choose a different one." );
+      req.flash("error", "Username or email is already in used, please choose a different one." );
       res.redirect("back");
     }
   })

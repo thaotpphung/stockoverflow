@@ -27,12 +27,20 @@ router.get("/edit", middleware.checkCorrectUser, (req, res) => {
 
 // USER UPDATE
 router.put("/", middleware.checkCorrectUser, (req, res) => {
-  User.findById(req.params.userid, (err, foundUser) => {
+  User.findById(req.params.userid, async (err, foundUser) => {
     if (err || !foundUser) {
       req.flash("error", "User not found");
       res.redirect("back");
     } else {
       if (!req.body.newpassword) {  // if not change password
+        if (req.body.email != null) {
+          let user = await User.findOne({email: req.body.email});
+          if (user) {
+            req.flash("error", "Email already in used, please choose a different one.");
+            return res.redirect("back");
+          }
+        }
+
         User.findByIdAndUpdate(req.params.userid, {$set: req.body}, (err, UpdatedUser) => {
           if (err) {
             req.flash("error", "There is an error, please try again");
