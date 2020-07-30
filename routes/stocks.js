@@ -132,7 +132,7 @@ async function addToSharedStockDB(queryStock, queryBody){
 } 
 
 const urlHead = "https://financialmodelingprep.com/api/v3/";
-const apiKey = "?apikey=" + process.env.API_KEY;
+const apiKey = "?apikey=" + process.env.STOCK_API_KEY;
 const timeSeriesCount = "&timeseries=30";
 const timeSeries = "historical-price-full/";
 const keyMetrics = "key-metrics/";
@@ -164,6 +164,8 @@ async function createNewStock(queryBody, queryStock, flag) {
                                        getJSON(apiProfileUrl), getJSON(apiRatingUrl),
                                        getJSON(apiFinancialGrowthUrl)
                                       ]);
+
+    console.log(apiKey);
     let timeSeriesData = results[0]["historical"];  
     console.log("time api", apiTimeSeriesUrl);
     console.log("full time", results[0]);
@@ -361,7 +363,7 @@ async function updateDB() {
   var stocks = await Stock.find({});
   stocks.forEach( async (stock) => {
     var stock = await Stock.findOne({symbol: stock.symbol});
-    const apiTimeSeriesUrl = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.API_KEY;
+    const apiTimeSeriesUrl = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.STOCK_API_KEY;
     createNewStock({symbol: stock.symbol}, stock.symbol, false);
   });
   console.log("just updated!");
