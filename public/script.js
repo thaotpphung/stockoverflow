@@ -59,7 +59,9 @@ $("#searchKey").keyup( async function (event) {
       // if in the transaction stock page
       if ($("#tickSymbolDiv").html()) {
         let searchVal = $("#searchKey").val();
-        let url = "http://localhost:8000/getStock";
+        // let url = "http://localhost:8000/getStock";
+        let url = "https://shrouded-shelf-22294.herokuapp.com/getStock";
+        
         let foundStock = await makeHttpRequest(url, searchVal);
         // after search for stock, 
         if (foundStock === "not found") {
@@ -83,7 +85,8 @@ $("#searchKey").keyup( async function (event) {
 
 // send request to server API for search query and return result
 async function searchQuery(searchTerm) {
-  let url = "http://localhost:8000/search";
+  let url = "https://shrouded-shelf-22294.herokuapp.com/search";
+  // let url = "http://localhost:8000/search";
   let found = await makeHttpRequest(url, searchTerm)
   if (found === "not found") {
     $searchResult.html('<div class="notfound-mes">Can\'t find stock, search another term </div>');
