@@ -11,6 +11,12 @@ $(document).ready(function () {
   });
 });
 
+// Set the cursor ASAP to "Wait"
+document.body.style.cursor='wait';
+
+// When the window has finished loading, set it back to default...
+window.onload=function(){document.body.style.cursor='default';}
+
 /* ----------------------------TrackedStocks---------------------------- */
 // Show stock info
 $(".table tbody").delegate("tr", "click", function (event) {
@@ -45,6 +51,8 @@ $(".show-form").click(function(event) {
 /* -----------------------search----------------------- */
 var $searchResult = $("#searchResult");
 var $searchKey = $("#searchKey");
+const website = "http://localhost:8000/";
+// const website = "https://shrouded-shelf-22294.herokuapp.com/";
 
 // send request whenever user enter a valid string
 $("#searchKey").keyup( async function (event) {
@@ -55,38 +63,12 @@ $("#searchKey").keyup( async function (event) {
     searchQuery(searchVal);
   } else if (event.which == 13) {
     // when user hit enter key in 
-    if (!($searchResult.html().includes("notfound-mes"))) {
-      // if in the transaction stock page
-      if ($("#tickSymbolDiv").html()) {
-        let searchVal = $("#searchKey").val();
-        
-        // let url = "http://localhost:8000/getStock";
-        let url = "https://shrouded-shelf-22294.herokuapp.com/getStock";
-        
-        let foundStock = await makeHttpRequest(url, searchVal);
-        // after search for stock, 
-        if (foundStock === "not found") {
-          $("#stock-symbol").val(searchVal.toUpperCase());
-          $("#addStockForm").submit();
-        } else {
-          $(".transaction-symbol").val(searchVal.toUpperCase());
-          $(".transaction-name").val(foundStock.name);
-          $(".transaction-stockid").val(foundStock._id);
-          $(".transaction-price").val(Math.floor(foundStock.history[0].open/100) + "." + foundStock.history[0].open%100);
-          var today = new Date().toISOString().split('T')[0];
-          $(".transaction-time").val(today);
-          $(".fa-times").click();
-        }
-      } else { // else in the add page, submit the form
-        $("#searchStockForm").submit();
-      }
-    } 
   }
 });
 
 // send request to server API for search query and return result
 async function searchQuery(searchTerm) {
-  let url = "https://shrouded-shelf-22294.herokuapp.com/search";
+  let url = website + "search";
   // let url = "http://localhost:8000/search";
   let found = await makeHttpRequest(url, searchTerm)
   if (found === "not found") {
@@ -134,10 +116,40 @@ $("#searchStockForm").keydown(function (event) {
 });
 
 // listen for click on div to fill the search box with that value
-$searchResult.delegate("div", "click", function (event) {  
+$searchResult.delegate("div", "click", async function (event) {  
   var found = $(this).text();
   $searchKey.val(found.split("-")[0].trim());
   $(this).parent().addClass("d-none");
+
+  document.body.style.cursor='wait'
+
+  if (!($searchResult.html().includes("notfound-mes"))) {
+    // if in the transaction stock page
+    if ($("#tickSymbolDiv").html()) {
+      let searchVal = $("#searchKey").val();
+      let url = website + "getStock";
+      let foundStock = await makeHttpRequest(url, searchVal);
+      // after search for stock 
+      if (foundStock === "not found") {
+        $("#stock-symbol").val(searchVal.toUpperCase());
+        $("#addStockForm").submit();
+      } else {
+        $(".transaction-symbol").val(searchVal.toUpperCase());
+        $(".transaction-name").val(foundStock.name);
+        $(".transaction-stockid").val(foundStock._id);
+        $(".transaction-price").val(Math.floor(foundStock.history[0].open/100) + "." + foundStock.history[0].open%100);
+        var today = new Date().toISOString().split('T')[0];
+        $(".transaction-time").val(today);
+        $(".fa-times").click();
+        document.body.style.cursor='default';
+      }
+
+    // else in the add page, submit the form
+    } else { 
+      $("#searchKey").val($("#searchKey").val().toUpperCase()); 
+      $("#searchStockForm").submit();
+    }
+  } 
 });
 
 // display search result
@@ -154,6 +166,7 @@ function displaySearchResult(found) {
 
 /* -----------------------Pop up search bar----------------------- */
 function togglePopup(){
+  console.log("click");
   $("#popup-search-bar").toggleClass("active");
 }
 

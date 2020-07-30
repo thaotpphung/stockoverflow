@@ -62,16 +62,12 @@ router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
-// CREAT route - Add tracked stocks to the stocks db
+// CREATE route - Add tracked stocks to the stocks db
 router.post("/", middleware.checkCorrectUser, async (req, res) => {
-  const queryStock = req.body.stock.symbol.toUpperCase();
+  const queryStock = req.body.stock.symbol;
   const queryBody = req.body.stock;
-  // const apiTimeSeriesUrl = urlHead + timeSeries + queryStock + apiKey + timeSeriesCount;
-  
   var user = await User.findById(req.params.userid).populate("trackedstocks");
-
-  var newStock = await addToSharedStockDB(queryStock, queryBody);
-  
+  var newStock = await addToSharedStockDB(queryStock);
   if ((queryBody.page === "transaction")) { // if the current page is the transaction page
     res.render("transactions/new", { stock: newStock, transaction: {totalquantity: 0} });
   } else { // the current page is the tracked stocks page
@@ -94,7 +90,6 @@ async function addToTrackedStocks(user, checkStockExists, newStockId, req, res) 
   } catch (err) {
     console.log("ERROR in addToTrackedStocks")
   }
-  
 }
 
 // Checked if the query stock is in the tracked stock list by symbol

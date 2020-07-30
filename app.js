@@ -8,7 +8,6 @@ let express = require("express"),
   LocalStrategy = require("passport-local"),
   // passportLocalMongoose = require("passport-local-mongoose"),
   User = require("./models/user");
-
   
 // requring routes
 let transactionRoutes = require("./routes/transactions"),
@@ -16,7 +15,8 @@ let transactionRoutes = require("./routes/transactions"),
   userRoutes = require("./routes/users"),
   indexRoutes = require("./routes/index");
 
-mongoose.connect(process.env.MONGODB_URI, {
+const dbURL = process.env.MONGODB_URI || "mongodb://127.0.0.1/stockapp"
+mongoose.connect(dbURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
