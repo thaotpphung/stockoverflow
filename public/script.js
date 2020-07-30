@@ -121,7 +121,9 @@ $searchResult.delegate("div", "click", async function (event) {
   $searchKey.val(found.split("-")[0].trim());
   $(this).parent().addClass("d-none");
 
-  document.body.style.cursor='wait'
+  $("#pageload").addClass("active");
+  $("#pageload").addClass("disable-click");
+
 
   if (!($searchResult.html().includes("notfound-mes"))) {
     // if in the transaction stock page
@@ -141,7 +143,8 @@ $searchResult.delegate("div", "click", async function (event) {
         var today = new Date().toISOString().split('T')[0];
         $(".transaction-time").val(today);
         $(".fa-times").click();
-        document.body.style.cursor='default';
+        $("#pageload").removeClass("active");
+        $("#pageload").removeClass("enable-click");
       }
 
     // else in the add page, submit the form

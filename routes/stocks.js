@@ -33,18 +33,6 @@ router.get("/:stockid", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
-// EDIT ROUTE - edit a tracked stock
-router.put("/:stockid", middleware.checkCorrectUser, (req, res) => {
-  User.findById(req.params.userid, async (err, user) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const index = user.trackedstocks.indexOf(req.params.stockid);
-      addToTrackedStocks(user, (index != - 1), req.params.stockid, req, res);
-    }
-  });
-});
-
 // DESTROY ROUTE - delete a tracked stock
 router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid, (err, user) => {
@@ -62,23 +50,36 @@ router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
   });
 });
 
+// EDIT ROUTE - edit a tracked stock
+router.put("/:stockid", middleware.checkCorrectUser, (req, res) => {
+  User.findById(req.params.userid, async (err, user) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const index = user.trackedstocks.indexOf(req.params.stockid);
+      addToTrackedStocks(user, (index != - 1), req.params.stockid, req, res);
+    }
+  });
+});
+
 // CREATE route - Add tracked stocks to the stocks db
 router.post("/", middleware.checkCorrectUser, async (req, res) => {
   const queryStock = req.body.stock.symbol;
   const queryBody = req.body.stock;
   var user = await User.findById(req.params.userid).populate("trackedstocks");
-  var newStock = await addToSharedStockDB(queryStock);
+  var newStock = await addToSharedStockDB(queryStock, queryBody);
   if ((queryBody.page === "transaction")) { // if the current page is the transaction page
     res.render("transactions/new", { stock: newStock, transaction: {totalquantity: 0} });
   } else { // the current page is the tracked stocks page
-    addToTrackedStocks(user, checkStockExists(user.trackedstocks, queryStock), newStock._id, req, res);
+    addToTrackedStocks(user, existsInTrackedStocks(user.trackedstocks, queryStock), newStock._id, req, res);
   }
 });
 
 // add to tracked stocks if not already exists
-async function addToTrackedStocks(user, checkStockExists, newStockId, req, res) {
+async function addToTrackedStocks(user, existsInTrackedStocks, newStockId, req, res) {
   try {
-    if (!checkStockExists) { // if it's not in trackedstocks
+    if (!existsInTrackedStocks) { // if it's not in trackedstocks
+      console.log(newStockId);
       user.trackedstocks.push(newStockId);
       await user.save();
       req.flash("success", "Successfully added stock");
@@ -88,14 +89,14 @@ async function addToTrackedStocks(user, checkStockExists, newStockId, req, res) 
       res.redirect("/stocks/" + user._id);
     }
   } catch (err) {
-    console.log("ERROR in addToTrackedStocks")
+    console.log("ERROR in addToTrackedStocks", err);
   }
 }
 
 // Checked if the query stock is in the tracked stock list by symbol
-// return false if not exists in user's tracked stock
-//        true if already exists in user's tracked stock
-function checkStockExists(trackedstocks, queryStock){
+// return true if already exists in user's tracked stock
+//        false if not exists in user's tracked stock
+function existsInTrackedStocks(trackedstocks, queryStock){
   let counter = 0;
   trackedstocks.forEach((aStock) => {
     if (aStock.symbol == queryStock) {
@@ -103,6 +104,7 @@ function checkStockExists(trackedstocks, queryStock){
     }
     counter++;
   });
+  // go through and not find => not exist => return false
   return (counter === trackedstocks.length) ? false : true;
 }
 
@@ -223,7 +225,8 @@ async function createNewStock(queryBody, queryStock, flag) {
         ratingRecommendation: [ratingData["ratingRecommendation"], ratingData["ratingDetailsDCFRecommendation"], ratingData["ratingDetailsROERecommendation"], 
         ratingData["ratingDetailsROARecommendation"], ratingData["ratingDetailsDERecommendation"], ratingData["ratingDetailsPERecommendation"], 
         ratingData["ratingDetailsPBRecommendation"]],
-        ratingLabels: [ "Overall", "DCF", "ROE", "ROA", "DE", "PE", "PB"]
+        ratingLabels: [ "Overall", "DCF", "ROE", "ROA", "DE", "PE", "PB"],
+        ratingLabelsFull: [ "Overall", "Discounted Cash Flow", "Return on Equity", "Return on Assets", "Debt to Equity", "Price Earning", "Price/Book"]
       }
       newStock.rating = newRatingData;
     }

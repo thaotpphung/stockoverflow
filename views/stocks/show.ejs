@@ -4,22 +4,25 @@
   <div class="table-container">
     <h1 class="header-black">OVERALL <i></i></h1> 
     <div id="stock-banner" class="row">
-      <div class="col-7">
-        <div class="font-size-lg"><img src=<%=stock.profile.image%> alt="Stock Image" class="stock-image">
-          <%=decodeURI(stock.name)%></div>
-        <div class="font-size-sm"><%=stock.symbol%> - <%=stock.history[0].date%></div>
+      <div class="col-9">
+        <div class="font-size-lg">
+          <%=decodeURI(stock.name)%>
+        </div>
+        <div class="font-size-sm"><%=stock.symbol%> - <%=stock.profile.exchange%></div>
+        <div class="font-size-sm"> 
+          <%=stock.history[0].date%>
+        </div>
         <div class="font-size-sm">
-          <%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%> USD -
+          $<%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%> -
           <span 
             <% if (stock.history[0].change < 0) { %>
-              class="negative" > <i class="fa fa-arrow-down"></i> <% } else { %> class="possitive" > <i class="fa fa-arrow-up"></i> <% } %>
+              class="negative" > <i class="fa fa-caret-down"></i> <% } else { %> class="possitive" > <i class="fa fa-caret-up"></i> <% } %>
               <%=stock.history[0].change%> (<%=stock.history[0].changepercent%>  %)
           </span>
         </div>
       </div>
 
-      <div class="col-3"></div>
-      <div class="col-2" >
+      <div class="col-3" >
         <div class="trade-button pb-0">
           <label class="btn btn-light">
             <a href="/transactions/<%=currentUser._id%>/<%=stock._id%>/new">

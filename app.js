@@ -16,6 +16,7 @@ let transactionRoutes = require("./routes/transactions"),
   indexRoutes = require("./routes/index");
 
 const dbURL = process.env.MONGODB_URI || "mongodb://127.0.0.1/stockapp"
+console.log(dbURL);
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

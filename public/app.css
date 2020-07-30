@@ -1,10 +1,10 @@
 /* ----------Javascript------------------------ */
-.not-clickable {
+.disable-click {
   cursor: wait;
   pointer-events: none;
 }
 
-.clickable {
+.enable-click{
   cursor: pointer;
   pointer-events: auto;
 }
@@ -305,7 +305,6 @@ hr {
   padding-left: 1rem !important;
 }
 
-
 .profile-table {
   background-color: white;
   border: black solid 1px;
@@ -326,7 +325,6 @@ hr {
 .trade-button {
   float: right;
   padding: 1rem;
-  font-size: 20px;
 }
 
 .trade-button a {
@@ -341,8 +339,6 @@ hr {
 #OHLCchart {
   height: 350px;
 }
-
-
 
 /* ----------Search------------------------ */
 .search-item, .notfound-mes {
@@ -416,6 +412,12 @@ hr {
 .popup.active .content {
   transition:all 300ms ease-in-out;
   transform:translate(-50%,-50%) scale(1);
+}
+
+#pageload .content {
+  top: 500px !important;
+  color: white;
+  /* font-size: 1.5em; */
 }
 
 /* -------------test--- */

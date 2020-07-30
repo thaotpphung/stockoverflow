@@ -17,7 +17,7 @@ function makeOHLCChart(stockinfo) {
 
     var data = [];
     for (i = 0; i < (stockinfo.history.length); i++) {
-      data[i] = [timeArray[i], openArray[i],  highArray[i], lowArray[i], closeArray[i] ];
+      data[i] = [timeArray[i], openArray[i],  highArray[i], lowArray[i], closeArray[i]];
     }
 
     // create a chart
@@ -108,12 +108,7 @@ function makeLineChart(stockinfo) {
               labelString: "Openning Price ($)",
             },
           },
-        ],
-        xAxes: [
-          {
-
-          }
-        ],
+        ]
       },
     },
   });
@@ -140,7 +135,7 @@ function makeRatingChart(stockinfo) {
       ],
     },
     options: {
-      // responsive: true,
+      responsive: true,
       // maintainAspectRatio: false,
       scales: {
         yAxes: [{
@@ -148,9 +143,26 @@ function makeRatingChart(stockinfo) {
             min: 0,
             max: 5,
             stepSize: 1,
-            beginAtZero: true
-          }
-        }]
+            beginAtZero: true,
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "Rating Score",
+          },
+        }],
+      },
+      tooltips: {
+        callbacks: {
+            label: function(tooltipItem, data) {
+              const index = ratingInfo.ratingLabels.indexOf(tooltipItem.xLabel);
+              var label = ratingInfo.ratingLabelsFull[index] || '';
+              if (label) {
+                  label += ': ';
+              }
+              label += ratingInfo.ratingRecommendation[index];
+              return label;
+            }
+        }
       }
     }
   });

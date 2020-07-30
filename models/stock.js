@@ -89,6 +89,11 @@ var StockSchema = new mongoose.Schema({
         type: String 
       }
     ],
+    ratingLabelsFull: [
+      {
+        type: String 
+      }
+    ],
   }
 });
 
