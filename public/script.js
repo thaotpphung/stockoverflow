@@ -59,6 +59,7 @@ $("#searchKey").keyup( async function (event) {
       // if in the transaction stock page
       if ($("#tickSymbolDiv").html()) {
         let searchVal = $("#searchKey").val();
+        
         // let url = "http://localhost:8000/getStock";
         let url = "https://shrouded-shelf-22294.herokuapp.com/getStock";
         

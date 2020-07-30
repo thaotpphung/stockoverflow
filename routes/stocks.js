@@ -81,15 +81,20 @@ router.post("/", middleware.checkCorrectUser, async (req, res) => {
 
 // add to tracked stocks if not already exists
 async function addToTrackedStocks(user, checkStockExists, newStockId, req, res) {
-  if (!checkStockExists) { // if it's not in trackedstocks
-    user.trackedstocks.push(newStockId);
-    await user.save();
-    req.flash("success", "Successfully added stock");
-    res.redirect("/stocks/" + user._id);
-  } else { // stock already in trackedstocks
-    req.flash("error", "Stock already exists");
-    res.redirect("/stocks/" + user._id);
+  try {
+    if (!checkStockExists) { // if it's not in trackedstocks
+      user.trackedstocks.push(newStockId);
+      await user.save();
+      req.flash("success", "Successfully added stock");
+      res.redirect("/stocks/" + user._id);
+    } else { // stock already in trackedstocks
+      req.flash("error", "Stock already exists");
+      res.redirect("/stocks/" + user._id);
+    }
+  } catch (err) {
+    console.log("ERROR in addToTrackedStocks")
   }
+  
 }
 
 // Checked if the query stock is in the tracked stock list by symbol
