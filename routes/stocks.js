@@ -165,10 +165,22 @@ async function createNewStock(queryBody, queryStock, flag) {
                                        getJSON(apiFinancialGrowthUrl)
                                       ]);
     let timeSeriesData = results[0]["historical"];  
+    console.log("time", timeSeriesData);
+    console.log("--------------------------------------");
     let keyMetricsData= results[1][0];
+    console.log("key metrics", keyMetricsData);
+    console.log("--------------------------------------");
     let profileData = results[2][0];  
+    console.log("profile",profileData);
+    console.log("--------------------------------------");
     let ratingData = results[3][0]; 
+    console.log("rating", ratingData);
+    console.log("--------------------------------------");
     let financialGrowthData = results[4][0];
+    console.log("finance", financialGrowthData);
+    console.log("--------------------------------------");
+
+
     // check if stock just needs to be updated or needs to be created
     var newStock;
     if (flag) {
