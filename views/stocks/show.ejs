@@ -34,7 +34,7 @@
 
         <div class="trade-button">
           <label class="btn btn-light">
-            <a href="/transactions/<%=currentUser._id%>/<%=stock._id%>/new">
+            <a href="/alerts/<%=currentUser._id%>/<%=stock.symbol%>/new">
               <i class="far fa-bell font-size-sm mr-1"></i>
               <span>Set Alerts</span>
             </a>
@@ -60,7 +60,7 @@
 
   <div class="row margin-top-2rem">
     <div class = "col-6">
-      <h1 class="header-black"><i class="fa fa-chart-line mr-1"></i> LATEST TRADE <span class="float-right font-size-xsm d-sm-none "> <%=stock.history[0].date%></span></h1> 
+      <h1 class="header-black"><i class="fa fa-chart-line mr-1"></i> LATEST TRADE <span class="float-right font-size-xsm pl-2"> <%=stock.history[0].date%></span></h1> 
       <div class="stat-table">
         <table class="table table-striped mb-0">
           <tbody>
@@ -124,7 +124,7 @@
             </tr>
             <tr>
               <th class="w-25" scope="row">Website</th>
-              <td class="w-50"><%=stock.profile.website%></td>
+              <td class="w-50"><a href="<%=stock.profile.website%>">View</a></td>
             </tr>
             <tr> 
               <th class="w-25" scope="row">CEO</th>
@@ -207,7 +207,7 @@
     </div>
       
     <div class = "col-6">
-      <h1 class="header-black"><i class="fa fa-heartbeat mr-1"></i> FINANCIAL GROWTH <span class="float-right font-size-xsm d-sm-none"> <%=stock.financialgrowth.date%></span></h1> 
+      <h1 class="header-black"><i class="fa fa-heartbeat mr-1"></i> FINANCIAL GROWTH <span class="float-right font-size-xsm pl-2"> <%=stock.financialgrowth.date%></span></h1> 
       <div class="profile-table">
         <table class="table table-striped mb-0">
           <tbody>

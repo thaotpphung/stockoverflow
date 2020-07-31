@@ -42,6 +42,7 @@ router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
       const index = user.trackedstocks.indexOf(req.params.stockid);
       if (index > -1) {
         user.trackedstocks.splice(index, 1);
+        user.alerts.splice(index, 1);
         user.save();
       }
       req.flash("success", "Stock deleted");
@@ -57,7 +58,7 @@ router.put("/:stockid", middleware.checkCorrectUser, (req, res) => {
       console.log(err);
     } else {
       const index = user.trackedstocks.indexOf(req.params.stockid);
-      addToTrackedStocks(user, (index != - 1), req.params.stockid, req, res);
+      addToTrackedStocks(user, (index != - 1), req.params.stockid, null,  req, res);
     }
   });
 });
@@ -71,16 +72,20 @@ router.post("/", middleware.checkCorrectUser, async (req, res) => {
   if ((queryBody.page === "transaction")) { // if the current page is the transaction page
     res.render("transactions/new", { stock: newStock, transaction: {totalquantity: 0} });
   } else { // the current page is the tracked stocks page
-    addToTrackedStocks(user, existsInTrackedStocks(user.trackedstocks, queryStock), newStock._id, req, res);
+    addToTrackedStocks(user, existsInTrackedStocks(user.trackedstocks, queryStock), newStock._id, newStock, req, res);
   }
 });
 
 // add to tracked stocks if not already exists
-async function addToTrackedStocks(user, existsInTrackedStocks, newStockId, req, res) {
+async function addToTrackedStocks(user, existsInTrackedStocks, newStockId, newStock, req, res) {
   try {
     if (!existsInTrackedStocks) { // if it's not in trackedstocks
-      console.log(newStockId);
       user.trackedstocks.push(newStockId);
+      // if the stock is added from the add purchase route
+      if (newStock == null) {
+        newStock = await Stock.findById(newStockId);
+      } 
+      user.alerts.push({symbol: newStock.symbol, name: newStock.name});
       await user.save();
       req.flash("success", "Successfully added stock");
       res.redirect("/stocks/" + user._id);

@@ -11,12 +11,10 @@ var StockSchema = new mongoose.Schema({
       high: Number,
       low: Number,
       close: Number,
-
       vwap: String,
       adjClose: String,
       volume: String,
       unadjustedVolume: String,
-
       change: Number,
       changepercent: Number
     }

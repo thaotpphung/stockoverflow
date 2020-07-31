@@ -13,13 +13,20 @@ var UserSchema = new mongoose.Schema({
       ref: "Stock"
     }
   ],
+  alerts: [
+    {
+      symbol: String,
+      name: String,
+      alertPrice: Number,
+      currentPrice: Number
+    }
+  ],
   transactions: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Transaction",
     },
   ],
-
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   isAdmin: {type: Boolean, default: false}
