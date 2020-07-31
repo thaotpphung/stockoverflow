@@ -3,7 +3,7 @@ $(document).ready(function () {
   $(function () {
     $("a.nav-item.nav-link").each(function () {
       var $nav = $(".navbar");
-      if (window.location.href.includes($(this).prop("href"))) {
+      if (window.location.href == ($(this).prop("href"))) {
         $nav.find("a").removeClass("activeLink");
         $(this).addClass("activeLink");
       }

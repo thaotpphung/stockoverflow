@@ -21,7 +21,7 @@ router.get("/", middleware.checkCorrectUser, (req, res) => {
 });
 
 // New transaction - form to add transaction
-router.get("/:stockid/new", middleware.checkCorrectUser, (req, res) => {
+router.get("/stocks/:stockid/new", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid, (err, user) => {
     if (err || !user) {
       req.flash("error", "User not found");
@@ -74,11 +74,11 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
         user.transactions.push(transaction);
         user.save();
         req.flash("success", "Successfully added transaction");
-        res.redirect("/transactions/" + user._id);
+        res.redirect("/users/" + user._id + "/transactions");
       } else {
         await updateTransaction(foundTransaction, req.body.transaction, req.body.transaction.type);
         req.flash("success", "Successfully added transaction");
-        res.redirect("/transactions/" + user._id);
+        res.redirect("/users/" + user._id + "/transactions");
       }
     }
   });

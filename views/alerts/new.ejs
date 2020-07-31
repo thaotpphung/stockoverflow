@@ -5,7 +5,7 @@
     <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-width-md">">
       <div class="card-container">
         <h1 class="header-black">NEW ALERT </i></h1>
-        <form action="/alerts/<%=currentUser._id%>/<%=alert.symbol%>" method="POST">
+        <form action="/users/<%=currentUser._id%>/alerts/stocks/<%=alert.stockid%>" method="POST">
           <div class="form-row pt-3">
             <div class="col-12">
               <div class="row">
@@ -49,7 +49,7 @@
                   </button>
                 </div>
         </form>
-        <form action="/alerts/<%=currentUser._id%>/<%=alert.symbol%>?_method=DELETE"method="POST">
+        <form action="/users/<%=currentUser._id%>/alerts/stocks/<%=alert.stockid%>?_method=DELETE"method="POST">
                 <div class="col-2 two-button-container">
                   <button class="btn btn-danger">
                     Delete Alert
@@ -61,14 +61,6 @@
         </form>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="popup" id="pageload">
-  <div class="overlay"></div>
-  <div class="content">
-    <i class="fa-spin fa fa-spinner"></i>
-    <div>Processing request...</div>
   </div>
 </div>
 

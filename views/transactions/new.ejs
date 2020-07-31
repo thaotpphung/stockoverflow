@@ -6,7 +6,7 @@
       
       <div class="card-container">
         <h1 class="header-black">PURCHASE STOCK <i class="fa fa-plus float-right show-form"></i></h1>
-        <form action="/transactions/<%=currentUser._id%>" method="POST">
+        <form action="/users/<%=currentUser._id%>/transactions" method="POST">
           <div class="form-row pt-3">
             <div class="col-12">
               <div class="row">
@@ -133,7 +133,7 @@
 
       <div id="sellStock" class="card-container margin-top-2rem">
         <h1 class="header-black">SELL STOCK <i class="fa fa-plus float-right show-form"></i></h1>
-        <form action="/transactions/<%=currentUser._id%>" method="POST" class="display-none">
+        <form action="/users/<%=currentUser._id%>/transactions" method="POST" class="display-none">
           <div class="form-row pt-3">
             <div class="col-12">
               <div class="row">
@@ -284,7 +284,7 @@
   </div>
 </div>
 
-<form class="d-none" id="addStockForm" action="/stocks/<%=currentUser._id%>" method="POST">
+<form class="d-none" id="addStockForm" action="/users/<%=currentUser._id%>/stocks" method="POST">
   <input
     id="stock-symbol"
     type="text"

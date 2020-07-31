@@ -9,6 +9,7 @@ require("dotenv").config();
 
 // INDEX - show all tracked stocks
 router.get("/", middleware.checkCorrectUser, (req, res) => {
+  console.log("index stock");
   User.findById(req.params.userid)
     .populate("trackedstocks")
     .exec((err, user) => {
@@ -46,7 +47,7 @@ router.delete("/:stockid", middleware.checkCorrectUser, (req, res) => {
         user.save();
       }
       req.flash("success", "Stock deleted");
-      res.redirect("/stocks/" + req.params.userid);
+      res.redirect("/users/" + req.params.userid + "/stocks");
     }
   });
 });
@@ -85,13 +86,13 @@ async function addToTrackedStocks(user, existsInTrackedStocks, newStockId, newSt
       if (newStock == null) {
         newStock = await Stock.findById(newStockId);
       } 
-      user.alerts.push({symbol: newStock.symbol, name: newStock.name});
+      user.alerts.push({symbol: newStock.symbol, name: newStock.name, stockid: newStockId});
       await user.save();
       req.flash("success", "Successfully added stock");
-      res.redirect("/stocks/" + user._id);
+      res.redirect("/users/" + req.params.userid + "/stocks");
     } else { // stock already in trackedstocks
       req.flash("error", "Stock already exists");
-      res.redirect("/stocks/" + user._id);
+      res.redirect("/users/" + req.params.userid + "/stocks");
     }
   } catch (err) {
     console.log("ERROR in addToTrackedStocks", err);

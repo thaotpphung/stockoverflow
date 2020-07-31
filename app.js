@@ -57,11 +57,16 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/stocks/:userid", stockRoutes);
+// app.use("/stocks/:userid", stockRoutes);
+// app.use("/users/:userid", userRoutes);
+// app.use("/transactions/:userid", transactionRoutes);
+// app.use("/alerts/:userid", alertRoutes);
+// app.use("/", indexRoutes);
+
 app.use("/users/:userid", userRoutes);
-// app.use("/portfolio/:userid", portfolioRoutes);
-app.use("/transactions/:userid", transactionRoutes);
-app.use("/alerts/:userid", alertRoutes);
+app.use("/users/:userid/stocks", stockRoutes);
+app.use("/users/:userid/alerts/stocks/:stockid/", alertRoutes);
+app.use("/users/:userid/transactions", transactionRoutes);
 app.use("/", indexRoutes);
 
 let port = process.env.PORT || 8000;

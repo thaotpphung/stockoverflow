@@ -42,9 +42,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
   
     <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-base.min.js"></script>
-<script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-exports.min.js"></script>
-<script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-ui.min.js"></script>
-<link rel="stylesheet" href="https://cdn.anychart.com/releases/8.7.1/css/anychart-ui.min.css" />
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.anychart.com/releases/8.7.1/css/anychart-ui.min.css" />
 
     <script src="/graph-script.js"></script>
 
@@ -73,12 +73,12 @@
             <a class="nav-item nav-link" href="/">HOME</a>
             <% } else { %>
             <a class="nav-item nav-link" href="/">HOME</a>
-            <a class="nav-item nav-link" href="/stocks/<%=currentUser._id%>/"
-              >DASHBOARD</a
-            >
-            <a class="nav-item nav-link" href="/transactions/<%=currentUser._id%>"
-              >PORTFOLIO</a
-            >
+            <a class="nav-item nav-link" href="/users/<%=currentUser._id%>/stocks"
+              >DASHBOARD
+            </a>
+            <a class="nav-item nav-link" href="/users/<%=currentUser._id%>/transactions%>"
+              >PORTFOLIO
+            </a>
             <% } %>
           </div>
         </div>

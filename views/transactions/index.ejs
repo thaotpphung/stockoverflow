@@ -5,14 +5,14 @@
 <div id="body-container">
   <% if (currentUser.transactions.length === 0) { %>
   <div>
-    <h1 class="header-black">Assets <a href="/transactions/<%=currentUser._id%>/new"><i class="fa fa-plus float-right"></i></a></h1>
+    <h1 class="header-black">Assets <a href="/users/<%=currentUser._id%>/transactions/new"><i class="fa fa-plus float-right"></i></a></h1>
     <div class="card-container card-center">
       You don't own any stock
     </div>
   </div>
   <% } else { %>
   <div class="table-container">
-    <h1 class="header-black">ASSETS <a href="/transactions/<%=currentUser._id%>/new"><i class="fa fa-plus float-right"></i></a></h1>
+    <h1 class="header-black">ASSETS <a href="/users/<%=currentUser._id%>/transactions/new"><i class="fa fa-plus float-right"></i></a></h1>
     <table class="table table-hover mb-0">
       <thead>
         <tr>
@@ -31,7 +31,7 @@
                   <span class="add-to-tracked" title="Add to tracked stocks"> 
                     <i class="fa fa-eye"></i> 
                   </span> 
-                  <form class="d-none" action="/stocks/<%=currentUser._id%>/<%=transaction.stockid%>?_method=PUT" method="POST">
+                  <form class="d-none" action="/users/<%=currentUser._id%>/stocks/<%=transaction.stockid%>?_method=PUT" method="POST">
                     <button type="submit" id ="addToTrackedButton"></button>
                   </form>
                   <%=transaction.name%>
@@ -42,7 +42,7 @@
               <td>
                 <%=transaction.totalquantity%>
                 <span class="d-none"> 
-                  <a href="/stocks/<%=currentUser._id%>/<%=transaction.stockid%>">
+                  <a href="/users/<%=currentUser._id%>/stocks/<%=transaction.stockid%>">
                     <i class="fa-info"></i>
                   </a>
                 </span> 
@@ -99,7 +99,7 @@
             <% if (history.transactiontype === "Purchase") { %>
               class="negative" > -<% } else { %> class="possitive" > +<% } %><%=Math.floor((history.quantity*history.price)/100)%>.<%=(history.quantity*history.price)%100%>
             <span class="d-none"> 
-              <a href="/stocks/<%=currentUser._id%>/<%=transaction.stockid%>">
+              <a href="/users/<%=currentUser._id%>/stocks/<%=transaction.stockid%>">
                 <i class="fa-info"></i>
               </a>
             </span> 
@@ -110,9 +110,6 @@
       </tbody>
     </table>
   </div>
-
-  
-
   <% } %>
 </div>
 

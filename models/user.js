@@ -17,6 +17,7 @@ var UserSchema = new mongoose.Schema({
     {
       symbol: String,
       name: String,
+      stockid: String,
       alertPrice: Number,
       currentPrice: Number
     }
