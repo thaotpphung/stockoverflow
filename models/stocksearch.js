@@ -6,7 +6,7 @@ var StockSearchSchema = new mongoose.Schema(
     name: String,
   },
   {
-    collection: "stocksearch",
+    collection: "search",
   }
 );
 
