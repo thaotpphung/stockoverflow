@@ -51,8 +51,8 @@ $(".show-form").click(function(event) {
 /* -----------------------search----------------------- */
 var $searchResult = $("#searchResult");
 var $searchKey = $("#searchKey");
-const website = "http://localhost:8000/";
-// const website = "https://shrouded-shelf-22294.herokuapp.com/";
+// const website = "http://localhost:8000/";
+const website = "https://shrouded-shelf-22294.herokuapp.com/";
 
 // send request whenever user enter a valid string
 $("#searchKey").keyup( async function (event) {
@@ -69,8 +69,7 @@ $("#searchKey").keyup( async function (event) {
 // send request to server API for search query and return result
 async function searchQuery(searchTerm) {
   let url = website + "search";
-  // let url = "http://localhost:8000/search";
-  let found = await makeHttpRequest(url, searchTerm)
+  let found = await makeHttpRequest(url, searchTerm);
   if (found === "not found") {
     $searchResult.html('<div class="notfound-mes">Can\'t find stock, search another term </div>');
     $searchResult.css({

@@ -334,13 +334,12 @@ function abbrNum(number, decPlaces) {
 // Update Stock db every 55 mins
 async function updateDB() {
   var stocks = await Stock.find({});
-  stocks.forEach( async (stock) => {
+  stocks.forEach(async (stock) => {
     var stock = await Stock.findOne({symbol: stock.symbol});
-    const apiTimeSeriesUrl = "https://financialmodelingprep.com/api/v3/historical-price-full/"+ stock.symbol + "?timeseries=30&apikey=" + process.env.STOCK_API_KEY;
     createNewStock({symbol: stock.symbol}, stock.symbol, false);
   });
   console.log("just updated!");
 }
-// setInterval(updateDB, 1000 * 60 * 55);
+setInterval(updateDB, 1000 * 60 * 55);
 
 module.exports = router;

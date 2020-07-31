@@ -72,27 +72,31 @@ router.get("/register", (req, res) => {
 //handle sign up logic
 router.post("/register", (req, res) => {
   // check unique valid user name here
-  User.find( {$or: [ {username: req.body.username},{email: req.body.email}]}, (err, foundUser) => {
-    if (foundUser.length == 0) {
-      let newUser = new User(req.body);
-      User.register(newUser, req.body.password, (err, user) => {
-        // encode the password
-        if (err) {
-          console.log("error in register", err);
-          req.flash("error", err.message);
-          return res.render("register");
-        }
-        passport.authenticate("local")(req, res, () => {
-          // log user in, serialize session
-          req.flash("success", "Welcome to Stockoverflow " + user.firstname);
-          res.redirect("/");
+  if (req.body.password == req.body.confirm) {
+    User.find( {$or: [ {username: req.body.username},{email: req.body.email}]}, (err, foundUser) => {
+      if (foundUser.length == 0) {
+        let newUser = new User(req.body);
+        User.register(newUser, req.body.password, (err, user) => {
+          // encode the password
+          if (err) {
+            req.flash("error", err.message);
+            return res.render("register");
+          }
+          passport.authenticate("local")(req, res, () => {
+            // log user in, serialize session
+            req.flash("success", "Welcome to Stockoverflow " + user.firstname);
+            res.redirect("/");
+          });
         });
-      });
-    } else {
-      req.flash("error", "Username or email is already in used, please choose a different one." );
-      res.redirect("back");
-    }
-  })
+      } else {
+        req.flash("error", "Username or email is already in used, please choose a different one." );
+        res.redirect("back");
+      }
+    })
+  } else {
+    req.flash("error", "Password doesn't match" );
+    res.redirect("back");
+  }
 });
 
 // show login form
