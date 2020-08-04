@@ -42,8 +42,8 @@ body {
 }
 
 #body-container {
-  padding: 4rem 12em !important ;
-  min-width: 720px;
+  padding: 4rem 7rem!important ;
+  /* min-width: 720px; */
 }
 
 .margin-top-2rem {
@@ -90,7 +90,7 @@ body {
 .table-container {
   background-color: white;
   border: black solid 1px;
-  min-width: 720px;
+  /* min-width: 720px; */
 }
 
 .header-black {
@@ -222,7 +222,7 @@ background-color: #6A7E7A;
 }
 
 .form-row .form-control {
-  margin: 1em;
+  margin: 1em 1em 1em 0;
 }
 
 #password-warning {

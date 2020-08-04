@@ -9,7 +9,6 @@ require("dotenv").config();
 
 // INDEX - show all tracked stocks
 router.get("/", middleware.checkCorrectUser, (req, res) => {
-  console.log("index stock");
   User.findById(req.params.userid)
     .populate("trackedstocks")
     .exec((err, user) => {
