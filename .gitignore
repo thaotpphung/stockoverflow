@@ -8,8 +8,10 @@ node_modules/
 
 draft.html
 
-realsearch.json
+apisearch.json
 
 search.json
 
 seeds.js 
+
+realsearch.json
