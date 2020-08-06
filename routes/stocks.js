@@ -173,6 +173,17 @@ async function createNewStock(queryBody, queryStock, flag) {
     let ratingData = results[3][0]; 
     let financialGrowthData = results[4][0];
 
+    // console.log("time", timeSeriesData);
+    // console.log("--------------------------------------");
+    // console.log("profile",profileData);
+    // console.log("--------------------------------------");
+    // console.log("finance", financialGrowthData);
+    // console.log("--------------------------------------");
+    // console.log("rating", ratingData);
+    // console.log("--------------------------------------");
+    // console.log("key metrics", keyMetricsData);
+    // console.log("--------------------------------------");
+
     // check if stock just needs to be updated or needs to be created
     var newStock;
     if (flag) {
