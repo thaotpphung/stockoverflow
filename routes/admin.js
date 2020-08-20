@@ -8,7 +8,7 @@ router.get("/", middleware.isLoggedIn, (req, res) => {
     if (err || !foundUser) {
       req.flash("error", "Something went wrong");
       res.redirect("back");
-    } else {
+    } else { 
       res.render("users/show", { user: foundUser });
     }
   });
