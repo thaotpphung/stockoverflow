@@ -64,6 +64,11 @@ router.post("/getStock", (req, res) => {
 
 
 // === AUTH ===
+// show admin log in page
+router.get("/admin", (req, res) => {
+  res.render("adminlogin");
+});
+
 // show register form
 router.get("/register", (req, res) => {
   res.render("register");

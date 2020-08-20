@@ -1,10 +1,8 @@
 <%- include("../partials/header") %>
 
-<div id="body-container">
-  <div class="row justify-content-center">
-    <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-width-md">">
-      
-      <div class="card-container">
+<div id="body-container" class="row justify-content-center">
+    <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-width-md">
+      <div id="purchase-stock" class="card-container">
         <h1 class="header-black">PURCHASE STOCK <i class="fa fa-plus float-right show-form"></i></h1>
         <form action="/users/<%=currentUser._id%>/transactions" method="POST">
           <div class="form-row pt-3">
@@ -131,7 +129,7 @@
         </form>
       </div>
 
-      <div id="sellStock" class="card-container margin-top-2rem">
+      <div id="sell-stock" class="card-container margin-top-2rem">
         <h1 class="header-black">SELL STOCK <i class="fa fa-plus float-right show-form"></i></h1>
         <form action="/users/<%=currentUser._id%>/transactions" method="POST" class="display-none">
           <div class="form-row pt-3">
@@ -262,7 +260,6 @@
         </form>
       </div>
 
-    </div>
   </div>
 </div>
 
