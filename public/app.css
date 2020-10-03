@@ -13,7 +13,7 @@
   color: #FF0000 !important;
 }  
 
-.possitive {
+.positive {
   color: #3caea3 !important;
 }
 
@@ -42,7 +42,7 @@ body {
 }
 
 #body-container {
-  padding: 4rem 9rem!important ;
+  padding: 5rem 15rem!important ;
   /* min-width: 720px; */
 }
 
@@ -214,8 +214,10 @@ background-color: #6A7E7A;
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0 auto;
-  height: 100%;
-  width: auto;
+  /* height: 100%;
+  width: auto; */
+  height: 475px;
+  width: 561px;
   max-width: 100%;
 }
 

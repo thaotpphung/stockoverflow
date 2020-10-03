@@ -16,7 +16,7 @@
           $<%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%> -
           <span 
             <% if (stock.history[0].change < 0) { %>
-              class="negative" > <i class="fa fa-caret-down"></i> <% } else { %> class="possitive" > <i class="fa fa-caret-up"></i> <% } %>
+              class="negative" > <i class="fa fa-caret-down"></i> <% } else { %> class="positive" > <i class="fa fa-caret-up"></i> <% } %>
               <%=stock.history[0].change%> (<%=stock.history[0].changepercent%>  %)
           </span>
         </div>

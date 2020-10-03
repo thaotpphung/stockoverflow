@@ -66,7 +66,6 @@ var StockSchema = new mongoose.Schema({
   },
   rating: {
     date: String,  //"2020-07-17",
-
     "Overall Rating": String, //"S-",
     // overall, dcf, roe, de, pe, pb
     // overall, Discounted cash flow, return on equity, return on assets, debt to equity, price earning, price/book
@@ -75,13 +74,11 @@ var StockSchema = new mongoose.Schema({
         type: Number
       }
     ],
-
     ratingRecommendation: [
       {
         type: String
       }
     ],
-
     ratingLabels: [
       {
         type: String 

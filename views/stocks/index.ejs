@@ -40,10 +40,10 @@
           <td class="symbol"><%=stock.symbol%></td>
           <td class="price"><%=Math.floor(stock.history[0].open/100)%>.<%=(stock.history[0].open)%100%></td>
           <td <% if (stock.history[0].changepercent < 0) { %>
-            class="negative"><% } else { %> class="possitive" >+<%} %><%=stock.history[0].changepercent%>
+            class="negative"><% } else { %> class="positive" >+<%} %><%=stock.history[0].changepercent%>
           </td>
           <td <% if (stock.history[0].change < 0) { %>
-            class="negative"><% } else { %> class="possitive">+<% } %><%=stock.history[0].change%>
+            class="negative"><% } else { %> class="positive">+<% } %><%=stock.history[0].change%>
             <span class="d-none"> 
               <a href="/users/<%=currentUser._id%>/stocks/<%=stock._id%>">
                 <i class="fa-info"></i>

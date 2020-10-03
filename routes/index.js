@@ -1,3 +1,5 @@
+const user = require("../models/user");
+
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
   passport = require("passport"),
@@ -42,33 +44,6 @@ router.post("/getStock", (req, res) => {
   });
 });
 
-// router.post("/update", async (req, res) => {
-//   console.log(req.body);
-//   let query = req.body.query.split(",");
-//   let response = await getStocks(query);
-//   res.json(response);
-// });
-
-// function getStocks (query) {
-//   return new Promise( async (resolve, reject) => {
-//     var re = [];
-//     for (i = 0; i < query.length; i ++){
-//       var foundStock = await Stock.findOne({symbol: query[i]});
-//       re.push(foundStock);
-//       if (i === (query.length - 1)) {
-//         resolve(re);
-//       }
-//     }
-//   });
-// }
-
-
-// === AUTH ===
-// show admin log in page
-router.get("/admin", (req, res) => {
-  res.render("adminlogin");
-});
-
 // show register form
 router.get("/register", (req, res) => {
   res.render("register");
@@ -111,12 +86,22 @@ router.get("/login", (req, res) => {
 
 // handling login logic
 router.post("/login", passport.authenticate("local", {
-    successRedirect: "/",
     failureRedirect: "/login",
+    failureFlash: true,
   }), (req, res) => {
-    res.redirect("/");
+    req.flash("success", "Successfully logged in!");
+    if (user.isAdmin) {
+      res.render("admin/index");
+    } else {
+      res.redirect("/");
+    }
   }
 );
+
+// show admin log in page
+router.get("/admin", (req, res) => {
+  res.render("adminlogin");
+});
 
 // logout route
 router.get("/logout", (req, res) => {
@@ -167,7 +152,7 @@ router.post('/forgot', async (req, res) => {
       to: user.email,
       from: 'stockoverflow.stockapp@gmail.com',
       subject: 'StackOverflow Password Reset',
-			text: 'You are receiving this because you (or someone else) have requested the reset of the password linked to your Yelpcamp account.' +
+			text: 'You are receiving this because you (or someone else) have requested the reset of the password linked to your StockOverflow account.' +
 				'Please click on the following link, or paste this into your browser to complete the process.' + '\n\n' +
 				'http://' + req.headers.host + '/reset/' + reset_token + '\n\n' + 
 				'If you did not request this, please ignore this email and your password will remain unchanged.',

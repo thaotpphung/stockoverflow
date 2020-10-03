@@ -5,11 +5,12 @@
     <div id="body-container" class="text-center">
       <div class="row">
         <div id="intro-left" class="col 10 col-lg-6">
+          <% if(!currentUser){ %>
           <div id="landing-banner">
             <span id="logo">STOCKOVERFLOW</span> provides good service with
             no fees. A powerful tool to track and visualize stock data.
           </div>
-          <div>
+          <div id="signup-form">
             <form action="/register" method="POST">
               <div class="form-row">
                 <div class="col-6">
@@ -84,11 +85,49 @@
               </div>
             </form>
           </div>
+          <% } else { %>
+          <div id="landing-banner" class="pt-5 pb-5" >
+            <div>Welcome back to </div>
+            <span id="logo">STOCKOVERFLOW</span> <%= currentUser.firstname %>!
+          </div>
+          <div class="row justify-content-center">
+          <div class = "col-12 col-md-8">
+            <h1 class="header-black"><i class="fa fa-money-bill-wave mr-1"></i> TOP SELLERS <span class="float-right font-size-xsm "></span></h1> 
+            <div class="stat-table">
+              <table class="table table-striped mb-0">
+                <tbody>
+                  <tr>
+                    <th class="w-25" scope="row">AAPL</th>
+                    <td class="w-50 negative"><i class="fa fa-caret-down"></i> 2.22</td>
+                  </tr>
+                  <tr>
+                    <th class="w-25" scope="row">AMZN</th>
+                    <td class="w-50 positive"><i class="fa fa-caret-up"></i> 2.22</td>
+                  </tr>
+                  <tr>
+                    <th class="w-25" scope="row">MCDL</th>
+                    <td class="w-50 negative"><i class="fa fa-caret-down"></i> 2.22</td>
+                  </tr>
+                  <tr>
+                    <th class="w-25" scope="row">DLA</th>
+                    <td class="w-50 negative"><i class="fa fa-caret-down"></i> 2.22</td>
+                  </tr>
+                  <tr>
+                    <th class="w-25" scope="row">DNW</th>
+                    <td class="w-50 positive"><i class="fa fa-caret-up"></i> 2.22</td>
+                  </tr>
+                  <tr> 
+                    <th class="w-25" scope="row">WWA</th>
+                    <td class="w-50 positive"><i class="fa fa-caret-up"></i> 2.22</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <div
-          id="intro-right"
-          class="col-12 col-lg-6 d-none d-md-block pb-5 pb-lg-0"
-        >
+          <% } %>
+        </div>
+        <div id="intro-right" class="col-12 col-lg-6 d-none d-md-block pb-5 pb-lg-0">
           <div id="stock-image"></div>
         </div>
       </div>

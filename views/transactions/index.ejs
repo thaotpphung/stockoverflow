@@ -97,7 +97,7 @@
           <td><%=history.quantity%></td>
           <td
             <% if (history.transactiontype === "Purchase") { %>
-              class="negative" > -<% } else { %> class="possitive" > +<% } %><%=Math.floor((history.quantity*history.price)/100)%>.<%=(history.quantity*history.price)%100%>
+              class="negative" > -<% } else { %> class="positive" > +<% } %><%=Math.floor((history.quantity*history.price)/100)%>.<%=(history.quantity*history.price)%100%>
             <span class="d-none"> 
               <a href="/users/<%=currentUser._id%>/stocks/<%=transaction.stockid%>">
                 <i class="fa-info"></i>

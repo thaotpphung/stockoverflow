@@ -7,11 +7,13 @@ const express = require("express"),
   got = require("got");
 require("dotenv").config();
 
+var USER_ID;
 // INDEX - show all tracked stocks
 router.get("/", middleware.checkCorrectUser, (req, res) => {
   User.findById(req.params.userid)
     .populate("trackedstocks")
     .exec((err, user) => {
+      USER_ID = req.params.userid;
       if (err) {
         console.log(err);
         res.redirect("/");
@@ -125,7 +127,7 @@ async function addToSharedStockDB(queryStock, queryBody){
     if (foundStock) { // if found the stock, return it
       newstock = foundStock;
     } else { // if not, create the stock
-      newstock = await createNewStock(queryBody, queryStock, true);
+      newstock = await createNewStock(queryBody, queryStock);
     }
     return newstock;
   } catch (err) {
@@ -135,87 +137,77 @@ async function addToSharedStockDB(queryStock, queryBody){
 
 const urlHead = "https://financialmodelingprep.com/api/v3/";
 const apiKey = "?apikey=" + process.env.STOCK_API_KEY;
-const timeSeriesCount = "&timeseries=30";
-const timeSeries = "historical-price-full/";
-const keyMetrics = "key-metrics/";
-const rating = "rating/"
-const profile = "profile/"
-const financialGrowth = "financial-growth/"
+const quarterPeriod = "&period=quarter";
+const limitOne = "&limit=1"
 
-/* 
-  Create new stock 
-    if flag is true: Create a new stock
-    if flag is false: Update this stock
-*/
-async function createNewStock(queryBody, queryStock, flag) {
+// parse data to json
+async function getJSON(url) {
+  var responsePromise = await got(url);
+  return (JSON.parse(responsePromise.body));
+}
+
+// make API urls
+function makeApiTimeSeriesUrl (queryStock) {
+  const timeSeries = "historical-price-full/";
+  const timeSeriesCount = "&timeseries=30";
+  const apiTimeSeriesUrl = urlHead + timeSeries + queryStock + apiKey + timeSeriesCount;
+  return apiTimeSeriesUrl
+}
+function makeApiRatingUrl (queryStock) {
+  const rating = "rating/";
+  const apiRatingUrl = urlHead + rating + queryStock + apiKey;
+  return apiRatingUrl;
+}
+function makeApiProfileUrl (queryStock) {
+  const profile = "profile/";
+  const apiProfileUrl = urlHead + profile + queryStock + apiKey;
+  return apiProfileUrl;
+}
+function makeApiKeyMetricsUrl (queryStock) {
+  const keyMetrics = "key-metrics/";
+  const apikeyMetricsUrl = urlHead + keyMetrics + queryStock + apiKey + quarterPeriod + limitOne;
+  return apikeyMetricsUrl;
+}
+function makeApiFinancialGrowthUrl (queryStock) {
+  const financialGrowth = "financial-growth/";
+  const apiFinancialGrowthUrl = urlHead + financialGrowth + queryStock + apiKey + quarterPeriod + limitOne;
+  return apiFinancialGrowthUrl
+}
+
+// Create new stock  
+async function createNewStock(queryBody, queryStock) {
   try {
-    const apiTimeSeriesUrl = urlHead + timeSeries + queryStock + apiKey + timeSeriesCount;
-    const apikeyMetricsUrl = urlHead + keyMetrics + queryStock + apiKey;
-    const apiProfileUrl = urlHead + profile + queryStock + apiKey;
-    const apiRatingUrl = urlHead + rating + queryStock + apiKey;
-    const apiFinancialGrowthUrl = urlHead + financialGrowth + queryStock + apiKey;
-
-    // parse data to json
-    async function getJSON(url) {
-      var responsePromise = await got(url);
-      return (JSON.parse(responsePromise.body));
-    }
-
     // wait for all request to finish before processing data
-    const results = await Promise.all([getJSON(apiTimeSeriesUrl), getJSON(apikeyMetricsUrl),
-                                       getJSON(apiProfileUrl), getJSON(apiRatingUrl),
-                                       getJSON(apiFinancialGrowthUrl)
-                                      ]);
+    const results = await Promise.all([getJSON(makeApiTimeSeriesUrl(queryStock)), getJSON(makeApiKeyMetricsUrl(queryStock)),
+      getJSON(makeApiProfileUrl(queryStock)), getJSON(makeApiRatingUrl(queryStock)),
+      getJSON(makeApiFinancialGrowthUrl(queryStock))
+     ]);
+    const timeSeriesData = results[0]["historical"];  
+    const keyMetricsData= results[1][0];
+    const profileData = results[2][0];  
+    const ratingData = results[3][0]; 
+    const financialGrowthData = results[4][0];
+    var newStock = await Stock.create(queryBody);
+    setHistory(newStock, timeSeriesData);
+    setKeyMetrics(newStock, keyMetricsData);
+    setProfile(newStock, profileData);
+    setRating(newStock, ratingData);
+    setFinancialGrowth(newStock, financialGrowthData);
+    const foundSearchStock = await StockSearch.findOne({ symbol: queryStock}); // get new stock's company name
+    newStock.name = foundSearchStock.name.replace(/'/g, "%27");
+    console.log('created this stock', newStock.name, 'Data:');
+    newStock.save();
+    return newStock;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
-    let timeSeriesData = results[0]["historical"];  
-    let keyMetricsData= results[1][0];
-    let profileData = results[2][0];  
-    let ratingData = results[3][0]; 
-    let financialGrowthData = results[4][0];
-
-    // console.log("time", timeSeriesData);
-    // console.log("--------------------------------------");
-    // console.log("profile",profileData);
-    // console.log("--------------------------------------");
-    // console.log("finance", financialGrowthData);
-    // console.log("--------------------------------------");
-    // console.log("rating", ratingData);
-    // console.log("--------------------------------------");
-    // console.log("key metrics", keyMetricsData);
-    // console.log("--------------------------------------");
-
-    // check if stock just needs to be updated or needs to be created
-    var newStock;
-    if (flag) {
-      newStock = await Stock.create(queryBody);
-    } else {
-      newStock = await Stock.findOne(queryBody);
-      newStock.history = [];
-    }
-
-    // update stock history data
-    timeSeriesData.forEach((aStock) => {
-      let newHistoryEntry = 
-        {
-          date: aStock["date"],
-          label: aStock["label"], 
-          open: Math.round(aStock["open"] * 100), 
-          high: aStock["high"].toFixed(2),
-          low: aStock["low"].toFixed(2),
-          close: aStock["close"].toFixed(2),
-          vwap: formatNum(aStock["vwap"]),
-          adjClose: formatNum(aStock["adjClose"]),
-          volume: formatNum(aStock["volume"]),
-          unadjustedVolume: formatNum(aStock["unadjustedVolume"]),
-          change: aStock["change"].toFixed(2), 
-          changepercent: aStock["changePercent"].toFixed(2),
-        };
-      newStock.history.push(newHistoryEntry);
-    });
-
-    // update profile data
+async function setProfile(newStock, profileData) {
+  // update profile data
+  return new Promise((resolve, reject) => {
     if ((profileData != null)) {
-      let newProfileData = 
+      const newProfileData = 
         {
           beta: formatNum(profileData["beta"]),  // => stability
           exchange: profileData["exchange"],  // "NASDAQ"
@@ -226,55 +218,54 @@ async function createNewStock(queryBody, queryStock, flag) {
           sector: profileData["sector"], //"Technology",
           image: encodeURI(profileData["image"]), // "https://financialmodelingprep.com/image-stock/AAPL.jpg"
         }
-    newStock.profile = newProfileData;
-    }
-
-    // update rating data
-    if ((ratingData != null)) {
-      let newRatingData = 
-      {
-        date: ratingData["date"], //"2020-07-17",
-        "Overall Rating": ratingData["rating"],
-        ratingScores: [ratingData["ratingScore"], ratingData["ratingDetailsDCFScore"], ratingData["ratingDetailsROEScore"], 
-        ratingData["ratingDetailsROAScore"], ratingData["ratingDetailsDEScore"], ratingData["ratingDetailsPEScore"], 
-        ratingData["ratingDetailsPBScore"]],
-        ratingRecommendation: [ratingData["ratingRecommendation"], ratingData["ratingDetailsDCFRecommendation"], ratingData["ratingDetailsROERecommendation"], 
-        ratingData["ratingDetailsROARecommendation"], ratingData["ratingDetailsDERecommendation"], ratingData["ratingDetailsPERecommendation"], 
-        ratingData["ratingDetailsPBRecommendation"]],
-        ratingLabels: [ "Overall", "DCF", "ROE", "ROA", "DE", "PE", "PB"],
-        ratingLabelsFull: [ "Overall", "Discounted Cash Flow", "Return on Equity", "Return on Assets", "Debt to Equity", "Price Earning", "Price/Book"]
+      newStock.profile = newProfileData;
+      if (newStock.profile) { 
+        resolve(newStock);
       }
-      newStock.rating = newRatingData;
     }
+  });
+}
 
-    // update financial growth data
-    if ((financialGrowthData != null)) {
-      let newFinancialGrowthData = 
-        {
-          date: financialGrowthData["date"], //"2019-09-28",
-          revenueGrowth: formatNum(financialGrowthData["revenueGrowth"]),
-          netIncomeGrowth: formatNum(financialGrowthData["netIncomeGrowth"]),
-          dividendsperShareGrowth: formatNum(financialGrowthData["dividendsperShareGrowth"]),
-          freeCashFlowGrowth: formatNum(financialGrowthData["freeCashFlowGrowth"]),
-          grossProfitGrowth: formatNum(financialGrowthData["grossProfitGrowth"]),
-          epsgrowth: formatNum(financialGrowthData["epsgrowth"]),
-          debtGrowth: formatNum(financialGrowthData["debtGrowth"]),
-          operatingCashFlowGrowth: formatNum(financialGrowthData["operatingCashFlowGrowth"]),
-          operatingIncomeGrowth: formatNum(financialGrowthData["operatingIncomeGrowth"]),
-          assetGrowth: formatNum(financialGrowthData["assetGrowth"]),
+async function setHistory(newStock, timeSeriesData) {
+  return new Promise((resolve, reject) => {
+    // update stock history data
+    if (timeSeriesData) {
+      timeSeriesData.forEach((aStock) => {
+        const newHistoryEntry = 
+          {
+            date: aStock["date"],
+            label: aStock["label"], 
+            open: Math.round(aStock["open"] * 100), 
+            high: aStock["high"].toFixed(2),
+            low: aStock["low"].toFixed(2),
+            close: aStock["close"].toFixed(2),
+            vwap: formatNum(aStock["vwap"]),
+            adjClose: formatNum(aStock["adjClose"]),
+            volume: formatNum(aStock["volume"]),
+            unadjustedVolume: formatNum(aStock["unadjustedVolume"]),
+            change: aStock["change"].toFixed(2), 
+            changepercent: aStock["changePercent"].toFixed(2),
+          };
+        newStock.history.push(newHistoryEntry);
+        if (newStock.history.length == 30) {
+          resolve(newStock);
         }
-      newStock.financialgrowth = newFinancialGrowthData;
+      });
     }
+  });
+}
 
+async function setKeyMetrics(newStock, keyMetricsData) {
+  return new Promise((resolve, reject) => {
     // update key metrics data
     if ((keyMetricsData != null)) {
-      let newKeyMetricsData = 
+      const newKeyMetricsData = 
         { 
           date : keyMetricsData["date"],
           marketcap :  formatNum(keyMetricsData["marketCap"]),
           netincome: formatNum(keyMetricsData["netIncomePerShare"]), //  "Net Income per Share"
           EV:  formatNum(keyMetricsData["enterpriseValue"]), // Enterprise Value
-          netDebtToEBITDA:  formatNum(keyMetricsData["netDebtToEBITDA"]), // 0.695934725473018,
+          netDebtToEBITDA: formatNum(keyMetricsData["netDebtToEBITDA"]), // 0.695934725473018,
           DE :  formatNum(keyMetricsData["debtToEquity"]), // Debt to Equity
           DY : formatNum(keyMetricsData["dividendYield"]), //  Dividend Yield
           payoutratio : formatNum(keyMetricsData["payoutRatio"]),
@@ -289,67 +280,131 @@ async function createNewStock(queryBody, queryStock, flag) {
           roe: formatNum(keyMetricsData["roe"]) // return on equity
         };
       newStock.keymetrics = newKeyMetricsData;
+      if (newStock.keyMetrics) {
+        resolve(newStock);
+      }
     }
-
-    var foundSearchStock = await StockSearch.findOne({ symbol: queryStock});
-    newStock.name = foundSearchStock.name.replace(/'/g, "%27");
-    console.log(newStock.name);
-
-    newStock.save();
-    return newStock;
-
-  } catch (err) {
-    console.log(err);
-  }
+  });
 }
 
-function formatNum(num) {
-  if (num == null) {
+function setFinancialGrowth(newStock, financialGrowthData) {
+  return new Promise((resolve, reject) => {
+    // update financial growth data
+    if ((financialGrowthData != null)) {
+      const newFinancialGrowthData = 
+        {
+          date: financialGrowthData["date"], //"2019-09-28",
+          revenueGrowth: formatNum(financialGrowthData["revenueGrowth"]),
+          netIncomeGrowth: formatNum(financialGrowthData["netIncomeGrowth"]),
+          dividendsperShareGrowth: formatNum(financialGrowthData["dividendsperShareGrowth"]),
+          freeCashFlowGrowth: formatNum(financialGrowthData["freeCashFlowGrowth"]),
+          grossProfitGrowth: formatNum(financialGrowthData["grossProfitGrowth"]),
+          epsgrowth: formatNum(financialGrowthData["epsgrowth"]),
+          debtGrowth: formatNum(financialGrowthData["debtGrowth"]),
+          operatingCashFlowGrowth: formatNum(financialGrowthData["operatingCashFlowGrowth"]),
+          operatingIncomeGrowth: formatNum(financialGrowthData["operatingIncomeGrowth"]),
+          assetGrowth: formatNum(financialGrowthData["assetGrowth"]),
+        }
+      newStock.financialgrowth = newFinancialGrowthData;
+      if (newStock.financialgrowth) {
+        resolve(newStock);
+      }
+    }
+  });
+}
+
+function setRating(newStock, ratingData) {
+  return new Promise((resolve, reject) => {
+    // update rating data
+    if ((ratingData != null)) {
+      const newRatingData = 
+      {
+        date: ratingData["date"], //"2020-07-17",
+        "Overall Rating": ratingData["rating"],
+        ratingScores: [ratingData["ratingScore"], ratingData["ratingDetailsDCFScore"], ratingData["ratingDetailsROEScore"], 
+        ratingData["ratingDetailsROAScore"], ratingData["ratingDetailsDEScore"], ratingData["ratingDetailsPEScore"], 
+        ratingData["ratingDetailsPBScore"]],
+        ratingRecommendation: [ratingData["ratingRecommendation"], ratingData["ratingDetailsDCFRecommendation"], ratingData["ratingDetailsROERecommendation"], 
+        ratingData["ratingDetailsROARecommendation"], ratingData["ratingDetailsDERecommendation"], ratingData["ratingDetailsPERecommendation"], 
+        ratingData["ratingDetailsPBRecommendation"]],
+        ratingLabels: [ "Overall", "DCF", "ROE", "ROA", "DE", "PE", "PB"],
+        ratingLabelsFull: [ "Overall", "Discounted Cash Flow", "Return on Equity", "Return on Assets", "Debt to Equity", "Price Earning", "Price/Book"]
+      }
+      newStock.rating = newRatingData;
+      if (newStock.rating) {
+        resolve(newStock);
+      }
+    }
+  });
+}
+
+function formatNum(number) {
+  if (number == null) {
     return "-";
   } else {
-    if (num >= 1000) {
-      return abbrNum(num, 2);
+    if (number >= 1000) {
+      return abbreviateNum(number, 2);
     }
-    return num.toFixed(2);
+    return number.toFixed(2);
   }
 }
 
-function abbrNum(number, decPlaces) {
-  // 2 decimal places => 100, 3 => 1000, etc
-  decPlaces = Math.pow(10,decPlaces);
-  // Enumerate number abbreviations
-  var abbrev = [ "k", "M", "B", "T" ];
-  // Go through the array backwards, so we do the largest first
-  for (var i=abbrev.length-1; i>=0; i--) {
-      // Convert array index to "1000", "1000000", etc
-      var size = Math.pow(10,(i+1)*3);
-      // If the number is bigger or equal do the abbreviation
+function abbreviateNum(number, decimalPlaces) {
+  decimalPlaces = Math.pow(10,decimalPlaces);
+  var abbreviation = [ "k", "M", "B", "T" ];
+  for (var i = abbreviation.length - 1; i >= 0; i--) {
+      var size = Math.pow(10, (i + 1) * 3);
       if(size <= number) {
-           // Here, we multiply by decPlaces, round, and then divide by decPlaces.
-           // This gives us nice rounding to a particular decimal place.
-           number = Math.round(number*decPlaces/size)/decPlaces;
-           // Handle special case where we round up to the next abbreviation
-           if((number == 1000) && (i < abbrev.length - 1)) {
-               number = 1;
-               i++;
-           }
-           // Add the letter for the abbreviation
-           number += abbrev[i];
-           break;
+        number = Math.round(number * decimalPlaces / size) / decimalPlaces;
+        if((number == 1000) && (i < abbreviation.length - 1)) {
+            number = 1;
+            i++;
+        }
+        number += abbreviation[i];
+        break;
       }
   }
   return number;
 }
 
-// Update Stock db every 55 mins
-async function updateDB() {
-  var stocks = await Stock.find({});
-  stocks.forEach(async (stock) => {
-    var stock = await Stock.findOne({symbol: stock.symbol});
-    createNewStock({symbol: stock.symbol}, stock.symbol, false);
-  });
-  console.log("just updated!");
+async function UpdateQuarterly() {
+  if(USER_ID) {
+    const user = await User.findById(USER_ID);
+    const stockids = user.trackedstocks;
+    stockids.forEach(async (stockid) => { 
+      var newStock = await Stock.findById(stockid);
+      const results = await Promise.all([getJSON(makeApiProfileUrl(newStock.symbol)), getJSON(makeApiKeyMetricsUrl(newStock.symbol)), getJSON(makeApiFinancialGrowthUrl(newStock.symbol))]);
+      const profileData = results[0][0];  
+      const keyMetricsData= results[1][0];
+      const financialGrowthData = results[2][0];
+      setProfile(newStock, profileData);
+      setKeyMetrics(newStock, keyMetricsData);
+      setFinancialGrowth(newStock, financialGrowthData);
+      console.log("just updated quarterly: ", newStock.name);
+    });
+  }
 }
-setInterval(updateDB, 1000 * 60 * 55);
+// setInterval(UpdateQuarterly, 1000 * 60 * 60 * 24 * 30 * 4); // set quarterly update time
+// 1s * 60 s per minute * 60 minutes per hour * 24 hour per day * 30 day per month * 4 month per quarter
+
+async function UpdateDaily() {
+  if(USER_ID) {
+    const user = await User.findById(USER_ID);
+    const stockids = user.trackedstocks;
+    stockids.forEach(async (stockid) => { 
+      var newStock = await Stock.findById(stockid);
+      newStock.history = [];
+      newStock.rating = [];
+      const results = await Promise.all([getJSON(makeApiTimeSeriesUrl(newStock.symbol)),getJSON(makeApiRatingUrl(newStock.symbol))]);
+      const timeSeriesData = results[0]["historical"];  
+      const ratingData = results[1][0]; 
+      setHistory(newStock, timeSeriesData);
+      setRating(newStock, ratingData);
+      console.log("just updated daily: ", newStock.name);
+    });
+  }
+}
+setInterval(UpdateDaily, 1000 * 60 * 60 * 24); // set daily update time
+// 1s * 60 s per minute * 60 minutes per hour * 24 hour per day
 
 module.exports = router;
