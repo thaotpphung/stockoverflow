@@ -14,8 +14,7 @@ let transactionRoutes = require("./routes/transactions"),
   stockRoutes = require("./routes/stocks"),
   userRoutes = require("./routes/users"),
   alertRoutes = require("./routes/alerts"),
-  indexRoutes = require("./routes/index"),
-  adminRoutes = require("./routes/admin");
+  indexRoutes = require("./routes/index");
 
 const dbURL = process.env.MONGODB_URI || "mongodb://127.0.0.1/stockapp"
 console.log(dbURL);
@@ -64,7 +63,6 @@ app.use("/users/:userid", userRoutes);
 app.use("/users/:userid/stocks", stockRoutes);
 app.use("/users/:userid/alerts/stocks/:stockid/", alertRoutes);
 app.use("/users/:userid/transactions", transactionRoutes);
-app.use("/admin", adminRoutes);
 app.use("/", indexRoutes);
 
 let port = process.env.PORT || 8000;

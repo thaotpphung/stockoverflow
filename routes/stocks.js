@@ -203,29 +203,6 @@ async function createNewStock(queryBody, queryStock) {
   }
 }
 
-async function setProfile(newStock, profileData) {
-  // update profile data
-  return new Promise((resolve, reject) => {
-    if ((profileData != null)) {
-      const newProfileData = 
-        {
-          beta: formatNum(profileData["beta"]),  // => stability
-          exchange: profileData["exchange"],  // "NASDAQ"
-          industry: profileData["industry"], //"Consumer Electronics",
-          website: encodeURI(profileData["website"]).replace(/'/g, "%27"), // "http://www.apple.com",
-          description: encodeURI(profileData["description"]).replace(/'/g, "%27"), //"Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, HomePod, iPod touch, and other Apple-branded and third-party accessories. It also provides digital content stores and streaming services; AppleCare support services; and iCloud, a cloud service, which stores music, photos, contacts, calendars, mail, documents, and others. In addition, the company offers various service, such as Apple Arcade, a game subscription service; Apple Card, a co-branded credit card; Apple News+, a subscription news and magazine service; and Apple Pay, a cashless payment service, as well as licenses its intellectual property, and provides other related services. The company serves co",
-          ceo: encodeURI(profileData["ceo"]).replace(/'/g, "%27"), // "Mr. Timothy D. Cook",
-          sector: profileData["sector"], //"Technology",
-          image: encodeURI(profileData["image"]), // "https://financialmodelingprep.com/image-stock/AAPL.jpg"
-        }
-      newStock.profile = newProfileData;
-      if (newStock.profile) { 
-        resolve(newStock);
-      }
-    }
-  });
-}
-
 async function setHistory(newStock, timeSeriesData) {
   return new Promise((resolve, reject) => {
     // update stock history data
@@ -251,6 +228,29 @@ async function setHistory(newStock, timeSeriesData) {
           resolve(newStock);
         }
       });
+    }
+  });
+}
+
+async function setProfile(newStock, profileData) {
+  // update profile data
+  return new Promise((resolve, reject) => {
+    if ((profileData != null)) {
+      const newProfileData = 
+        {
+          beta: formatNum(profileData["beta"]),  // => stability
+          exchange: profileData["exchange"],  // "NASDAQ"
+          industry: profileData["industry"], //"Consumer Electronics",
+          website: encodeURI(profileData["website"]).replace(/'/g, "%27"), // "http://www.apple.com",
+          description: encodeURI(profileData["description"]).replace(/'/g, "%27"), //"Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, HomePod, iPod touch, and other Apple-branded and third-party accessories. It also provides digital content stores and streaming services; AppleCare support services; and iCloud, a cloud service, which stores music, photos, contacts, calendars, mail, documents, and others. In addition, the company offers various service, such as Apple Arcade, a game subscription service; Apple Card, a co-branded credit card; Apple News+, a subscription news and magazine service; and Apple Pay, a cashless payment service, as well as licenses its intellectual property, and provides other related services. The company serves co",
+          ceo: encodeURI(profileData["ceo"]).replace(/'/g, "%27"), // "Mr. Timothy D. Cook",
+          sector: profileData["sector"], //"Technology",
+          image: encodeURI(profileData["image"]), // "https://financialmodelingprep.com/image-stock/AAPL.jpg"
+        }
+      newStock.profile = newProfileData;
+      if (newStock.profile) { 
+        resolve(newStock);
+      }
     }
   });
 }
