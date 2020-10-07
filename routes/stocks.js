@@ -3,6 +3,7 @@ const express = require("express"),
   Stock = require("../models/stock"),
   User = require("../models/user"),
   StockSearch = require("../models/stocksearch"),
+  StockMarket = require("../models/stockmarket")
   middleware = require("../middleware"),
   got = require("got");
 require("dotenv").config();
@@ -138,7 +139,7 @@ async function addToSharedStockDB(queryStock, queryBody){
 const urlHead = "https://financialmodelingprep.com/api/v3/";
 const apiKey = "?apikey=" + process.env.STOCK_API_KEY;
 const quarterPeriod = "&period=quarter";
-const limitOne = "&limit=1"
+const limitOne = "&limit=1";
 
 // parse data to json
 async function getJSON(url) {
@@ -195,7 +196,7 @@ async function createNewStock(queryBody, queryStock) {
     setFinancialGrowth(newStock, financialGrowthData);
     const foundSearchStock = await StockSearch.findOne({ symbol: queryStock}); // get new stock's company name
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
-    console.log('created this stock', newStock.name, 'Data:');
+    console.log('created this stock: ', newStock.name);
     newStock.save();
     return newStock;
   } catch (err) {
@@ -368,43 +369,87 @@ function abbreviateNum(number, decimalPlaces) {
 }
 
 async function UpdateQuarterly() {
-  if(USER_ID) {
-    const user = await User.findById(USER_ID);
-    const stockids = user.trackedstocks;
-    stockids.forEach(async (stockid) => { 
-      var newStock = await Stock.findById(stockid);
-      const results = await Promise.all([getJSON(makeApiProfileUrl(newStock.symbol)), getJSON(makeApiKeyMetricsUrl(newStock.symbol)), getJSON(makeApiFinancialGrowthUrl(newStock.symbol))]);
-      const profileData = results[0][0];  
-      const keyMetricsData= results[1][0];
-      const financialGrowthData = results[2][0];
-      setProfile(newStock, profileData);
-      setKeyMetrics(newStock, keyMetricsData);
-      setFinancialGrowth(newStock, financialGrowthData);
-      console.log("just updated quarterly: ", newStock.name);
-    });
-  }
+  const stocks = await Stock.find({});
+  stocks.forEach(async (stock) => { 
+    var newStock = await Stock.findOne({symbol: stock.symbol});
+    const results = await Promise.all([getJSON(makeApiProfileUrl(newStock.symbol)), getJSON(makeApiKeyMetricsUrl(newStock.symbol)), getJSON(makeApiFinancialGrowthUrl(newStock.symbol))]);
+    const profileData = results[0][0];  
+    const keyMetricsData= results[1][0];
+    const financialGrowthData = results[2][0];
+    setProfile(newStock, profileData);
+    setKeyMetrics(newStock, keyMetricsData);
+    setFinancialGrowth(newStock, financialGrowthData);
+    console.log("just updated quarterly: ", newStock.name);
+  });
 }
 // setInterval(UpdateQuarterly, 1000 * 60 * 60 * 24 * 30 * 4); // set quarterly update time
 // 1s * 60 s per minute * 60 minutes per hour * 24 hour per day * 30 day per month * 4 month per quarter
 
 async function UpdateDaily() {
-  if(USER_ID) {
-    const user = await User.findById(USER_ID);
-    const stockids = user.trackedstocks;
-    stockids.forEach(async (stockid) => { 
-      var newStock = await Stock.findById(stockid);
-      newStock.history = [];
-      newStock.rating = [];
-      const results = await Promise.all([getJSON(makeApiTimeSeriesUrl(newStock.symbol)),getJSON(makeApiRatingUrl(newStock.symbol))]);
-      const timeSeriesData = results[0]["historical"];  
-      const ratingData = results[1][0]; 
-      setHistory(newStock, timeSeriesData);
-      setRating(newStock, ratingData);
-      console.log("just updated daily: ", newStock.name);
-    });
-  }
+  const stocks = await Stock.find({});
+  stocks.forEach(async (stock) => { 
+    var newStock = await Stock.findOne({symbol: stock.symbol});
+    newStock.history = [];
+    newStock.rating = [];
+    const results = await Promise.all([getJSON(makeApiTimeSeriesUrl(newStock.symbol)),getJSON(makeApiRatingUrl(newStock.symbol))]);
+    const timeSeriesData = results[0]["historical"];  
+    const ratingData = results[1][0]; 
+    setHistory(newStock, timeSeriesData);
+    setRating(newStock, ratingData);
+    console.log("just updated daily: ", newStock.name);
+  });
 }
-setInterval(UpdateDaily, 1000 * 60 * 60 * 24); // set daily update time
+// setInterval(UpdateDaily, 1000 * 60 * 60 * 24); // set daily update time
 // 1s * 60 s per minute * 60 minutes per hour * 24 hour per day
+
+
+async function UpdateStockMarket() {
+  await StockMarket.deleteOne({});
+  const stockmarket = await StockMarket.create({});
+
+  const apiActiveUrl = urlHead + "actives" + apiKey;
+  const apiGainerUrl = urlHead + "gainers" + apiKey;
+  const apiLoserUrl = urlHead + "losers" + apiKey;
+
+  const results = await Promise.all([getJSON(apiActiveUrl), getJSON(apiGainerUrl), getJSON(apiLoserUrl)]);
+
+  const mostactiveData = results[0];
+  const mostgainerData = results[1];
+  const mostloserData = results[2];
+
+  
+  for (var i = 0; i < 5; i++) {
+    let mostactive = mostactiveData[i];
+    let newMostActiveEntry = {
+      symbol: mostactive.ticker,
+      changesPercentage: mostactive.changesPercentage.slice(1,-2),
+      price: mostactive.price
+    }
+    stockmarket.mostactive.push(newMostActiveEntry);
+
+    let mostgainer = mostgainerData[i];
+    let newMostGainerEntry = {
+      symbol: mostgainer.ticker,
+      changesPercentage: mostgainer.changesPercentage.slice(1,-2),
+      price: mostgainer.price
+    }
+    stockmarket.mostgainer.push(newMostGainerEntry);
+
+    let mostloser = mostloserData[i];
+    let newMostLoserEntry = {
+      symbol: mostloser.ticker,
+      changesPercentage: mostloser.changesPercentage.slice(1,-2),
+      price: mostloser.price
+    }
+    stockmarket.mostloser.push(newMostLoserEntry);
+  }
+
+  stockmarket.save();
+
+  console.log("DONE UPDATE STOCK MARKET");
+}
+
+// setInterval(UpdateStockMarket, 3000); 
+
 
 module.exports = router;

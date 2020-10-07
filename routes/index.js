@@ -5,10 +5,10 @@ const express = require("express"),
   passport = require("passport"),
   // require sendgrid/mail
   sgMail = require('@sendgrid/mail'),
-
   crypto = require("crypto"),
   User = require("../models/user"),
   StockSearch = require("../models/stocksearch"),
+  StockMarket = require("../models/stockmarket")
   got = require("got"),
   Stock = require("../models/stock");
 require("dotenv").config();
@@ -16,8 +16,9 @@ require("dotenv").config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // root route
-router.get("/", (req, res) => {
-  res.render("landing");
+router.get("/", async (req, res) => {
+  const stockmarket = await StockMarket.findOne();
+  res.render("landing", {stockmarket});
 });
 
 // get search route

@@ -85,7 +85,12 @@ router.post("/", middleware.checkCorrectUser, (req, res) => {
 });
 
 async function updateTransaction(transaction, transactionReq, type) {
-  let newHistoryEntry = {price: Math.round(transactionReq.price * 100), time: transactionReq.time, quantity: transactionReq.quantity, transactiontype: type };
+  let newHistoryEntry = {
+    price: Math.round(transactionReq.price * 100), 
+    time: transactionReq.time, 
+    quantity: transactionReq.quantity, 
+    transactiontype: type 
+  };
   transaction.history.push(newHistoryEntry); 
   if (type === "Purchase") {
     transaction.totalprice += (Math.round(transactionReq.price * 100 * transactionReq.quantity)) ;

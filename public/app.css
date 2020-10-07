@@ -198,16 +198,6 @@ background-color: #6A7E7A;
 /* }  
 
 /* ----------------------Home-header -------------------------- */
-.jumbotron {
-  height: 100vh;
-  padding-top: 4rem !important;
-  margin-bottom: 0 !important;
-  background-color: #1a2a5a !important;
-  /* background: url("https://wallpapercave.com/wp/wp2128226.jpg"); */
-  /* background-size: cover;
-  background-position: center; */
-}
-
 #stock-image {
   background: url("img/landing-stock.jpg");
   /* background-position: center; */
