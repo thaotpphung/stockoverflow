@@ -132,6 +132,8 @@ var generateResetToken = () => {
 	})
 }
 
+
+
 // NEW forgot post
 router.post('/forgot', async (req, res) => {
 	try {
@@ -148,18 +150,34 @@ router.post('/forgot', async (req, res) => {
 		// passport local mongoose allows for promises inherently.
 		await user.save();
 
-    // create transport
-    const msg = {
+    // send email here
+    var nodemailer = require('nodemailer');
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USERNAME,
+        pass: process.env.GMAIL_PASSWORD
+      }
+    });
+
+    var mailOptions = {
+      from: 'stockoverflow.ad@gmail.com',
       to: user.email,
-      from: 'stockoverflow.stockapp@gmail.com',
       subject: 'StackOverflow Password Reset',
-			text: 'You are receiving this because you (or someone else) have requested the reset of the password linked to your StockOverflow account.' +
-				'Please click on the following link, or paste this into your browser to complete the process.' + '\n\n' +
-				'http://' + req.headers.host + '/reset/' + reset_token + '\n\n' + 
-				'If you did not request this, please ignore this email and your password will remain unchanged.',
+      text:  'You are receiving this because you (or someone else) have requested the reset of the password linked to your StockOverflow account.' +
+      'Please click on the following link, or paste this into your browser to complete the process.' + '\n\n' +
+      'http://' + req.headers.host + '/reset/' + reset_token + '\n\n' + 
+      'If you did not request this, please ignore this email and your password will remain unchanged.'
     };
+
     try {
-      await sgMail.send(msg);
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
       req.flash('success', 'An email has been sent to ' + user.email + ' with further instructions.');
       res.redirect('/forgot');
     } catch (error) {
@@ -198,14 +216,33 @@ router.post('/reset/:token', async function(req, res) {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
         await user.save();
-        const msg = {
+        
+        // send email here
+        var nodemailer = require('nodemailer');
+        var transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.GMAIL_USERNAME,
+            pass: process.env.GMAIL_PASSWORD
+          }
+        });
+
+        var mailOptions = {
+          from: 'stockoverflow.ad@gmail.com',
           to: user.email,
-          from: 'stockoverflow.stockapp@gmail.com',
-          subject: 'Your password has been changed',
+          subject: 'Successfully Changed Password',
           text: 'Hello,\n\n' +
             'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
         };
-        await sgMail.send(msg);
+
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+
         req.login(user, function(err) {
           if (err) {   
             console.log(err);
