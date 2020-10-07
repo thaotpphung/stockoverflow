@@ -1,10 +1,9 @@
-# stock-tracker
-Simple javafx application that assists users keeping track of stock trends to make decision.
-
+# StockOverflow
+>  Stock tracker and visualization 
 
 # Contents  
-* [Setup](#setup)  
-* [Functionality](#functionality)
+* [Installation](#installation)  
+* [Features](#features)
     * [Login](#login)
         * [Reset username/password](#functionality)
         * [Registration](#registration)
@@ -17,36 +16,38 @@ Simple javafx application that assists users keeping track of stock trends to ma
             * [Portfolio](#portfolio)
             * [Display list of interested stocks](#functionality)
 
-## Setup
+## Installation
 
-1. Clone project by using ```git clone```
+### 1. Clone project by using ```git clone```
 ```
-    git clone https://github.com/aqd14/stock-tracker.git
-```
-2. Build project with ```maven```
-```
-mvn jfx:jar
-```
-3. Run ```jar``` file at $SOURCE_DIR$/target/jfx/app
-```
-java -jar path_to_jar_file
+$ git clone git@github.com:thaotpphung/stockapp.git
+$ cd stockapp
 ```
 
-## Functionality
+### 2. Install MongoDB
+[MongoDB Download Page](https://docs.mongodb.com/manual/administration/install-community/)
+
+### 3. Run application
+
+```
+$ npm install
+$ node app.js
+```
+
+## Features
 ### Login
-![Alt text](screenshots/login.jpg?raw=true "Login Screen")
 
-When user starts the app, Login screen will be opened. User can login either by registered email or username.
 
-Beside the main function is logging user in the app, there are several options. User can:
-+ Remember username/password so there is no need to enter them next time login
-+ Register Account
-+ Reset Password
+![Alt text](screens/login.png?raw=true "Login Screen")
 
-If the username/password is incorrect, an error message will be displayed to user.
+Functionalities
++ Log user in the application
++ Provide option to reset password in case user forget
+![Alt text](screens/forgot.png?raw=true "Reset Password")
++ Display error message when user name or password is incorrect
 
 ### Reset username/password
-![Alt text](screenshots/reset-password.jpg?raw=true "Reset Password")
+
 
 User can reset password by providing some needed personal information that user has registered earlier.
 
