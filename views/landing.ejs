@@ -10,62 +10,36 @@
           fees. A powerful tool to track and visualize stock data.
         </div>
         <div id="signup-form">
+
           <form action="/register" method="POST">
             <div class="form-row">
               <div class="col-6">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="username"
-                  placeholder="Username"
-                />
+                <input type="text" class="form-control" name="username" placeholder="Username" />
               </div>
               <div class="col-6">
-                <input
-                  type="email"
-                  class="form-control"
-                  name="email"
-                  placeholder="Email"
-                />
+                <input type="email" class="form-control" name="email" placeholder="Email" />
               </div>
 
               <div class="col-md-6">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="firstname"
-                  placeholder="First name"
-                />
+                <input type="text" class="form-control" name="firstname" placeholder="First name" />
               </div>
               <div class="col-md-6">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="lastname"
-                  placeholder="Last name"
-                />
+                <input type="text" class="form-control" name="lastname" placeholder="Last name" />
               </div>
 
               <div class="col-md-6">
                 <div class="row">
                   <div class="col-12">
-                    <input
-                      type="password"
-                      class="form-control"
-                      name="password"
-                      placeholder="Password"
-                    />
+                    <input type="password" class="form-control" name="password"
+                      placeholder="Password" />
                   </div>
                   <div class="col-12">
-                    <input
-                      type="password"
-                      class="form-control"
-                      name="confirm-password"
-                      placeholder="Confirm Password"
-                    />
+                    <input type="password" class="form-control" name="confirm"
+                      placeholder="Confirm Password" />
                   </div>
                 </div>
               </div>
+
               <div id="password-warning" class="col-md-6">
                 Password must contain:
                 <ul>
@@ -81,12 +55,10 @@
               </div>
             </div>
           </form>
+
         </div>
       </div>
-      <div
-        id="intro-right"
-        class="col-12 col-lg-6 d-none d-md-block pb-5 pb-lg-0"
-      >
+      <div id="intro-right" class="col-12 col-lg-6 d-none d-md-block pb-5 pb-lg-0">
         <div id="stock-image"></div>
       </div>
 
@@ -97,7 +69,7 @@
         <span id="logo">STOCKOVERFLOW</span> <%= currentUser.firstname %>!
         <div>How are you today?</div>
       </div>
-      
+
       <div class="col-5">
         <h1 class="header-black">
           MOST GAINER
@@ -115,27 +87,27 @@
             <tbody>
 
               <% stockmarket.mostgainer.forEach(stock => { %>
-                <tr>
-                  <td><%=stock.symbol%></td>
+              <tr>
+                <td><%=stock.symbol%></td>
 
-                  <% if (stock.changesPercentage < 0) { %>
-                    <td class="negative"> 
-                    <% } else { %> 
-                     <td class="positive"> 
-                    <% } %>
-                    <%=stock.changesPercentage%>
-                    </td>
+                <% if (stock.changesPercentage < 0) { %>
+                <td class="negative">
+                  <% } else { %>
+                <td class="positive">
+                  <% } %>
+                  <%=stock.changesPercentage%>
+                </td>
 
-                  <td><%=stock.price%></td>
+                <td><%=stock.price%></td>
 
-                </tr>
+              </tr>
               <% }); %>
             </tbody>
           </table>
         </div>
       </div>
 
-      
+
       <div class="col-5">
         <h1 class="header-black">
           MOST ACTIVE
@@ -153,20 +125,20 @@
             <tbody>
 
               <% stockmarket.mostactive.forEach(stock => { %>
-                <tr>
-                  <td><%=stock.symbol%></td>
+              <tr>
+                <td><%=stock.symbol%></td>
 
-                  <% if (stock.changesPercentage < 0) { %>
-                    <td class="negative"> 
-                    <% } else { %> 
-                     <td class="positive"> 
-                    <% } %>
-                    <%=stock.changesPercentage%>
-                    </td>
+                <% if (stock.changesPercentage < 0) { %>
+                <td class="negative">
+                  <% } else { %>
+                <td class="positive">
+                  <% } %>
+                  <%=stock.changesPercentage%>
+                </td>
 
-                  <td><%=stock.price%></td>
+                <td><%=stock.price%></td>
 
-                </tr>
+              </tr>
               <% }); %>
             </tbody>
           </table>
@@ -191,17 +163,17 @@
             </thead>
             <tbody>
               <% stockmarket.mostloser.forEach(stock => { %>
-                <tr>
-                  <td><%=stock.symbol%></td>
-                  <% if (stock.changesPercentage < 0) { %>
-                    <td class="negative"> 
-                    <% } else { %> 
-                     <td class="positive"> 
-                    <% } %>
-                    <%=stock.changesPercentage%>
-                    </td>
-                  <td><%=stock.price%></td>
-                </tr>
+              <tr>
+                <td><%=stock.symbol%></td>
+                <% if (stock.changesPercentage < 0) { %>
+                <td class="negative">
+                  <% } else { %>
+                <td class="positive">
+                  <% } %>
+                  <%=stock.changesPercentage%>
+                </td>
+                <td><%=stock.price%></td>
+              </tr>
               <% }); %>
             </tbody>
           </table>

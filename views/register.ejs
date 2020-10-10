@@ -1,6 +1,6 @@
 <%- include("partials/header") %>
 
-<form action="/register" method="post">
+<form action="/register" method="POST">
 <div id="body-container">
   <div class="row justify-content-center">
     <div class="col-11 col-sm-9 col-md-8 col-lg-6" >
@@ -10,11 +10,11 @@
       <div class="form-row">
         <div class="col-6">
           <input
+          autocomplete="off"
             type="text"
             class="form-control"
             name="username"
             placeholder="Username"
-            autocomplete="off"
           />
         </div>
         <div class="col-6">
