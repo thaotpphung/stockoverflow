@@ -80,6 +80,7 @@ The dashboard shows the tracked stocks and their current price changes compared 
 
 Users can search for stocks that they want to track, the system then add the desired stock to the tracked list.
 
+
 ![Alt text](screens/search.gif?raw=true "Search")
 
 ### Delete Stock
