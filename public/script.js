@@ -51,8 +51,8 @@ $(".show-form").click(function(event) {
 /* -----------------------search----------------------- */
 var $searchResult = $("#searchResult");
 var $searchKey = $("#searchKey");
-const website = "http://localhost:8000/";
-// const website = "https://shrouded-shelf-22294.herokuapp.com/";
+// const website = "http://localhost:8000/";
+const website = "https://shrouded-shelf-22294.herokuapp.com/";
 
 // send request whenever user enter a valid string
 $("#searchKey").keyup( async function (event) {

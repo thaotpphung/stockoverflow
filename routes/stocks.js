@@ -463,7 +463,7 @@ async function UpdateStockMarket() {
   console.log("DONE UPDATE STOCK MARKET");
 }
 
-// setInterval(UpdateStockMarket, 10000); 
+setInterval(UpdateStockMarket, 10000); 
 
 
 module.exports = router;
