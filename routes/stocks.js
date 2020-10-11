@@ -179,8 +179,11 @@ function makeApiFinancialGrowthUrl (queryStock) {
 async function createNewStock(queryBody, queryStock) {
   try {
     // wait for all request to finish before processing data
-    const results = await Promise.all([getJSON(makeApiTimeSeriesUrl(queryStock)), getJSON(makeApiKeyMetricsUrl(queryStock)),
-      getJSON(makeApiProfileUrl(queryStock)), getJSON(makeApiRatingUrl(queryStock)),
+    const results = await Promise.all([
+      getJSON(makeApiTimeSeriesUrl(queryStock)), 
+      getJSON(makeApiKeyMetricsUrl(queryStock)),
+      getJSON(makeApiProfileUrl(queryStock)), 
+      getJSON(makeApiRatingUrl(queryStock)),
       getJSON(makeApiFinancialGrowthUrl(queryStock))
      ]);
     const timeSeriesData = results[0]["historical"];  
@@ -189,11 +192,30 @@ async function createNewStock(queryBody, queryStock) {
     const ratingData = results[3][0]; 
     const financialGrowthData = results[4][0];
     var newStock = await Stock.create(queryBody);
-    setHistory(newStock, timeSeriesData);
+    console.log(makeApiTimeSeriesUrl(queryStock));
+    console.log(makeApiKeyMetricsUrl(queryStock));
+    console.log(makeApiProfileUrl(queryStock));
+    console.log(makeApiRatingUrl(queryStock));
+    console.log(makeApiFinancialGrowthUrl(queryStock));
+
+    console.log("time SERIES", timeSeriesData);
+    console.log("----------------------------------");
+    console.log("key metrics", keyMetricsData);
+    console.log("----------------------------------");
+    console.log("profile", profileData);
+    console.log("----------------------------------");
+    console.log("rating", ratingData);
+    console.log("----------------------------------");
+    console.log("financial growth", financialGrowthData);
+    console.log("----------------------------------");
+
+
+    await setHistory(newStock, timeSeriesData);
     setKeyMetrics(newStock, keyMetricsData);
     setProfile(newStock, profileData);
     setRating(newStock, ratingData);
     setFinancialGrowth(newStock, financialGrowthData);
+
     const foundSearchStock = await StockSearch.findOne({ symbol: queryStock}); // get new stock's company name
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
     console.log('created this stock: ', newStock.name);
@@ -235,29 +257,27 @@ async function setHistory(newStock, timeSeriesData) {
 
 async function setProfile(newStock, profileData) {
   // update profile data
-  return new Promise((resolve, reject) => {
+  // return new Promise((resolve, reject) => {
     if ((profileData != null)) {
       const newProfileData = 
         {
           beta: formatNum(profileData["beta"]),  // => stability
           exchange: profileData["exchange"],  // "NASDAQ"
           industry: profileData["industry"], //"Consumer Electronics",
-          website: encodeURI(profileData["website"]).replace(/'/g, "%27"), // "http://www.apple.com",
-          description: encodeURI(profileData["description"]).replace(/'/g, "%27"), //"Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple TV, Apple Watch, Beats products, HomePod, iPod touch, and other Apple-branded and third-party accessories. It also provides digital content stores and streaming services; AppleCare support services; and iCloud, a cloud service, which stores music, photos, contacts, calendars, mail, documents, and others. In addition, the company offers various service, such as Apple Arcade, a game subscription service; Apple Card, a co-branded credit card; Apple News+, a subscription news and magazine service; and Apple Pay, a cashless payment service, as well as licenses its intellectual property, and provides other related services. The company serves co",
+          website: encodeURI(profileData["website"]).replace(/'/g, "%27"), 
+          description: encodeURI(profileData["description"]).replace(/'/g, "%27"), 
           ceo: encodeURI(profileData["ceo"]).replace(/'/g, "%27"), // "Mr. Timothy D. Cook",
           sector: profileData["sector"], //"Technology",
-          image: encodeURI(profileData["image"]), // "https://financialmodelingprep.com/image-stock/AAPL.jpg"
+          image: encodeURI(profileData["image"]),
         }
       newStock.profile = newProfileData;
-      if (newStock.profile) { 
-        resolve(newStock);
-      }
+      // resolve();
     }
-  });
+  // });
 }
 
 async function setKeyMetrics(newStock, keyMetricsData) {
-  return new Promise((resolve, reject) => {
+  // return new Promise((resolve, reject) => {
     // update key metrics data
     if ((keyMetricsData != null)) {
       const newKeyMetricsData = 
@@ -281,15 +301,13 @@ async function setKeyMetrics(newStock, keyMetricsData) {
           roe: formatNum(keyMetricsData["roe"]) // return on equity
         };
       newStock.keymetrics = newKeyMetricsData;
-      if (newStock.keyMetrics) {
-        resolve(newStock);
-      }
+      // resolve();
     }
-  });
+  // });
 }
 
 function setFinancialGrowth(newStock, financialGrowthData) {
-  return new Promise((resolve, reject) => {
+  // return new Promise((resolve, reject) => {
     // update financial growth data
     if ((financialGrowthData != null)) {
       const newFinancialGrowthData = 
@@ -307,15 +325,13 @@ function setFinancialGrowth(newStock, financialGrowthData) {
           assetGrowth: formatNum(financialGrowthData["assetGrowth"]),
         }
       newStock.financialgrowth = newFinancialGrowthData;
-      if (newStock.financialgrowth) {
-        resolve(newStock);
-      }
+      // resolve();
     }
-  });
+  // });
 }
 
 function setRating(newStock, ratingData) {
-  return new Promise((resolve, reject) => {
+  // return new Promise((resolve, reject) => {
     // update rating data
     if ((ratingData != null)) {
       const newRatingData = 
@@ -332,11 +348,9 @@ function setRating(newStock, ratingData) {
         ratingLabelsFull: [ "Overall", "Discounted Cash Flow", "Return on Equity", "Return on Assets", "Debt to Equity", "Price Earning", "Price/Book"]
       }
       newStock.rating = newRatingData;
-      if (newStock.rating) {
-        resolve(newStock);
-      }
+      // resolve();
     }
-  });
+  // });
 }
 
 function formatNum(number) {
