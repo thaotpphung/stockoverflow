@@ -1,3 +1,4 @@
+const user = require("../models/user");
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
   passport = require("passport"),
