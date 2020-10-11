@@ -1,10 +1,6 @@
-const user = require("../models/user");
-
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
   passport = require("passport"),
-  // require sendgrid/mail
-  sgMail = require('@sendgrid/mail'),
   crypto = require("crypto"),
   User = require("../models/user"),
   StockSearch = require("../models/stocksearch"),
@@ -12,8 +8,6 @@ const express = require("express"),
   got = require("got"),
   Stock = require("../models/stock");
 require("dotenv").config();
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // root route
 router.get("/", async (req, res) => {
@@ -131,8 +125,6 @@ var generateResetToken = () => {
 		})
 	})
 }
-
-
 
 // NEW forgot post
 router.post('/forgot', async (req, res) => {
