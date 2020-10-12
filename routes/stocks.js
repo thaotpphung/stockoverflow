@@ -181,22 +181,26 @@ function makeApiTimeSeriesUrl(queryStock) {
     urlHead + timeSeries + queryStock + apiKey + timeSeriesCount;
   return apiTimeSeriesUrl;
 }
+
 function makeApiRatingUrl(queryStock) {
   const rating = "rating/";
   const apiRatingUrl = urlHead + rating + queryStock + apiKey;
   return apiRatingUrl;
 }
+
 function makeApiProfileUrl(queryStock) {
   const profile = "profile/";
   const apiProfileUrl = urlHead + profile + queryStock + apiKey;
   return apiProfileUrl;
 }
+
 function makeApiKeyMetricsUrl(queryStock) {
   const keyMetrics = "key-metrics/";
   const apikeyMetricsUrl =
     urlHead + keyMetrics + queryStock + apiKey + quarterPeriod + limitOne;
   return apikeyMetricsUrl;
 }
+
 function makeApiFinancialGrowthUrl(queryStock) {
   const financialGrowth = "financial-growth/";
   const apiFinancialGrowthUrl =
@@ -215,17 +219,25 @@ async function createNewStock(queryBody, queryStock) {
       getJSON(makeApiRatingUrl(queryStock)),
       getJSON(makeApiFinancialGrowthUrl(queryStock)),
     ]);
+    console.log(results);
+    console.log("----------------------------------------------")
+
+
     const timeSeriesData = results[0]["historical"];
     const keyMetricsData = results[1][0];
     const profileData = results[2][0];
     const ratingData = results[3][0];
     const financialGrowthData = results[4][0];
+
     var newStock = await Stock.create(queryBody);
+
     await setHistory(newStock, timeSeriesData);
     setKeyMetrics(newStock, keyMetricsData);
     setProfile(newStock, profileData);
     setRating(newStock, ratingData);
     setFinancialGrowth(newStock, financialGrowthData);
+    console.log("----------------------------------------------")
+    console.log(newStock)
 
     const foundSearchStock = await StockSearch.findOne({ symbol: queryStock }); // get new stock's company name
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
