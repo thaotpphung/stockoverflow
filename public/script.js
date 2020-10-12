@@ -52,7 +52,7 @@ $(".show-form").click(function(event) {
 var $searchResult = $("#searchResult");
 var $searchKey = $("#searchKey");
 // const website = "http://localhost:8000/";
-const website = "https://shrouded-shelf-22294.herokuapp.com/";
+const website = "https://stockoverflow-stockapp.herokuapp.com/";
 
 // send request whenever user enter a valid string
 $("#searchKey").keyup( async function (event) {
