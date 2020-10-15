@@ -212,13 +212,13 @@ function makeApiFinancialGrowthUrl(queryStock) {
 async function createNewStock(queryBody, queryStock) {
   try {
     // wait for all request to finish before processing data
-    const results = await Promise.all([
-      getJSON(makeApiTimeSeriesUrl(queryStock)),
-      getJSON(makeApiKeyMetricsUrl(queryStock)),
-      getJSON(makeApiProfileUrl(queryStock)),
-      getJSON(makeApiRatingUrl(queryStock)),
-      getJSON(makeApiFinancialGrowthUrl(queryStock)),
-    ]);
+    // const results = await Promise.all([
+    //   getJSON(makeApiTimeSeriesUrl(queryStock)),
+    //   getJSON(makeApiKeyMetricsUrl(queryStock)),
+    //   getJSON(makeApiProfileUrl(queryStock)),
+    //   getJSON(makeApiRatingUrl(queryStock)),
+    //   getJSON(makeApiFinancialGrowthUrl(queryStock)),
+    // ]);
 
     console.log('time series url', makeApiTimeSeriesUrl(queryStock));
     console.log('key metric url', makeApiKeyMetricsUrl(queryStock));
@@ -226,15 +226,40 @@ async function createNewStock(queryBody, queryStock) {
     console.log('rating url', makeApiRatingUrl(queryStock));
     console.log('growth url', makeApiFinancialGrowthUrl(queryStock));
 
+    // const timeSeriesData = results[0]["historical"];
+    // const keyMetricsData = results[1][0];
+    // const profileData = results[2][0];
+    // const ratingData = results[3][0];
+    // const financialGrowthData = results[4][0];
 
-    const timeSeriesData = results[0]["historical"];
-    const keyMetricsData = results[1][0];
-    const profileData = results[2][0];
-    const ratingData = results[3][0];
-    const financialGrowthData = results[4][0];
+    // const results = await Promise.all([
+    //   getJSON(makeApiTimeSeriesUrl(queryStock)),
+    //   getJSON(makeApiKeyMetricsUrl(queryStock)),
+    //   getJSON(makeApiProfileUrl(queryStock)),
+    //   getJSON(makeApiRatingUrl(queryStock)),
+    //   getJSON(makeApiFinancialGrowthUrl(queryStock)),
+    // ]);
+
+    // const timeSeriesData = await getJSON(makeApiTimeSeriesUrl(queryStock))["historical"];
+
+    const timeSeries = await getJSON(makeApiTimeSeriesUrl(queryStock));
+    const timeSeriesData = timeSeries["historical"];
+
+    const keyMetrics = await getJSON(makeApiKeyMetricsUrl(queryStock));
+    const keyMetricsData = keyMetrics[0];
+
+    const profile = await getJSON(makeApiProfileUrl(queryStock));
+    const profileData = profile[0];
+
+    const rating =  await getJSON(makeApiRatingUrl(queryStock));
+    const ratingData  = rating[0];
+
+    const financialGrowth = await getJSON(makeApiFinancialGrowthUrl(queryStock));
+    const financialGrowthData = financialGrowth[0];
+
     
-    console.log('results \n', results);
-    console.log("-----------------------------------------------------------------");
+    // console.log('results \n', results);
+    // console.log("-----------------------------------------------------------------");
 
     console.log("time SERIES", timeSeriesData);
     console.log("----------------------------------");
@@ -246,7 +271,6 @@ async function createNewStock(queryBody, queryStock) {
     console.log("----------------------------------");
     console.log("financial growth", financialGrowthData);
     console.log("----------------------------------");
-
 
     var newStock = await Stock.create(queryBody);
 
