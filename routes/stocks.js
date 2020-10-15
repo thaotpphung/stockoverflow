@@ -219,15 +219,24 @@ async function createNewStock(queryBody, queryStock) {
       getJSON(makeApiRatingUrl(queryStock)),
       getJSON(makeApiFinancialGrowthUrl(queryStock)),
     ]);
-    console.log(results);
-    console.log("----------------------------------------------")
-
 
     const timeSeriesData = results[0]["historical"];
     const keyMetricsData = results[1][0];
     const profileData = results[2][0];
     const ratingData = results[3][0];
     const financialGrowthData = results[4][0];
+
+    console.log("time SERIES", timeSeriesData);
+    console.log("----------------------------------");
+    console.log("key metrics", keyMetricsData);
+    console.log("----------------------------------");
+    console.log("profile", profileData);
+    console.log("----------------------------------");
+    console.log("rating", ratingData);
+    console.log("----------------------------------");
+    console.log("financial growth", financialGrowthData);
+    console.log("----------------------------------");
+
 
     var newStock = await Stock.create(queryBody);
 
@@ -237,7 +246,7 @@ async function createNewStock(queryBody, queryStock) {
     setRating(newStock, ratingData);
     setFinancialGrowth(newStock, financialGrowthData);
     console.log("----------------------------------------------")
-    console.log(newStock)
+    console.log('new stock', newStock)
 
     const foundSearchStock = await StockSearch.findOne({ symbol: queryStock }); // get new stock's company name
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
