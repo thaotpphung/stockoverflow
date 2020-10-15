@@ -220,6 +220,13 @@ async function createNewStock(queryBody, queryStock) {
       getJSON(makeApiFinancialGrowthUrl(queryStock)),
     ]);
 
+    console.log('time series url', makeApiTimeSeriesUrl(queryStock));
+    console.log('key metric url', makeApiKeyMetricsUrl(queryStock));
+    console.log('profile url', makeApiProfileUrl(queryStock));
+    console.log('rating url', makeApiRatingUrl(queryStock));
+    console.log('growth url', makeApiFinancialGrowthUrl(queryStock));
+
+
     const timeSeriesData = results[0]["historical"];
     const keyMetricsData = results[1][0];
     const profileData = results[2][0];
