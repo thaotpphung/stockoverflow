@@ -225,6 +225,9 @@ async function createNewStock(queryBody, queryStock) {
     const profileData = results[2][0];
     const ratingData = results[3][0];
     const financialGrowthData = results[4][0];
+    
+    console.log('results \n', results);
+    console.log("-----------------------------------------------------------------");
 
     console.log("time SERIES", timeSeriesData);
     console.log("----------------------------------");
@@ -245,8 +248,6 @@ async function createNewStock(queryBody, queryStock) {
     setProfile(newStock, profileData);
     setRating(newStock, ratingData);
     setFinancialGrowth(newStock, financialGrowthData);
-    console.log("----------------------------------------------")
-    console.log('new stock', newStock)
 
     const foundSearchStock = await StockSearch.findOne({ symbol: queryStock }); // get new stock's company name
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
