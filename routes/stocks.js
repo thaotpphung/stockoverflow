@@ -6,18 +6,19 @@ const express = require("express"),
 
 require("dotenv").config();
 
-router.get("/", middleware.checkCorrectUser, stockController.getUserStocks);
+router.get("/", middleware.checkCorrectUser, stockController.getStocks);
 
 // SHOW ROUTE - show information of the chosen stock
-router.get("/:stockid", middleware.checkCorrectUser, stockController.getStockById);
+router.get("/:stockid", middleware.checkCorrectUser, stockController.getStock);
 
 // DESTROY ROUTE - delete a tracked stock
-router.delete("/:stockid", middleware.checkCorrectUser, stockController.removeStockFromUserTrackedList);
+router.delete("/:stockid", middleware.checkCorrectUser, stockController.deleteStock);
 
 // EDIT ROUTE - edit a tracked stock
-router.put("/:stockid", middleware.checkCorrectUser, stockController.addStockToUserTrackedList);
+router.put("/:stockid", middleware.checkCorrectUser, stockController.editStock);
 
 // CREATE route - Add tracked stocks to the stocks db
 router.post("/", middleware.checkCorrectUser, stockController.createStock);
+
 
 module.exports = router;

@@ -1,13 +1,11 @@
-const express = require("express"),
-  Stock = require("../models/stock"),
+const Stock = require("../models/stock"),
   User = require("../models/user"),
   StockSearch = require("../models/stocksearch"),
   StockMarket = require("../models/stockmarket"),
-  userService = require("./stock")
-  middleware = require("../middleware"),
   got = require("got");
+require("dotenv").config();
 
-exports.getUserStocks = (req, res, next) => {
+exports.getStocks = (req, res, next) => {
   User.findById(req.params.userid)
     .populate("trackedstocks")
     .exec((err, user) => {
@@ -20,7 +18,7 @@ exports.getUserStocks = (req, res, next) => {
     });
 }
 
-exports.getStockById = (req, res) => {
+exports.getStock = (req, res) => {
   Stock.findById(req.params.stockid, (err, foundStock) => {
     if (err || !foundStock) {
       req.flash("error", "Stock not found");
@@ -31,7 +29,7 @@ exports.getStockById = (req, res) => {
   });
 }
 
-exports.removeStockFromUserTrackedList = (req, res) => {
+exports.deleteStock = (req, res) => {
   User.findById(req.params.userid, (err, user) => {
     if (err) {
       console.log(err);
@@ -48,7 +46,7 @@ exports.removeStockFromUserTrackedList = (req, res) => {
   });
 }
 
-exports.addStockToUserTrackedList = (req, res) => {
+exports.editStock = (req, res) => {
   User.findById(req.params.userid, async (err, user) => {
     if (err) {
       console.log(err);
@@ -57,12 +55,11 @@ exports.addStockToUserTrackedList = (req, res) => {
       addToTrackedStocks(user, index != -1, req.params.stockid, null, req, res);
     }
   });
-}
+};
 
 exports.createStock = async (req, res) => {
   const queryStock = req.body.stock.symbol;
   const queryBody = req.body.stock;
-  console.log("query stock", queryStock);
   var user = await User.findById(req.params.userid).populate("trackedstocks");
   var newStock = await addToSharedStockDB(queryStock, queryBody);
   if (queryBody.page === "transaction") {
@@ -83,6 +80,7 @@ exports.createStock = async (req, res) => {
     );
   }
 }
+
 
 // add to tracked stocks if not already exists
 async function addToTrackedStocks(
@@ -118,6 +116,7 @@ async function addToTrackedStocks(
     console.log("ERROR in addToTrackedStocks", err);
   }
 }
+
 
 // Checked if the query stock is in the tracked stock list by symbol
 // return true if already exists in user's tracked stock
@@ -215,6 +214,16 @@ async function createNewStock(queryBody, queryStock) {
     const ratingData  = rating[0];
     const financialGrowth = await getJSON(makeApiFinancialGrowthUrl(queryStock));
     const financialGrowthData = financialGrowth[0];
+
+    // console.log("key metric ", keyMetricsData);
+    // console.log("------------");
+    // console.log("profile", profileData);
+    // console.log("------------");
+    // console.log("rating ", ratingData);
+    // console.log("------------");
+    // console.log("financial growth ", financialGrowthData);
+    // console.log("------------")
+
     var newStock = await Stock.create(queryBody);
 
     await setHistory(newStock, timeSeriesData);
@@ -223,7 +232,6 @@ async function createNewStock(queryBody, queryStock) {
     setRating(newStock, ratingData);
     setFinancialGrowth(newStock, financialGrowthData);
 
-    console.log("here");
 
     const foundSearchStock = await StockSearch.findOne({ symbol: queryStock }); // get new stock's company name
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
@@ -504,8 +512,5 @@ async function UpdateStockMarket() {
 
 // setInterval(UpdateStockMarket, 10000);
 
-
-
-module.exports = userService;
 
 
