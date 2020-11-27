@@ -26,13 +26,12 @@ var UserSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Transaction",
-    },
+    }
   ],
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 }); 
 
 UserSchema.plugin(passportLocalMongoose);
-
 
 module.exports = mongoose.model("User", UserSchema);

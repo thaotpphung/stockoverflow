@@ -119,11 +119,8 @@ $searchResult.delegate("div", "click", async function (event) {
   var found = $(this).text();
   $searchKey.val(found.split("-")[0].trim());
   $(this).parent().addClass("d-none");
-
   $("#pageload").addClass("active");
   $("#pageload").addClass("disable-click");
-
-
   if (!($searchResult.html().includes("notfound-mes"))) {
     // if in the transaction stock page
     if ($("#tickSymbolDiv").html()) {
@@ -145,7 +142,6 @@ $searchResult.delegate("div", "click", async function (event) {
         $("#pageload").removeClass("active");
         $("#pageload").removeClass("enable-click");
       }
-
     // else in the add page, submit the form
     } else { 
       $("#searchKey").val($("#searchKey").val().toUpperCase()); 

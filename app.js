@@ -6,7 +6,6 @@ let express = require("express"),
   methodOverride = require("method-override"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
-  // passportLocalMongoose = require("passport-local-mongoose"),
   User = require("./models/user");
   
 // requring routes
@@ -44,9 +43,9 @@ app.use(
   })
 );
 
-
 app.use(passport.initialize());
 app.use(passport.session());
+
 // local-mongoose package
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());

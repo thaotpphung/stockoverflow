@@ -36,16 +36,13 @@ function makeOHLCChart(stockinfo) {
 
     // set the chart title
     chart.title("Stock Price of " + stockinfo.symbol);
-
     // set the titles of the axes
     // chart.xAxis().title("Date");
     chart.yAxis().title("Stock Price ($)");
-
     // set the container id
     // var chartName = 'chart' + stockinfo.symbol;
     var chartName = 'OHLCchart';
     chart.container(chartName);
-
     // initiate drawing the chart
     chart.draw();
 });
