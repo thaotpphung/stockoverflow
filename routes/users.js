@@ -1,107 +1,12 @@
 const express = require("express"),
   router = express.Router({ mergeParams: true }),
-  User = require("../models/user"),
-  middleware = require("../middleware");
+  middleware = require("../middleware"),
+  userController = require("../controller/user");
+  
+router.get("/", middleware.isLoggedIn, userController.showUserInfo);
+router.put("/modifyFirstName", middleware.checkCorrectUser, userController.modifyFirstName);
+router.put("/modifyLastName", middleware.checkCorrectUser, userController.modifyLastName);
+router.put("/modifyPassWord", middleware.checkCorrectUser, userController.modifyPassword);
+router.put("/modifyEmail", middleware.checkCorrectUser, userController.modifyEmail);
 
-router.get("/", middleware.isLoggedIn, (req, res) => {
-  User.findById(req.params.userid, (err, foundUser) => {
-    if (err || !foundUser) {
-      req.flash("error", "Something went wrong");
-      res.redirect("back");
-    } else {
-      res.render("users/show", { user: foundUser });
-    }
-  });
-});
-
-// USER EDIT ROUTE
-router.get("/edit", middleware.checkCorrectUser, (req, res) => {
-  User.findById(req.params.userid, (err, foundUser) => {
-    if (err || !foundUser) {
-      res.redirect("back");
-    } else {
-      res.render("users/edit");
-    }
-  });
-});
-
-// USER UPDATE
-router.put("/", middleware.checkCorrectUser, (req, res) => {
-  User.findById(req.params.userid, async (err, foundUser) => {
-    if (err || !foundUser) {
-      req.flash("error", "User not found");
-      res.redirect("back");
-    } else {
-      if (!req.body.newpassword) {  // if not change password
-        if (req.body.email != null) {
-          let user = await User.findOne({email: req.body.email});
-          if (user) {
-            req.flash("error", "Email already in used, please choose a different one.");
-            return res.redirect("back");
-          }
-        }
-
-        User.findByIdAndUpdate(req.params.userid, {$set: req.body}, (err, UpdatedUser) => {
-          if (err) {
-            req.flash("error", "There is an error, please try again");
-            res.redirect("back");
-          } else {
-            req.flash("success", "Successfully changed information");
-            res.redirect("back");
-          }
-        });
-      } else { // change password
-        if (req.body.newpassword !== req.body.confirmnewpassword){ // check password matches
-          req.flash("error", "New passwords do not match");
-          res.redirect("back"); 
-        } else {
-          User.findById(req.params.userid,(err, user) => {
-            // Check if error connecting
-            if (err) {
-              req.flash("error", "There is an error, please try again");
-              res.redirect("back"); 
-            } else {
-              // Check if user was found in database
-              if (!user) {
-                // Return error, user was not found in db
-                req.flash("error", "There is an error, please try again");
-                res.redirect("back"); 
-              } else {
-                user.changePassword(req.body.oldpassword, req.body.newpassword, function(err) {
-                  if(err) {
-                    if(err.name === 'IncorrectPasswordError'){
-                      req.flash("error", "Incorrect password");
-                      res.redirect("back"); 
-                    }else {
-                      req.flash("error", "There is an error, please try again");
-                      res.redirect("back"); 
-                    }
-                  } else {
-                    req.flash("success", "Your password has been changed successfully");
-                    res.redirect("back");
-                  }
-                })
-              }
-            }
-          });  
-        }
-      }
-    }
-  });
-});
-
-// eval(require("locus"));
-// username = req.body.username;
-// console.log('tontai', username);
-// User.findById(req.params.userid, (err, foundUser) =>  {
-//   console.log("found", foundUser.username);
-//   console.log('dung ko', foundUser.username === username);
-//   if (username && foundUser.username === username) {
-//     console.log("in here");
-//     req.flash("error", "Username already exists");
-//     res.redirect("back");
-//   } else {
-// console.log("not exist");
-//   }
-// });
 module.exports = router;

@@ -29,7 +29,7 @@
             </div>
 
             <div class="editForm display-none">
-              <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+              <form action="/users/<%= currentUser._id %>/modifyEmail?_method=PUT" method="POST">
                 <div class="row">
                     <div class="col-3"></div>
                     <div class="col-6 pl-5">
@@ -63,7 +63,7 @@
             </div>
 
             <div class="editForm display-none">
-              <form  action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+              <form  action="/users/<%= currentUser._id %>/modifyFirstName?_method=PUT" method="POST">
                 <div class="row">
                     <div class="col-3"></div>
                     <div class="col-6 pl-5">
@@ -96,7 +96,7 @@
               </div>
             </div>
             <div class="editForm display-none">
-              <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+              <form action="/users/<%= currentUser._id %>/modifyLastName?_method=PUT" method="POST">
               <div class="row">
                   <div class="col-3"></div>
                   <div class="col-6 pl-5">
@@ -122,7 +122,7 @@
 
       <!-- Password -->
 
-      <form action="/users/<%= currentUser._id %>?_method=PUT" method="POST">
+      <form action="/users/<%= currentUser._id %>/modifyPassword?_method=PUT" method="POST">
 
       <div class="card-container margin-top-2rem">
         <h1 class="header-black">PASSWORD</h1>

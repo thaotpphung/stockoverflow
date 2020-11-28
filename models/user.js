@@ -15,11 +15,8 @@ var UserSchema = new mongoose.Schema({
   ],
   alerts: [
     {
-      symbol: String,
-      name: String,
-      stockid: String,
-      alertPrice: Number,
-      currentPrice: Number
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Alert"
     }
   ],
   transactions: [

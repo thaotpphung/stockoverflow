@@ -5,16 +5,39 @@
     <div class="col-8 col-md-12 col-lg-10 col-xl-8 min-width-md">">
       <div class="card-container">
         <h1 class="header-black">NEW ALERT </i></h1>
-        <form action="/users/<%=currentUser._id%>/alerts/stocks/<%=alert.stockid%>" method="POST">
+        <form action="/users/<%=currentUser._id%>/alerts/" method="POST">
           <div class="form-row pt-3">
+            
             <div class="col-12">
               <div class="row">
                 <div class="col-3 card-row">Tick Symbol:</div>
                 <div class="col-7 ">
                   <input 
                     type="text"
+                    name=alert[symbol]
                     class="form-control"
-                    value = <%=alert.symbol%> 
+                    <% if(stock) { %>
+                      value = <%=stock.symbol%> 
+                    <% } %>
+                  />
+                </div>
+                <div class="col-1 button-container">
+                  <i onclick="togglePopup()" class="fas fa fa-search fa-lg vertical-middle"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="row">
+                <div class="col-3 card-row">Name:</div>
+                <div class="col-7 ">
+                  <input 
+                    type="text"
+                    name=alert[name]
+                    class="form-control"
+                    <% if(stock) { %>
+                      value = "<%=stock.name%>"
+                    <% } %>
                   />
                 </div>
               </div>
@@ -27,40 +50,81 @@
                   <input 
                     type="number"
                     class="form-control"
-                    name="alertPrice" 
+                    name="alert[price]" 
                     step="0.01"
                     min = 0
-                    <% if (alert.alertPrice != null) { %>
-                      placeholder=<%=alert.alertPrice%>
-                    <% } else {%>
-                      placeholder= 0.0
+                    <% if(stock) { %>
+                  <% console.log("hi", alert.alertPrice);%>
+                  <% console.log("alert ne ", alert);%>
+                      placeholder = "<%=alert.alertPrice%>"
                     <% } %>
                   />
                 </div>
               </div>
             </div>
 
+            <div class="d-none">
+              <input 
+                type="text"
+                name="alert[stockid] "
+                <% if(stock) { %>
+                  value = "<%=stock._id%>"
+                <% } %>
+              />
+            </div>
+
             <div class="col-12">
               <div class="row">
-                <div class="col-6"> </div>
+                <div class="col-8"> </div>
                 <div class="col-2 two-button-container pr-0 mr-0"">
                   <button class="btn green-button">
                     Confirm
                   </button>
                 </div>
         </form>
-        <form action="/users/<%=currentUser._id%>/alerts/stocks/<%=alert.stockid%>?_method=DELETE"method="POST">
-                <div class="col-2 two-button-container">
-                  <button class="btn btn-danger">
-                    Delete Alert
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
       </div>
     </div>
+  </div>
+</div>
+
+
+<div class="popup" id="popup-search-bar">
+  <div class="overlay">
+    <div class="fa fa-times" onclick="togglePopup()"></div>
+  </div>
+  <div class="content">
+    <input
+      id="searchKey"
+      class="form-control mb-0"
+      type="text"
+      name="stock[symbol]"
+      placeholder="Enter tick symbol"
+      required
+      autocomplete="off"
+    />
+    <div id="searchResult"></div>
+  </div>
+</div>
+
+<form class="d-none" id="addStockForm" action="/users/<%=currentUser._id%>/stocks" method="POST">
+  <input
+    id="stock-symbol"
+    type="text"
+    name="stock[symbol]"
+  />
+  <input
+    id="stock-page"
+    type="text"
+    value = "transaction"
+    name="stock[page]"
+  />
+</form>
+
+<div class="popup" id="pageload">
+  <div class="overlay"></div>
+  <div class="content">
+    <i class="fa-spin fa fa-spinner"></i>
+    <div>Processing request...</div>
   </div>
 </div>
 

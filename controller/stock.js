@@ -5,7 +5,7 @@ const Stock = require("../models/stock"),
   got = require("got");
 require("dotenv").config();
 
-exports.getStocks = (req, res, next) => {
+exports.getStocks = (req, res) => {
   User.findById(req.params.userid)
     .populate("trackedstocks")
     .exec((err, user) => {
@@ -37,7 +37,6 @@ exports.deleteStock = (req, res) => {
       const index = user.trackedstocks.indexOf(req.params.stockid);
       if (index > -1) {
         user.trackedstocks.splice(index, 1);
-        user.alerts.splice(index, 1);
         user.save();
       }
       req.flash("success", "Stock deleted");
@@ -99,11 +98,6 @@ async function addToTrackedStocks(
       if (newStock == null) {
         newStock = await Stock.findById(newStockId);
       }
-      user.alerts.push({
-        symbol: newStock.symbol,
-        name: newStock.name,
-        stockid: newStockId,
-      });
       await user.save();
       req.flash("success", "Successfully added stock");
       res.redirect("/users/" + req.params.userid + "/stocks");
