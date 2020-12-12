@@ -18,7 +18,7 @@ exports.getStocks = (req, res) => {
     });
 }
 
-exports.getStock = (req, res) => {
+exports.getStockById = (req, res) => {
   Stock.findById(req.params.stockid, (err, foundStock) => {
     if (err || !foundStock) {
       req.flash("error", "Stock not found");
@@ -29,7 +29,7 @@ exports.getStock = (req, res) => {
   });
 }
 
-exports.deleteStock = (req, res) => {
+exports.deleteStockById = (req, res) => {
   User.findById(req.params.userid, (err, user) => {
     if (err) {
       console.log(err);
@@ -45,7 +45,7 @@ exports.deleteStock = (req, res) => {
   });
 }
 
-exports.editStock = (req, res) => {
+exports.editStockById = (req, res) => {
   User.findById(req.params.userid, async (err, user) => {
     if (err) {
       console.log(err);
@@ -424,7 +424,7 @@ async function UpdateQuarterly() {
       getJSON(makeApiFinancialGrowthUrl(newStock.symbol)),
     ]);
     const profileData = results[0][0];
-    const keyMetricsData = results[1][0];
+    const keyMetricsDta = results[1][0];
     const financialGrowthData = results[2][0];
     setProfile(newStock, profileData);
     setKeyMetrics(newStock, keyMetricsData);

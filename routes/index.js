@@ -18,7 +18,6 @@ router.get("/", async (req, res) => {
 
 // get search route
 router.post("/search", middleware.isLoggedIn, (req, res) => {
-  console.log('search', req.body.symbol);
   StockSearch.find({ symbol: { $regex: req.body.symbol } }, (err, foundStock) => {
     if (foundStock.length > 0) {
       res.json({ foundStock });

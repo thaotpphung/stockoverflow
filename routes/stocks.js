@@ -4,9 +4,9 @@ const express = require("express"),
   middleware = require("../middleware");
 
 router.get("/", middleware.checkCorrectUser, stockController.getStocks);
-router.get("/:stockid", middleware.checkCorrectUser, stockController.getStock);
-router.delete("/:stockid", middleware.checkCorrectUser, stockController.deleteStock);
-router.put("/:stockid", middleware.checkCorrectUser, stockController.editStock);
+router.get("/:stockid", middleware.checkCorrectUser, stockController.getStockById);
+router.delete("/:stockid", middleware.checkCorrectUser, stockController.deleteStockById);
+router.put("/:stockid", middleware.checkCorrectUser, stockController.editStockById);
 router.post("/", middleware.checkCorrectUser, stockController.createStock);
 
 
