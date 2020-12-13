@@ -4,7 +4,7 @@ const express = require("express"),
   transactionController = require("../controller/transaction");
 
 router.get("/", middleware.checkCorrectUser, transactionController.getTransactions);
-router.get("/new/:stockid", middleware.checkCorrectUser, transactionController.showNewTransactionFormByStock);
+router.get("/new/:stocksymbol", middleware.checkCorrectUser, transactionController.showNewTransactionFormByStock);
 router.get("/new", middleware.checkCorrectUser, transactionController.showNewTransactionForm);
 router.post("/", middleware.checkCorrectUser, transactionController.postTransaction);
 

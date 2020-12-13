@@ -21,6 +21,9 @@
                     readonly="readonly" 
                   />
                 </div>
+                <div class="col-1 button-container">
+                  <i onclick="togglePopup()" class="fas fa fa-search fa-lg vertical-middle"></i>
+                </div>
               </div>
             </div>
 
@@ -42,7 +45,7 @@
               </div>
             </div>
 
-            <div class="d-none">
+            <!-- <div class="d-none">
               <input 
                 type="text"
                 class="transaction-stockid"
@@ -50,6 +53,15 @@
                 <% if(stock) { %>
                   value = "<%=stock._id%>"
                 <% } %>
+              />
+            </div> -->
+
+            <div class="d-none">
+              <input 
+                type="text"
+                class="transaction-userid"
+                name="transaction[userid]"
+                value = "<%=currentUser._id%>"
               />
             </div>
 
@@ -89,7 +101,7 @@
                     class="form-control transaction-time"
                     name="transaction[time]"
                     <% if(stock) { %>
-                      value = <%- new Date().toISOString().substring(0, 10); %> 
+                      value = <%=stock.history[0].date%> 
                     <% } %>
                     required
                   />
@@ -169,7 +181,7 @@
               </div>
             </div>
 
-            <div class="d-none">
+            <!-- <div class="d-none">
               <input 
                 type="text"
                 class="transaction-stockid"
@@ -177,6 +189,15 @@
                 <% if(stock) { %>
                   value = "<%=stock._id%>"
                 <% } %>
+              />
+            </div> -->
+
+            <div class="d-none">
+              <input 
+                type="text"
+                class="transaction-userid"
+                name="transaction[userid]"
+                value = "<%=currentUser._id%>"
               />
             </div>
 
@@ -256,6 +277,47 @@
           </div>
         </form>
       </div>
+  </div>
+</div>
+
+
+<div class="popup" id="popup-search-bar">
+  <div class="overlay">
+    <div class="fa fa-times" onclick="togglePopup()"></div>
+  </div>
+  <div class="content">
+    <input
+      id="searchKey"
+      class="form-control mb-0"
+      type="text"
+      name="stock[symbol]"
+      placeholder="Enter tick symbol"
+      required
+      autocomplete="off"
+    />
+    <div id="searchResult"></div>
+  </div>
+</div>
+
+<form class="d-none" id="addStockForm" action="/users/<%=currentUser._id%>/stocks" method="POST">
+  <input
+    id="stock-symbol"
+    type="text"
+    name="stock[symbol]"
+  />
+  <input
+    id="stock-page"
+    type="text"
+    value = "transaction"
+    name="stock[page]"
+  />
+</form>
+
+<div class="popup" id="pageload">
+  <div class="overlay"></div>
+  <div class="content">
+    <i class="fa-spin fa fa-spinner"></i>
+    <div>Processing request...</div>
   </div>
 </div>
 

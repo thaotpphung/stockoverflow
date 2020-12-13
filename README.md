@@ -130,4 +130,3 @@ This feature helps user keeping track of user's asset - which stocks user owns a
 
 ### Transaction History
 ![Alt text](screens/history.png?raw=true "Portfolio")
-

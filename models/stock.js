@@ -87,4 +87,8 @@ var StockSchema = new mongoose.Schema({
   }
 });
 
+// StockSchema.statics.getBySymbol = function getBySymbol(symbol, cb) {
+//   return this.find({symbol: new RegExp(symbol, 'i')}, cb);
+// }
+
 module.exports = mongoose.model("Stock", StockSchema);
