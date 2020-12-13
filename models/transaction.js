@@ -4,22 +4,16 @@ var transactionSchema = mongoose.Schema({
   userid: String,
   symbol: String,
   name: String,
-  // stockid: String,
-  // history: [  // transaction history of this stock
-  //   {
-  //     price: Number,
-  //     time: String,
-  //     quantity: Number,
-  //     transactiontype: String
-  //   }
-  // ],
-  price: Number,
-  time: String,
-  quantity: Number,
-  transactiontype: String,
+  history: [  // transaction history of this stock
+    {
+      price: Number,
+      time: String,
+      quantity: Number,
+      transactiontype: String
+    }
+  ],
   totalprice: {type: Number, default: 0},
   totalquantity: {type: Number, default: 0},
-  isNewest: {type: Boolean, default: true },
 });
 
 transactionSchema.statics.getAllByUserId = function (userid, cb) {
