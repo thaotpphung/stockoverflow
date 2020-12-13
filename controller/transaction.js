@@ -5,13 +5,11 @@ const User = require("../models/user"),
 exports.getTransactions = async (req, res) => {
   try {
     let allTransactions = await Transaction.find({userid: req.params.userid});
-    // console.log("all transaciton", allTransactions);
     let assets =  allTransactions.filter(transaction => transaction.isNewest == true);
     console.log("assets", assets);
-    // eval(require("locus"));
-
     res.render("transactions/index", {
       transactions: allTransactions,
+      assets: assets
     });
   } catch(err) {
     console.log(err);
@@ -23,7 +21,6 @@ exports.showNewTransactionFormByStock = async (req, res) => {
   try {
     let stock = await Stock.findOne({symbol: req.params.stocksymbol});
     let transactions = await Transaction.find({symbol: req.params.stocksymbol});
-    console.log('newest ', transactions[transactions.length - 1]);
     if (transactions.length === 0) {
       res.render("transactions/new", { stock: stock, transaction: {totalquantity: 0} });
     } else {
@@ -47,7 +44,6 @@ exports.postTransaction = async (req, res) => {
     if (oldTransactions.length === 0) { // if transaction of this stock already exists
       updateTotalByType (transaction, transaction, req.body.transaction, true);
     } else {  // not exist before 
-      console.log("exists");
       updateTotalByType (transaction, oldTransactions[oldTransactions.length - 1], req.body.transaction, false);
     }
     req.flash("success", "Successfully added transaction");
@@ -70,6 +66,7 @@ async function updateTotalByType(transaction, oldTransaction, transactionReq, is
     transaction.isNewest = true;
     oldTransaction.save();
   }
+  transaction.price = Math.round(transactionReq.price * 100);
   transaction.save();
   return;
 }
