@@ -45,7 +45,7 @@
               </div>
             </div>
 
-            <!-- <div class="d-none">
+            <div class="d-none">
               <input 
                 type="text"
                 class="transaction-stockid"
@@ -54,7 +54,7 @@
                   value = "<%=stock._id%>"
                 <% } %>
               />
-            </div> -->
+            </div>
 
             <div class="d-none">
               <input 
@@ -181,7 +181,7 @@
               </div>
             </div>
 
-            <!-- <div class="d-none">
+            <div class="d-none">
               <input 
                 type="text"
                 class="transaction-stockid"
@@ -190,7 +190,7 @@
                   value = "<%=stock._id%>"
                 <% } %>
               />
-            </div> -->
+            </div>
 
             <div class="d-none">
               <input 
@@ -299,7 +299,7 @@
   </div>
 </div>
 
-<form class="d-none" id="addStockForm" action="/users/<%=currentUser._id%>/stocks" method="POST">
+<form class="d-none" id="addStockForm" action="/users/<%=currentUser._id%>/subscriptions" method="POST">
   <input
     id="stock-symbol"
     type="text"

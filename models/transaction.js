@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 
 var transactionSchema = mongoose.Schema({
   userid: String,
+  stockid: String,
   symbol: String,
   name: String,
   price: Number,

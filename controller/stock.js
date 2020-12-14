@@ -1,153 +1,68 @@
 const Stock = require("../models/stock"),
-  User = require("../models/user"),
   StockSearch = require("../models/stocksearch"),
   StockMarket = require("../models/stockmarket"),
   got = require("got");
-require("dotenv").config();
+require("dotenv").config();// get detail of stock by stockid
 
-exports.getStocks = (req, res) => {
-  User.findById(req.params.userid)
-    .populate("trackedstocks")
-    .exec((err, user) => {
-      if (err) {
-        console.log(err);
-        res.redirect("/");
-      } else {
-        res.render("stocks/index", { stocks: user.trackedstocks });
-      }
-    });
-}
-
-exports.getStockById = (req, res) => {
-  Stock.findById(req.params.stockid, (err, foundStock) => {
-    if (err || !foundStock) {
-      req.flash("error", "Stock not found");
-      res.redirect("back");
-    } else {
-      res.render("stocks/show", { stock: foundStock });
-    }
-  });
-}
-
-exports.deleteStockById = (req, res) => {
-  User.findById(req.params.userid, (err, user) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const index = user.trackedstocks.indexOf(req.params.stockid);
-      if (index > -1) {
-        user.trackedstocks.splice(index, 1);
-        user.save();
-      }
-      req.flash("success", "Stock deleted");
-      res.redirect("/users/" + req.params.userid + "/stocks");
-    }
-  });
-}
-
-exports.editStockById = (req, res) => {
-  User.findById(req.params.userid, async (err, user) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const index = user.trackedstocks.indexOf(req.params.stockid);
-      addToTrackedStocks(user, index != -1, req.params.stockid, null, req, res);
-    }
-  });
-};
-
-exports.createStock = async (req, res) => {
-  const queryStock = req.body.stock.symbol;
-  const queryBody = req.body.stock;
-  var user = await User.findById(req.params.userid).populate("trackedstocks");
-  var newStock = await addToSharedStockDB(queryStock, queryBody);
-  if (queryBody.page === "transaction") {
-    // if the current page is the transaction page
-    res.render("transactions/new", {
-      stock: newStock,
-      transaction: { totalquantity: 0 },
-    });
-  } else {
-    // the current page is the tracked stocks page
-    addToTrackedStocks(
-      user,
-      existsInTrackedStocks(user.trackedstocks, queryStock),
-      newStock._id,
-      newStock,
-      req,
-      res
-    );
-  }
-}
-
-
-// add to tracked stocks if not already exists
-async function addToTrackedStocks(
-  user,
-  existsInTrackedStocks,
-  newStockId,
-  newStock,
-  req,
-  res
-) {
+exports.getStockById = async (req, res) => {
   try {
-    if (!existsInTrackedStocks) {
-      // if it's not in trackedstocks
-      user.trackedstocks.push(newStockId);
-      // if the stock is added from the add purchase route
-      if (newStock == null) {
-        newStock = await Stock.findById(newStockId);
-      }
-      await user.save();
-      req.flash("success", "Successfully added stock");
-      res.redirect("/users/" + req.params.userid + "/stocks");
-    } else {
-      // stock already in trackedstocks
-      req.flash("error", "Stock already exists");
-      res.redirect("/users/" + req.params.userid + "/stocks");
-    }
+    let stock = Stock.findOne({symbol: req.params.stockid})
+    res.render("stocks/show", { stock: stock });
   } catch (err) {
-    console.log("ERROR in addToTrackedStocks", err);
+    req.flash("error", "Stock not found");
+    res.redirect("back");
   }
 }
 
-
-// Checked if the query stock is in the tracked stock list by symbol
-// return true if already exists in user's tracked stock
-//        false if not exists in user's tracked stock
-function existsInTrackedStocks(trackedstocks, queryStock) {
-  let counter = 0;
-  trackedstocks.forEach((aStock) => {
-    if (aStock.symbol == queryStock) {
-      return;
-    }
-    counter++;
-  });
-  // go through and not find => not exist => return false
-  return counter === trackedstocks.length ? false : true;
+// add stock when finding purchase or when
+exports.addStock = async (req, res) => {
+  try {
+    this.addStockHelper(req.body, req.body.stock.symbol);
+    req.flash("success", "Successfully made action");
+    res.redirect("/users/" + req.params.userid + "/transactions");
+  } catch (err) {
+    req.flash("error", "Error occured, please try again");
+    res.redirect("back");
+  }
 }
 
-/* 
-  Check if stock is in shared db 
-    return foundstock if already exists
-    return newly created stock if not 
-*/
-async function addToSharedStockDB(queryStock, queryBody) {
+exports.addStockHelper = async (queryBody, queryStock) => {
   try {
-    var newstock;
-    const foundStock = await Stock.findOne({ symbol: queryStock });
-    if (foundStock) {
-      // if found the stock, return it
-      newstock = foundStock;
-    } else {
-      // if not, create the stock
-      newstock = await createNewStock(queryBody, queryStock);
-    }
-    return newstock;
+    const timeSeries = await getJSON(makeApiTimeSeriesUrl(queryStock));
+    const timeSeriesData = timeSeries["historical"];
+    const keyMetrics = await getJSON(makeApiKeyMetricsUrl(queryStock));
+    const keyMetricsData = keyMetrics[0];
+    const profile = await getJSON(makeApiProfileUrl(queryStock));
+    const profileData = profile[0];
+    const rating =  await getJSON(makeApiRatingUrl(queryStock));
+    const ratingData  = rating[0];
+    const financialGrowth = await getJSON(makeApiFinancialGrowthUrl(queryStock));
+    const financialGrowthData = financialGrowth[0];
+
+    // console.log("key metric ", keyMetricsData);
+    // console.log("------------");
+    // console.log("profile", profileData);
+    // console.log("------------");
+    // console.log("rating ", ratingData);
+    // console.log("------------");
+    // console.log("financial growth ", financialGrowthData);
+    // console.log("------------")
+    var newStock = await Stock.create(queryBody);
+    await setHistory(newStock, timeSeriesData);
+    setKeyMetrics(newStock, keyMetricsData);
+    setProfile(newStock, profileData);
+    setRating(newStock, ratingData);
+    setFinancialGrowth(newStock, financialGrowthData);
+    const foundSearchStock = await StockSearch.findOne({ symbol: queryStock }); // get new stock's company name
+    newStock.name = foundSearchStock.name.replace(/'/g, "%27");
+    console.log("created this stock: ", newStock.name);
+    newStock.save();
+    return newStock;
   } catch (err) {
     console.log(err);
   }
 }
+
 
 const urlHead = "https://financialmodelingprep.com/api/v3/";
 const apiKey = "?apikey=" + process.env.STOCK_API_KEY;
@@ -193,48 +108,6 @@ function makeApiFinancialGrowthUrl(queryStock) {
   const apiFinancialGrowthUrl =
     urlHead + financialGrowth + queryStock + apiKey + quarterPeriod + limitOne;
   return apiFinancialGrowthUrl;
-}
-
-// Create new stock
-async function createNewStock(queryBody, queryStock) {
-  try {
-    const timeSeries = await getJSON(makeApiTimeSeriesUrl(queryStock));
-    const timeSeriesData = timeSeries["historical"];
-    const keyMetrics = await getJSON(makeApiKeyMetricsUrl(queryStock));
-    const keyMetricsData = keyMetrics[0];
-    const profile = await getJSON(makeApiProfileUrl(queryStock));
-    const profileData = profile[0];
-    const rating =  await getJSON(makeApiRatingUrl(queryStock));
-    const ratingData  = rating[0];
-    const financialGrowth = await getJSON(makeApiFinancialGrowthUrl(queryStock));
-    const financialGrowthData = financialGrowth[0];
-
-    // console.log("key metric ", keyMetricsData);
-    // console.log("------------");
-    // console.log("profile", profileData);
-    // console.log("------------");
-    // console.log("rating ", ratingData);
-    // console.log("------------");
-    // console.log("financial growth ", financialGrowthData);
-    // console.log("------------")
-
-    var newStock = await Stock.create(queryBody);
-
-    await setHistory(newStock, timeSeriesData);
-    setKeyMetrics(newStock, keyMetricsData);
-    setProfile(newStock, profileData);
-    setRating(newStock, ratingData);
-    setFinancialGrowth(newStock, financialGrowthData);
-
-
-    const foundSearchStock = await StockSearch.findOne({ symbol: queryStock }); // get new stock's company name
-    newStock.name = foundSearchStock.name.replace(/'/g, "%27");
-    console.log("created this stock: ", newStock.name);
-    newStock.save();
-    return newStock;
-  } catch (err) {
-    console.log(err);
-  }
 }
 
 async function setHistory(newStock, timeSeriesData) {
@@ -505,6 +378,3 @@ async function UpdateStockMarket() {
 }
 
 // setInterval(UpdateStockMarket, 10000);
-
-
-

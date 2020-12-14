@@ -19,8 +19,8 @@ exports.getTransactions = async (req, res) => {
 
 exports.showNewTransactionFormByStock = async (req, res) => {
   try {
-    let stock = await Stock.findOne({symbol: req.params.stocksymbol});
-    let transactions = await Transaction.find({symbol: req.params.stocksymbol});
+    let stock = await Stock.findOne({stockid: req.params.stockid});
+    let transactions = await Transaction.find({stockid: req.params.stockid});
     if (transactions.length === 0) {
       res.render("transactions/new", { stock: stock, transaction: {totalquantity: 0} });
     } else {

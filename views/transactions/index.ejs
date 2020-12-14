@@ -43,8 +43,15 @@
                 <i class="fa fa-eye"></i>
               </span>
               <form class="d-none"
-                action="/users/<%=currentUser._id%>/stocks/<%=stock.symbol%>?_method=PUT"
+                action="/users/<%=currentUser._id%>/subscriptions/new<%=stock.stockid%>?_method=PUT"
                 method="POST">
+                <input 
+                type="text"
+                name="transaction[stockid]"
+                <% if(stock) { %>
+                  value = "<%=stock._id%>"
+                <% } %>
+              />
                 <button type="submit" id="addToTrackedButton"></button>
               </form>
               <%=stock.name%>
@@ -55,7 +62,7 @@
           <td>
             <%=stock.totalquantity%>
             <span class="d-none">
-              <a href="/users/<%=currentUser._id%>/stocks/<%=stock.symbol%>">
+              <a href="/users/<%=currentUser._id%>/stocks/<%=stock.stockid%>">
                 <i class="fa-info"></i>
               </a>
             </span>
@@ -99,7 +106,7 @@
             class="positive" >
             +<% } %><%=Math.floor((transaction.quantity*transaction.price)/100)%>.<%=(transaction.quantity*transaction.price)%100%>
             <span class="d-none">
-              <a href="/users/<%=currentUser._id%>/stocks/<%=transaction.symbol%>">
+              <a href="/users/<%=currentUser._id%>/stocks/<%=transaction.stockid%>">
                 <i class="fa-info"></i>
               </a>
             </span>
