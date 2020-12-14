@@ -6,6 +6,7 @@ var subscriptionSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Stock"
   },
+  stockid: String
 });
 
 module.exports = mongoose.model("Subscription", subscriptionSchema);

@@ -18,12 +18,8 @@ exports.getSubscriptions = async (req, res) => {
 // delete subsciption
 exports.deleteSubscription = async (req, res) => {
   try {
-    Subscription.deleteOne(
-      {
-        userid: req.params.userid, 
-        stock: ObjectId('', req.params.stockid, '')
-      }
-    );
+    console.log("stockid ", req.params.stockid);
+    await Subscription.deleteOne({userid: req.params.userid} , {stockid: req.params.stockid});
     req.flash("success", "Stock deleted");
     res.redirect("/users/" + req.params.userid + "/subscriptions");
   } catch (err) {
@@ -40,7 +36,8 @@ exports.addSubscription = async (req, res) => {
     } 
     Subscription.create ({
       userid: req.params.userid, 
-      stock: stock._id
+      stock: stock._id,
+      stockid: stock._id
     });
     req.flash("success", "Successfully made action!");
     res.redirect("/users/" + req.params.userid + "/subscriptions");

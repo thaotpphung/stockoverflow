@@ -31,7 +31,7 @@
               <span class="delete"> 
                 <i class="fa fa-trash"></i> 
               </span> 
-              <form class="d-none" action="users/<%=currentUser._id%>/?_method=DELETE"method="POST">
+              <form class="d-none" action="/users/<%=currentUser._id%>/subscriptions/<%=subscription.stock._id%> ?_method=DELETE"method="POST">
                 <button type="submit" class="d-none" id="deleteButton"></button>
               </form>
               <%=decodeURI(subscription.stock.name)%>
