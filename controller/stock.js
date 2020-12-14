@@ -6,7 +6,7 @@ require("dotenv").config();// get detail of stock by stockid
 
 exports.getStockById = async (req, res) => {
   try {
-    let stock = Stock.findOne({symbol: req.params.stockid})
+    let stock = await Stock.findById(req.params.stockid);
     res.render("stocks/show", { stock: stock });
   } catch (err) {
     req.flash("error", "Stock not found");
@@ -17,7 +17,7 @@ exports.getStockById = async (req, res) => {
 // add stock when finding purchase or when
 exports.addStock = async (req, res) => {
   try {
-    this.addStockHelper(req.body, req.body.stock.symbol);
+    await this.addStockHelper(req.body.stock.symbol);
     req.flash("success", "Successfully made action");
     res.redirect("/users/" + req.params.userid + "/transactions");
   } catch (err) {
@@ -26,34 +26,25 @@ exports.addStock = async (req, res) => {
   }
 }
 
-exports.addStockHelper = async (queryBody, queryStock) => {
+exports.addStockHelper = async (symbol) => {
   try {
-    const timeSeries = await getJSON(makeApiTimeSeriesUrl(queryStock));
+    const timeSeries = await getJSON(makeApiTimeSeriesUrl(symbol));
     const timeSeriesData = timeSeries["historical"];
-    const keyMetrics = await getJSON(makeApiKeyMetricsUrl(queryStock));
+    const keyMetrics = await getJSON(makeApiKeyMetricsUrl(symbol));
     const keyMetricsData = keyMetrics[0];
-    const profile = await getJSON(makeApiProfileUrl(queryStock));
+    const profile = await getJSON(makeApiProfileUrl(symbol));
     const profileData = profile[0];
-    const rating =  await getJSON(makeApiRatingUrl(queryStock));
+    const rating =  await getJSON(makeApiRatingUrl(symbol));
     const ratingData  = rating[0];
-    const financialGrowth = await getJSON(makeApiFinancialGrowthUrl(queryStock));
+    const financialGrowth = await getJSON(makeApiFinancialGrowthUrl(symbol));
     const financialGrowthData = financialGrowth[0];
-
-    // console.log("key metric ", keyMetricsData);
-    // console.log("------------");
-    // console.log("profile", profileData);
-    // console.log("------------");
-    // console.log("rating ", ratingData);
-    // console.log("------------");
-    // console.log("financial growth ", financialGrowthData);
-    // console.log("------------")
-    var newStock = await Stock.create(queryBody);
+    let newStock = await Stock.create({symbol: symbol});
     await setHistory(newStock, timeSeriesData);
     setKeyMetrics(newStock, keyMetricsData);
     setProfile(newStock, profileData);
     setRating(newStock, ratingData);
     setFinancialGrowth(newStock, financialGrowthData);
-    const foundSearchStock = await StockSearch.findOne({ symbol: queryStock }); // get new stock's company name
+    const foundSearchStock = await StockSearch.findOne({ symbol: symbol }); // get new stock's company name
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
     console.log("created this stock: ", newStock.name);
     newStock.save();
@@ -62,7 +53,6 @@ exports.addStockHelper = async (queryBody, queryStock) => {
     console.log(err);
   }
 }
-
 
 const urlHead = "https://financialmodelingprep.com/api/v3/";
 const apiKey = "?apikey=" + process.env.STOCK_API_KEY;
@@ -76,37 +66,37 @@ async function getJSON(url) {
 }
 
 // make API urls
-function makeApiTimeSeriesUrl(queryStock) {
+function makeApiTimeSeriesUrl(symbol) {
   const timeSeries = "historical-price-full/";
   const timeSeriesCount = "&timeseries=30";
   const apiTimeSeriesUrl =
-    urlHead + timeSeries + queryStock + apiKey + timeSeriesCount;
+    urlHead + timeSeries + symbol + apiKey + timeSeriesCount;
   return apiTimeSeriesUrl;
 }
 
-function makeApiRatingUrl(queryStock) {
+function makeApiRatingUrl(symbol) {
   const rating = "rating/";
-  const apiRatingUrl = urlHead + rating + queryStock + apiKey;
+  const apiRatingUrl = urlHead + rating + symbol + apiKey;
   return apiRatingUrl;
 }
 
-function makeApiProfileUrl(queryStock) {
+function makeApiProfileUrl(symbol) {
   const profile = "profile/";
-  const apiProfileUrl = urlHead + profile + queryStock + apiKey;
+  const apiProfileUrl = urlHead + profile + symbol + apiKey;
   return apiProfileUrl;
 }
 
-function makeApiKeyMetricsUrl(queryStock) {
+function makeApiKeyMetricsUrl(symbol) {
   const keyMetrics = "key-metrics/";
   const apikeyMetricsUrl =
-    urlHead + keyMetrics + queryStock + apiKey + quarterPeriod + limitOne;
+    urlHead + keyMetrics + symbol + apiKey + quarterPeriod + limitOne;
   return apikeyMetricsUrl;
 }
 
-function makeApiFinancialGrowthUrl(queryStock) {
+function makeApiFinancialGrowthUrl(symbol) {
   const financialGrowth = "financial-growth/";
   const apiFinancialGrowthUrl =
-    urlHead + financialGrowth + queryStock + apiKey + quarterPeriod + limitOne;
+    urlHead + financialGrowth + symbol + apiKey + quarterPeriod + limitOne;
   return apiFinancialGrowthUrl;
 }
 
@@ -159,8 +149,6 @@ async function setProfile(newStock, profileData) {
 }
 
 async function setKeyMetrics(newStock, keyMetricsData) {
-  // return new Promise((resolve, reject) => {
-  // update key metrics data
   if (keyMetricsData != null) {
     const newKeyMetricsData = {
       date: keyMetricsData["date"],
@@ -182,14 +170,10 @@ async function setKeyMetrics(newStock, keyMetricsData) {
       roe: formatNum(keyMetricsData["roe"]), // return on equity
     };
     newStock.keymetrics = newKeyMetricsData;
-    // resolve();
   }
-  // });
 }
 
 function setFinancialGrowth(newStock, financialGrowthData) {
-  // return new Promise((resolve, reject) => {
-  // update financial growth data
   if (financialGrowthData != null) {
     const newFinancialGrowthData = {
       date: financialGrowthData["date"], //"2019-09-28",
@@ -211,14 +195,10 @@ function setFinancialGrowth(newStock, financialGrowthData) {
       assetGrowth: formatNum(financialGrowthData["assetGrowth"]),
     };
     newStock.financialgrowth = newFinancialGrowthData;
-    // resolve();
   }
-  // });
 }
 
 function setRating(newStock, ratingData) {
-  // return new Promise((resolve, reject) => {
-  // update rating data
   if (ratingData != null) {
     const newRatingData = {
       date: ratingData["date"], //"2020-07-17",
@@ -253,9 +233,7 @@ function setRating(newStock, ratingData) {
       ],
     };
     newStock.rating = newRatingData;
-    // resolve();
   }
-  // });
 }
 
 function formatNum(number) {
