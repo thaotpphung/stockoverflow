@@ -32,14 +32,20 @@ exports.addSubscription = async (req, res) => {
     let stock = await Stock.findOne({symbol: req.body.stock.symbol});
     if (stock == null) {
       stock = await stockController.addStockHelper(req.body.stock.symbol);
-    } 
-    Subscription.create ({
-      userid: req.params.userid, 
-      stock: stock._id,
-      stockid: stock._id
-    });
-    req.flash("success", "Successfully made action!");
-    res.redirect("/users/" + req.params.userid + "/subscriptions");
+    }
+    let subscription = await Subscription.findOne({symbol: req.body.stock.symbol});
+    if (subscription == null) {
+      await Subscription.create ({
+        userid: req.params.userid, 
+        stock: stock._id,
+        stockid: stock._id
+      });
+      req.flash("success", "Successfully made action!");
+      res.redirect("/users/" + req.params.userid + "/subscriptions");
+    } else {
+      req.flash("error", "Stock already exists");
+      res.redirect("/users/" + req.params.userid + "/subscriptions");
+    }
   } catch (err) {
     console.log(err);
   }

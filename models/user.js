@@ -7,24 +7,6 @@ var UserSchema = new mongoose.Schema({
   firstname: String,
   lastname: String,
   email: {type: String, unique: true, required: true},
-  trackedstocks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Stock"
-    }
-  ],
-  alerts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Alert"
-    }
-  ],
-  transactions: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Transaction",
-    }
-  ],
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 }); 

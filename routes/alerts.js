@@ -8,4 +8,6 @@ router.get("/new/:stockid", middleware.checkCorrectUser, alertController.getNewA
 router.post("/", middleware.checkCorrectUser, alertController.postAlert);
 router.delete("/:stockid", middleware.checkCorrectUser, alertController.deleteAlert);
 
+// router.get("/new", middleware.checkCorrectUser, transactionController.showNewTransactionForm);
+
 module.exports = router;

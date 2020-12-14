@@ -6,7 +6,6 @@ exports.getTransactions = async (req, res) => {
   try {
     let allTransactions = await Transaction.find({userid: req.params.userid});
     let assets =  allTransactions.filter(transaction => transaction.isNewest == true);
-    console.log("assets", assets);
     res.render("transactions/index", {
       transactions: allTransactions,
       assets: assets
@@ -19,12 +18,12 @@ exports.getTransactions = async (req, res) => {
 
 exports.showNewTransactionFormByStock = async (req, res) => {
   try {
-    let stock = await Stock.findOne({stockid: req.params.stockid});
-    let transactions = await Transaction.find({stockid: req.params.stockid});
+    let stock = await Stock.findById(req.params.stockid);
+    let transactions = await Transaction.find({userid: req.params.userid, stockid: req.params.stockid});
     if (transactions.length === 0) {
       res.render("transactions/new", { stock: stock, transaction: {totalquantity: 0} });
     } else {
-      res.render("transactions/new", { stock: stock, transaction: transactions[transactions.length - 1] });
+      res.render("transactions/new", { stock: stock, transaction: transactions[transactions.length - 1]});
     }
   } catch (err) {
     console.log(err);
@@ -34,18 +33,20 @@ exports.showNewTransactionFormByStock = async (req, res) => {
 }
 
 exports.showNewTransactionForm = (req, res) => {
-  res.render("transactions/new" , {stock: null});
+  res.render("transactions/new" , {stock: null, transaction: {totalquantity: 0}});
 }
 
-exports.postTransaction = async (req, res) => {
+exports.addTransaction = async (req, res) => {
   try {
     let oldTransactions = await Transaction.find({symbol: req.body.transaction.symbol});
-    let transaction = await Transaction.create(req.body.transaction);
-    if (oldTransactions.length === 0) { // if transaction of this stock already exists
-      updateTotalByType (transaction, transaction, req.body.transaction, true);
-    } else {  // not exist before 
-      updateTotalByType (transaction, oldTransactions[oldTransactions.length - 1], req.body.transaction, false);
-    }
+    let oldTransaction = oldTransactions[oldTransactions.length - 1];
+    let newTransaction = await Transaction.create(req.body.transaction);
+    let isFirstTransaction = false;
+    if (oldTransactions.length === 0) { // if transaction of this stock not exists
+      oldTransaction = newTransaction;
+      isFirstTransaction = true;
+    } 
+    updateTotalByType (newTransaction, oldTransaction, req.body.transaction, isFirstTransaction);
     req.flash("success", "Successfully added transaction");
     res.redirect("/users/" + req.body.transaction.userid + "/transactions");
   } catch (err) {
@@ -53,15 +54,16 @@ exports.postTransaction = async (req, res) => {
   }
 }
 
-async function updateTotalByType(transaction, oldTransaction, transactionReq, isFirst) {
+async function updateTotalByType(transaction, oldTransaction, transactionReq, isFirstTransaction) {
+  const {price, quantity} = transactionReq;
   if (transactionReq.type === "Purchase") {
-    transaction.totalprice = oldTransaction.totalprice + (Math.round(transactionReq.price * 100 * transactionReq.quantity)) ;
-    transaction.totalquantity = oldTransaction.totalquantity +  parseInt(transactionReq.quantity);
+    transaction.totalprice = oldTransaction.totalprice + (Math.round(price * 100 * quantity)) ;
+    transaction.totalquantity = oldTransaction.totalquantity +  parseInt(quantity);
   } else {
-    transaction.totalprice = oldTransaction.totalprice - (Math.round(transactionReq.price * 100 * transactionReq.quantity));
-    transaction.totalquantity = oldTransaction.totalquantity - parseInt(transactionReq.quantity);
+    transaction.totalprice = oldTransaction.totalprice - (Math.round(price * 100 * quantity));
+    transaction.totalquantity = oldTransaction.totalquantity - parseInt(quantity);
   }
-  if (!isFirst) {
+  if (!isFirstTransaction) {
     oldTransaction.isNewest = false;
     transaction.isNewest = true;
     oldTransaction.save();

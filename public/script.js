@@ -124,6 +124,7 @@ $searchResult.delegate("div", "click", async function (event) {
   if (!($searchResult.html().includes("notfound-mes"))) {
     // if in the transaction stock page
     if ($("#tickSymbolDiv").html()) {
+      console.log("in transaction page");
       let searchVal = $("#searchKey").val();
       let url = website + "getStock";
       let foundStock = await makeHttpRequest(url, searchVal);
@@ -144,6 +145,7 @@ $searchResult.delegate("div", "click", async function (event) {
       }
     // else in the add page, submit the form
     } else { 
+      console.log("in other page")
       $("#searchKey").val($("#searchKey").val().toUpperCase()); 
       $("#searchStockForm").submit();
     }

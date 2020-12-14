@@ -43,13 +43,13 @@
                 <i class="fa fa-eye"></i>
               </span>
               <form class="d-none"
-                action="/users/<%=currentUser._id%>/subscriptions/new<%=stock.stockid%>?_method=PUT"
+                action="/users/<%=currentUser._id%>/subscriptions/"
                 method="POST">
                 <input 
                 type="text"
-                name="transaction[stockid]"
+                name="stock[symbol]"
                 <% if(stock) { %>
-                  value = "<%=stock._id%>"
+                  value = "<%=stock.symbol%>"
                 <% } %>
               />
                 <button type="submit" id="addToTrackedButton"></button>

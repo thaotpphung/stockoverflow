@@ -13,15 +13,16 @@ exports.getStockById = async (req, res) => {
     res.redirect("back");
   }
 }
-
-// add stock when finding purchase or when
+// add stock when finding purchase 
 exports.addStock = async (req, res) => {
   try {
-    await this.addStockHelper(req.body.stock.symbol);
-    req.flash("success", "Successfully made action");
-    res.redirect("/users/" + req.params.userid + "/transactions");
+    let newStock = await this.addStockHelper(req.body.stock.symbol);
+    res.render("transactions/new", {
+      stock: newStock,
+      transaction: { totalquantity: 0 },
+    });
   } catch (err) {
-    req.flash("error", "Error occured, please try again");
+    console.log(err);
     res.redirect("back");
   }
 }
