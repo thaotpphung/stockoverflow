@@ -13,8 +13,8 @@ exports.getAlerts = async (req, res) => {
 
 exports.getNewAlertForm = async (req, res) => {
   try {
-    let stock = await Stock.findOne({stockid: req.params.stockid});
-    let alert = await Alert.findOne({stockid: req.params.stockid});
+    let stock = await Stock.findById(req.params.stockid);
+    let alert = await Alert.findOne({userid: req.params.userid, stockid: req.params.stockid});
     if (alert == null) {
       res.render("alerts/new", { stock: stock, alert: {alertPrice: 0.0} });
     } else {
@@ -29,18 +29,16 @@ exports.getNewAlertForm = async (req, res) => {
 
 exports.postAlert =  async (req, res) => {
   try {
-    let alert = await Alert.findOne({symbol: req.body.alert.symbol, userid : user._id});
+    let alert = await Alert.findOne({symbol: req.body.alert.symbol, userid : req.params.userid});
     if (!alert) {  // if alert of this stock has not been made b4
       let alert =  await Alert.create(req.body.alert);
-      console.log("new alert object", alert);
-      console.log("-----------")
       req.flash("success", "Successfully added alert");
-      res.redirect("/users/" + user._id + "/alerts");
+      res.redirect("/users/" + req.params.userid + "/alerts");
     } else {
-      alert.alertPrice = req.body.alert.price;
+      alert.alertPrice = req.body.alert.alertPrice;
       alert.save();
       req.flash("success", "Successfully added alert");
-      res.redirect("/users/" + user._id + "/alerts");
+      res.redirect("/users/" + req.params.userid + "/alerts");
     }
   } catch (err) {
     console.log(err);
@@ -49,9 +47,9 @@ exports.postAlert =  async (req, res) => {
   }
 }
 
-exports.deleteAlert = (req, res) => {
+exports.deleteAlert = async (req, res) => {
   try {
-    Alert.deleteOne({stockid: req.params.stockid});
+    await Alert.deleteOne({userid: req.params.userid},{stockid: req.params.stockid});
     req.flash("success", "Successfully deleted alert");
     res.redirect("/users/" + req.params.userid + "/alerts");
   } catch (err) {

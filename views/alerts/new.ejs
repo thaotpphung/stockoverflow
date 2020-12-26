@@ -7,7 +7,6 @@
         <h1 class="header-black">NEW ALERT </i></h1>
         <form action="/users/<%=currentUser._id%>/alerts/" method="POST">
           <div class="form-row pt-3">
-            
             <div class="col-12">
               <div class="row">
                 <div class="col-3 card-row">Tick Symbol:</div>
@@ -50,12 +49,10 @@
                   <input 
                     type="number"
                     class="form-control"
-                    name="alert[price]" 
+                    name="alert[alertPrice]" 
                     step="0.01"
                     min = 0
                     <% if(stock) { %>
-                  <% console.log("hi", alert.alertPrice);%>
-                  <% console.log("alert ne ", alert);%>
                       placeholder = "<%=alert.alertPrice%>"
                     <% } %>
                   />
@@ -69,6 +66,16 @@
                 name="alert[stockid] "
                 <% if(stock) { %>
                   value = "<%=stock._id%>"
+                <% } %>
+              />
+            </div>
+
+            <div class="d-none">
+              <input 
+                type="text"
+                name="alert[userid] "
+                <% if(stock) { %>
+                  value = "<%=currentUser._id%>"
                 <% } %>
               />
             </div>

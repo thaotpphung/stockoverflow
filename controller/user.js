@@ -190,7 +190,7 @@ exports.resetPassword = async function(req, res) {
         });
       } catch (error) {
         console.log(error);
-        req.flash('error', 'Sorry, something went wrong, please contact admin@website.com');
+        req.flash('error', 'Sorry, something went wrong, please contact stockoverflow.stockapp@gmail');
         return res.redirect('back');
       }
     } else {
@@ -203,7 +203,6 @@ exports.resetPassword = async function(req, res) {
 		return res.redirect('/forgot');
 	}	
 }
-
 
 exports.showUserInfo = (req, res) => {
   User.findById(req.params.userid, (err, foundUser) => {
