@@ -70,7 +70,7 @@ passport.use('google', new GoogleStrategy({
           firstname: profile.given_name,
           lastname: profile.family_name,
           email: profile.emails[0].value,
-          // username: profile.username,
+          username: profile.emails[0].value,
           googleid: profile.id
         }); 
         user.save(function(err) {
