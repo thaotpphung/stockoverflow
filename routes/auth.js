@@ -3,24 +3,18 @@ const express = require("express"),
   passport = require("passport"),
   userController = require("../controller/user");
   
-require("dotenv").config();
-
 router.get("/register", userController.showRegisterForm);
 router.post("/register", userController.createUser);
 router.get("/login", userController.showLoginForm);
-
-
 router.get('/login/google',
   passport.authenticate('google', { scope:
       [ 'email', 'profile' ] }
 ));
-
 router.get( '/login/google/callback',
     passport.authenticate( 'google', {
         successRedirect: '/',
         failureRedirect: '/login'
 }));
-
 router.post("/login", passport.authenticate("local", {
   failureRedirect: "/login",
   failureFlash: true,
@@ -28,7 +22,6 @@ router.post("/login", passport.authenticate("local", {
   successRedirect: "/",
   successFlash: 'Successfully logged in!'
 }));
-
 router.get("/logout", userController.logout);
 router.get("/forgot", userController.showForgotPasswordForm);
 router.post('/forgot', userController.sendResetPasswordEmail);

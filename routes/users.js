@@ -4,9 +4,9 @@ const express = require("express"),
   userController = require("../controller/user");
   
 router.get("/", middleware.isLoggedIn, userController.showUserInfo);
-router.put("/modifyFirstName", middleware.checkCorrectUser, userController.modifyFirstName);
-router.put("/modifyLastName", middleware.checkCorrectUser, userController.modifyLastName);
-router.put("/modifyPassWord", middleware.checkCorrectUser, userController.modifyPassword);
-router.put("/modifyEmail", middleware.checkCorrectUser, userController.modifyEmail);
+router.put("/edit/basic", middleware.checkCorrectUser, userController.modifyBasicInfo);
+router.put("/edit/password", middleware.checkCorrectUser, userController.modifyPassword);
+router.put("/edit/email", middleware.checkCorrectUser, userController.modifyEmail);
+router.put("/edit/username", middleware.checkCorrectUser, userController.modifyUsername);
 
 module.exports = router;

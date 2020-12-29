@@ -56,7 +56,7 @@ app.use(passport.session());
 passport.use('google', new GoogleStrategy({
   clientID:     process.env.GOOGLE_ID,
   clientSecret: process.env.GOOGLE_SECRET,
-  callbackURL: process.env.GOOGLE_CALLBACK,
+  callbackURL: process.env.GOOGLE_CALLBACK_LOCAL,
   passReqToCallback   : true
 }, function(request, accessToken, refreshToken, profile, done) {
     User.findOne( {googleid: profile.id } , function(err, user) {

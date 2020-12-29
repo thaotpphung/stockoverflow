@@ -1,7 +1,124 @@
 const passport = require("passport"),
-  crypto = require("crypto"),
   User = require("../models/user");
+const user = require("../models/user");
 require("dotenv").config();
+
+/**
+ * Show user information by user's ID
+ * @param {} req 
+ * @param {*} res 
+ */
+exports.showUserInfo = (req, res) => {
+  User.findById(req.params.userid, (err, foundUser) => {
+    if (err || !foundUser) {
+      req.flash("error", "Something went wrong");
+      res.redirect("back");
+    } else {
+      res.render("users/show", { user: foundUser });
+    }
+  });
+}
+
+/**
+ * Modify user's basic information such as first name and last name
+ * @param {} req 
+ * @param {*} res 
+ */
+exports.modifyBasicInfo = (req, res) => {
+  User.findById(req.params.userid, async (err, foundUser) => {
+    if (err || !foundUser) {
+      req.flash("error", "User not found");
+      res.redirect("back");
+    } else {
+      changeInfo(req, res);
+    }
+  });
+}
+
+/**
+ * Modify user's password
+ * @param {} req 
+ * @param {*} res 
+ */
+exports.modifyPassword = (req, res) => {
+  User.findById(req.params.userid, async (err, foundUser) => {
+    if (err || !foundUser) {
+      req.flash("error", "User not found");
+      res.redirect("back");
+    } else {
+      if (req.body.newpassword !== req.body.confirmnewpassword) {
+        // check password matches
+        req.flash("error", "New passwords do not match");
+        res.redirect("back");
+      } else {
+        user.changePassword(
+          req.body.oldpassword,
+          req.body.newpassword,
+          function (err) {
+            if (err) {
+              if (err.name === "IncorrectPasswordError") {
+                req.flash("error", "Incorrect password");
+                res.redirect("back");
+              } else {
+                req.flash("error", "There is an error, please try again");
+                res.redirect("back");
+              }
+            } else {
+              req.flash(
+                "success",
+                "Your password has been changed successfully"
+              );
+              res.redirect("back");
+            }
+          }
+        );
+      }
+    }
+  });
+}
+
+
+exports.modifyEmail =  (req, res) => {
+  User.findOne({ email: req.body.email }, (err, foundUser) => {
+    if (foundUser) {
+      req.flash(
+        "error",
+        `The email $req.body.email$ is already in used, please choose a different one.`
+      );
+      return res.redirect("back");
+    }
+    changeInfo(req, res);
+  });
+}
+
+exports.modifyUsername = (req, res) => {
+  User.findOne({ username: req.body.username }, (err, foundUser) => {
+    if (foundUser) {
+      req.flash(
+        "error",
+        `The sername $req.body.username$ is already in used, please choose a different one.`
+      );
+      return res.redirect("back");
+    }
+    changeInfo(req, res);
+  });
+}
+
+function changeInfo(req, res) {
+  User.findByIdAndUpdate(
+    req.params.userid,
+    { $set: req.body },
+    (err, UpdatedUser) => {
+      if (err) {
+        req.flash("error", "There is an error, please try again");
+        res.redirect("back");
+      } else {
+        req.flash("success", "Successfully changed information");
+        res.redirect("back");
+      }
+    }
+  );
+}
 
 exports.showRegisterForm = (req, res) => {
   res.render("register");
@@ -13,20 +130,19 @@ exports.createUser = (req, res) => {
     User.find( {$or: [ {username: req.body.username},{email: req.body.email}]}, (err, foundUser) => {
       if (foundUser.length == 0) {
         let newUser = new User(req.body);
+        // encode the password
         User.register(newUser, req.body.password, (err, user) => {
-          // encode the password
           if (err) {
             req.flash("error", err.message);
             return res.render("register");
           }
           passport.authenticate("local")(req, res, () => {
-            // log user in, serialize session
             req.flash("success", "Welcome to Stockoverflow " + user.firstname);
             res.redirect("/");
           });
         });
       } else {
-        req.flash("error", "Username or email is already in used, please choose a different one." );
+        req.flash("error", "A user with the given username or email already exists, please choose a different one." );
         res.redirect("back");
       }
     })
@@ -40,8 +156,6 @@ exports.showLoginForm = (req, res) => {
   res.render("login");
 }
 
-
-
 exports.login = (req, res) => {
   req.flash("success", "Successfully logged in!");
   res.redirect("/");
@@ -52,6 +166,7 @@ exports.logout = (req, res) => {
   req.flash("success", "Logged you out!");
   res.redirect("/");
 }
+
 
 exports.showForgotPasswordForm = (req, res) => {
   res.render("forgot");
@@ -129,7 +244,6 @@ var generateResetToken = () => {
 	})
 }
 
-
 exports.showResetPasswordForm = (req, res) => {
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
     if (!user) {
@@ -204,126 +318,4 @@ exports.resetPassword = async function(req, res) {
     req.flash('error', 'Sorry, something went wrong, please contact stockoverflow.stockapp@gmail.com');
 		return res.redirect('/forgot');
 	}	
-}
-
-exports.showUserInfo = (req, res) => {
-  User.findById(req.params.userid, (err, foundUser) => {
-    if (err || !foundUser) {
-      req.flash("error", "Something went wrong");
-      res.redirect("back");
-    } else {
-      res.render("users/show", { user: foundUser });
-    }
-  });
-}
-
-exports.modifyFirstName = (req, res) => {
-  User.findById(req.params.userid, async (err, foundUser) => {
-    if (err || !foundUser) {
-      req.flash("error", "User not found");
-      res.redirect("back");
-    } else {
-      changeInfo(req, res);
-    }
-  });
-}
-
-exports.modifyLastName = (req, res) => {
-  User.findById(req.params.userid, async (err, foundUser) => {
-    if (err || !foundUser) {
-      req.flash("error", "User not found");
-      res.redirect("back");
-    } else {
-      changeInfo(req, res);
-    }
-  });
-}
-
-exports.modifyPassword = (req, res) => {
-  User.findById(req.params.userid, async (err, foundUser) => {
-    if (err || !foundUser) {
-      req.flash("error", "User not found");
-      res.redirect("back");
-    } else {
-      if (req.body.newpassword !== req.body.confirmnewpassword) {
-        // check password matches
-        req.flash("error", "New passwords do not match");
-        res.redirect("back");
-      } else {
-        User.findById(req.params.userid, (err, user) => {
-          // Check if error connecting
-          if (err) {
-            req.flash("error", "There is an error, please try again");
-            res.redirect("back");
-          } else {
-            // Check if user was found in database
-            if (!user) {
-              // Return error, user was not found in db
-              req.flash("error", "There is an error, please try again");
-              res.redirect("back");
-            } else {
-              user.changePassword(
-                req.body.oldpassword,
-                req.body.newpassword,
-                function (err) {
-                  if (err) {
-                    if (err.name === "IncorrectPasswordError") {
-                      req.flash("error", "Incorrect password");
-                      res.redirect("back");
-                    } else {
-                      req.flash("error", "There is an error, please try again");
-                      res.redirect("back");
-                    }
-                  } else {
-                    req.flash(
-                      "success",
-                      "Your password has been changed successfully"
-                    );
-                    res.redirect("back");
-                  }
-                }
-              );
-            }
-          }
-        });
-      }
-    }
-  });
-}
-
-
-exports.modifyEmail =  (req, res) => {
-  User.findById(req.params.userid, async (err, foundUser) => {
-    if (err || !foundUser) {
-      req.flash("error", "User not found");
-      res.redirect("back");
-    } else {
-      let user = await User.findOne({ email: req.body.email });
-      if (user) {
-        req.flash(
-          "error",
-          "Email already in used, please choose a different one."
-        );
-        return res.redirect("back");
-      }
-      changeInfo(req, res);
-    }
-  });
-}
-
-
-function changeInfo(req, res) {
-  User.findByIdAndUpdate(
-    req.params.userid,
-    { $set: req.body },
-    (err, UpdatedUser) => {
-      if (err) {
-        req.flash("error", "There is an error, please try again");
-        res.redirect("back");
-      } else {
-        req.flash("success", "Successfully changed information");
-        res.redirect("back");
-      }
-    }
-  );
 }
