@@ -9,13 +9,6 @@ router.get("/register", userController.showRegisterForm);
 router.post("/register", userController.createUser);
 router.get("/login", userController.showLoginForm);
 
-router.get('/login/google/success', (req, res) => {
-  res.send(`Welcome mr ${req.user.email}!`);
-});
-
-router.get('/login/google/failure', (req, res) => {
-  res.send("you failed");
-});
 
 router.get('/login/google',
   passport.authenticate('google', { scope:
@@ -24,12 +17,12 @@ router.get('/login/google',
 
 router.get( '/login/google/callback',
     passport.authenticate( 'google', {
-        successRedirect: '/login/google/success',
-        failureRedirect: '/login/google/failure'
+        successRedirect: '/',
+        failureRedirect: '/login'
 }));
 
-// router.get("/login/google", userController.getGoogleAuth);
-// router.get("/login/google/callback", userController.getGoogleAuthCallback);
+router.get("/login/google", userController.getGoogleAuth);
+router.get("/login/google/callback", userController.getGoogleAuthCallback);
 
 
 router.post("/login", passport.authenticate("local", {

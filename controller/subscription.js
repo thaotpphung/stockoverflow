@@ -18,8 +18,8 @@ exports.getSubscriptions = async (req, res) => {
 // delete subsciption
 exports.deleteSubscription = async (req, res) => {
   try {
-    await Subscription.deleteOne({userid: req.params.userid} , {stockid: req.params.stockid});
-    req.flash("success", "Stock deleted");
+    await Subscription.findByIdAndDelete(req.params.subscriptionid);
+    req.flash("success", "Successfully deleted stock!");
     res.redirect("/users/" + req.params.userid + "/subscriptions");
   } catch (err) {
     console.log(err);
@@ -33,11 +33,11 @@ exports.addSubscription = async (req, res) => {
     if (stock == null) {
       stock = await stockController.addStockHelper(req.body.stock.symbol);
     }
-    let subscription = await Subscription.findOne({symbol: req.body.stock.symbol});
+    let subscription = await Subscription.findOne({userid: req.params.userid, stockid: stock._id});
     if (subscription == null) {
       await Subscription.create ({
         userid: req.params.userid, 
-        stock: stock._id,
+        stock: stock,
         stockid: stock._id
       });
       req.flash("success", "Successfully made action!");

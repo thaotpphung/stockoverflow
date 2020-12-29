@@ -88,7 +88,6 @@ passport.use('google', new GoogleStrategy({
 
 passport.use('local', new LocalStrategy(User.authenticate()));
 
-
 passport.serializeUser((user, done) => {
   done(null, user.id); //user.id is the id from Mongo
 });
