@@ -38,7 +38,13 @@
             <td>
               <%=alert.symbol%>
             </td>
-            <td><%=alert.alertPrice%></td>
+            <td><%=alert.alertPrice%>
+              <span class="d-none"> 
+                <a href="/users/<%=currentUser._id%>/stocks/<%=alert.stockid%>">
+                  <i class="fa-info"></i>
+                </a>
+              </span> 
+            </td>
           </tr>
         <% }); %>
       </tbody>

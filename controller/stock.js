@@ -2,7 +2,7 @@ const Stock = require("../models/stock"),
   StockSearch = require("../models/stocksearch"),
   StockMarket = require("../models/stockmarket"),
   got = require("got");
-require("dotenv").config();// get detail of stock by stockid
+require("dotenv").config();
 
 exports.getStockById = async (req, res) => {
   try {

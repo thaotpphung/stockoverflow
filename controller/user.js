@@ -3,6 +3,14 @@ const passport = require("passport"),
   User = require("../models/user");
 require("dotenv").config();
 
+exports.getGoogleAuth = (req, res) => {
+  res.render("login");
+}
+
+exports.getGoogleAuthCallback = (req, res) => {
+  res.render("login");
+}
+
 exports.showRegisterForm = (req, res) => {
   res.render("register");
 }
@@ -39,6 +47,8 @@ exports.createUser = (req, res) => {
 exports.showLoginForm = (req, res) => {
   res.render("login");
 }
+
+
 
 exports.login = (req, res) => {
   req.flash("success", "Successfully logged in!");

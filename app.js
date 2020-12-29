@@ -6,8 +6,12 @@ let express = require("express"),
   methodOverride = require("method-override"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
+  GoogleStrategy = require("passport-google-oauth2").Strategy,
   User = require("./models/user");
-  
+
+  require("dotenv").config();
+
+
 // requring routes
 let transactionRoutes = require("./routes/transactions"),
   stockRoutes = require("./routes/stocks"),
@@ -18,7 +22,6 @@ let transactionRoutes = require("./routes/transactions"),
   indexRoutes = require("./routes/index");
 
 const dbURL = process.env.MONGODB_URI || "mongodb://127.0.0.1/stockapp"
-console.log(dbURL);
 mongoose.connect(dbURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -49,9 +52,61 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // local-mongoose package
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+ 
+passport.use('google', new GoogleStrategy({
+  clientID:     process.env.GOOGLE_ID,
+  clientSecret: process.env.GOOGLE_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK,
+  passReqToCallback   : true
+}, function(request, accessToken, refreshToken, profile, done) {
+    User.findOne( {googleid: profile.id } , function(err, user) {
+      if (err) {
+        console.log('err in findone', err)
+          return done(err);
+      }
+      if (!user) {
+        console.log('create new user')
+        user = new User({
+          firstname: profile.given_name,
+          lastname: profile.family_name,
+          email: profile.emails[0].value,
+          // username: profile.username,
+          googleid: profile.id
+        }); 
+        user.save(function(err) {
+          if (err) console.log('err in save', err);
+          return done(err, user);
+        });
+      } else {
+        console.log('found user')
+          //found user. Return
+          return done(err, user);
+      }
+    });
+  }
+)); 
+
+passport.use('local', new LocalStrategy(User.authenticate()));
+
+
+passport.serializeUser((user, done) => {
+  done(null, user.id); //user.id is the id from Mongo
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    if (err) {
+      done('pass');
+    } else {
+      done(null, user);
+    }
+  })
+});
+
+passport.deserializeUser((user, done) => {
+  User.deserializeUser();
+});
+
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
