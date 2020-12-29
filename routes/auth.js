@@ -21,10 +21,6 @@ router.get( '/login/google/callback',
         failureRedirect: '/login'
 }));
 
-router.get("/login/google", userController.getGoogleAuth);
-router.get("/login/google/callback", userController.getGoogleAuthCallback);
-
-
 router.post("/login", passport.authenticate("local", {
   failureRedirect: "/login",
   failureFlash: true,

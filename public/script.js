@@ -51,8 +51,8 @@ $(".show-form").click(function(event) {
 /* -----------------------search----------------------- */
 var $searchResult = $("#searchResult");
 var $searchKey = $("#searchKey");
-const website = "http://localhost:8000/";
-// const website = "https://stockoverflow-stockapp.herokuapp.com/";
+// const website = "http://localhost:8000/";
+const website = "https://stockoverflow-stockapp.herokuapp.com/";
 
 // send request whenever user enter a valid string
 $("#searchKey").keyup( async function (event) {
