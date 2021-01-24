@@ -1,5 +1,5 @@
 
-function makeOHLCChart(stockinfo) {
+function makeOHLCChart(stockinfo, len) {
   anychart.onDocumentReady(function () {
     // data
     var openArray = [];
@@ -7,7 +7,7 @@ function makeOHLCChart(stockinfo) {
     var highArray = [];
     var lowArray = [];
     var timeArray = [];
-    for (i = 0; i < stockinfo.history.length; i++ ) {
+    for (i = 0; i < len; i++ ) {
       openArray.push((stockinfo.history[i].open/100).toFixed(2));
       closeArray.push((stockinfo.history[i].close));
       highArray.push((stockinfo.history[i].high));
@@ -16,7 +16,7 @@ function makeOHLCChart(stockinfo) {
     }
 
     var data = [];
-    for (i = 0; i < (stockinfo.history.length); i++) {
+    for (i = 0; i < len; i++) {
       data[i] = [timeArray[i], openArray[i],  highArray[i], lowArray[i], closeArray[i]];
     }
 
@@ -48,7 +48,7 @@ function makeOHLCChart(stockinfo) {
 });
 }
 
-function makeLineChart(stockinfo) {
+function makeLineChart(stockinfo, len) {
   // line chart
   var chartName = 'chart' + stockinfo.symbol;
   var ctx = document.getElementById(chartName).getContext('2d');
@@ -60,13 +60,14 @@ function makeLineChart(stockinfo) {
   var lowArray = [];
 
   var timeArray = [];
-  for (i = (stockinfo.history.length - 1); i >= 0; i--) {
+  for (i = (len - 1); i >= 0; i--) {
     openArray.push((stockinfo.history[i].open / 100).toFixed(2));
     closeArray.push((stockinfo.history[i].close).toFixed(2));
     highArray.push((stockinfo.history[i].high).toFixed(2));
     lowArray.push((stockinfo.history[i].low).toFixed(2));
     timeArray.push(stockinfo.history[i].label);
   }
+  
   var color;
   if (stockinfo.history[0].change < 0) {
     color = ["#FF0000"];
@@ -93,6 +94,12 @@ function makeLineChart(stockinfo) {
     },
     options: {
       scales: {
+        xAxes: [{
+          ticks: {
+            autoSkip: true,
+            // maxTicksLimit: 50
+          }
+        }],
         yAxes: [
           {
             ticks: {
@@ -105,7 +112,7 @@ function makeLineChart(stockinfo) {
               labelString: "Openning Price ($)",
             },
           },
-        ]
+        ],
       },
     },
   });

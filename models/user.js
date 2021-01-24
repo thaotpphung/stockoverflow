@@ -9,7 +9,13 @@ var UserSchema = new mongoose.Schema({
   email: {type: String, unique: true, required: true},
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  googleid: String
+  googleid: String,
+  trackedstocks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Stock"
+    }
+  ],
 }); 
 
 UserSchema.plugin(passportLocalMongoose);

@@ -2,7 +2,7 @@
 
 <% if (currentUser) { %>
 
-<div id="body-container">
+<div class="body-container col-12 col-md-10 col-lg-9 col-centered">
   <!-- Assets   -->
   <% if (assets.length === 0) { %>
   <div>
@@ -100,7 +100,7 @@
           <td><%=transaction.symbol%></td>
           <td><%=transaction.type%></th>
           <td><%=transaction.time%></td>
-          <td><%=transaction.price%></td>
+          <td><%=Math.floor(transaction.price)/100%></td>
           <td><%=transaction.quantity%></td>
           <td <% if (transaction.type === "Purchase") { %> class="negative"> -<% } else { %>
             class="positive" >

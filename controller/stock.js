@@ -45,7 +45,7 @@ exports.addStockHelper = async (symbol) => {
     setProfile(newStock, profileData);
     setRating(newStock, ratingData);
     setFinancialGrowth(newStock, financialGrowthData);
-    const foundSearchStock = await StockSearch.findOne({ symbol: symbol }); // get new stock's company name
+    const foundSearchStock = await StockSearch.findOne({ symbol: symbol }); 
     newStock.name = foundSearchStock.name.replace(/'/g, "%27");
     console.log("created this stock: ", newStock.name);
     newStock.save();
@@ -69,7 +69,7 @@ async function getJSON(url) {
 // make API urls
 function makeApiTimeSeriesUrl(symbol) {
   const timeSeries = "historical-price-full/";
-  const timeSeriesCount = "&timeseries=30";
+  const timeSeriesCount = "&timeseries=90";
   const apiTimeSeriesUrl =
     urlHead + timeSeries + symbol + apiKey + timeSeriesCount;
   return apiTimeSeriesUrl;
@@ -276,7 +276,7 @@ async function UpdateQuarterly() {
       getJSON(makeApiFinancialGrowthUrl(newStock.symbol)),
     ]);
     const profileData = results[0][0];
-    const keyMetricsDta = results[1][0];
+    const keyMetricsData = results[1][0];
     const financialGrowthData = results[2][0];
     setProfile(newStock, profileData);
     setKeyMetrics(newStock, keyMetricsData);
@@ -350,9 +350,7 @@ async function UpdateStockMarket() {
     };
     stockmarket.mostloser.push(newMostLoserEntry);
   }
-
   stockmarket.save();
-
   console.log("DONE UPDATE STOCK MARKET");
 }
 

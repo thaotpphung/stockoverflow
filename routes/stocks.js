@@ -3,7 +3,7 @@ const express = require("express"),
   stockController = require("../controller/stock"),
   middleware = require("../middleware");
 
-router.get("/:stockid", middleware.checkCorrectUser, stockController.getStockById);
-router.post("/", middleware.checkCorrectUser, stockController.addStock);
+router.get("/:stockid",  stockController.getStockById);
+router.post("/", stockController.addStock);
 
 module.exports = router;

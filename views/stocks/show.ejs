@@ -1,6 +1,6 @@
 <%- include("../partials/header") %>
 
-<div id="body-container">
+<div class="body-container col-12 col-md-10 col-lg-9 col-centered">
   <div class="table-container">
     <h1 class="header-black">OVERALL <i></i></h1> 
     <div id="stock-banner" class="row">
@@ -43,17 +43,45 @@
       </div>
     </div>
 
+<script>
+  let stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
+  let chartId = '#chart' + stockinfo.symbol;
+
+  function toggleOHLC() {
+    $("#OHLCchart").toggleClass("d-none");
+  }
+
+  function toggleLine() {
+    $(chartId).toggleClass("d-none");
+  }
+
+  $('#chartTime').change(function(){ 
+    let value = $(this).val();
+    makeOHLCChart(stockinfo, value);
+  });
+  
+
+
+</script> 
+
+    <div>
+      <button onclick="toggleOHLC()">OHLC Chart</button>
+      <button onclick="toggleLine()">Line Graph</button>
+      <select id="chartTime">
+        <option value="30">1 Month</option>
+        <option value="90">3 Months</option>
+      </select>
+    </div>
+
     <div id="OHLCchart" class="pb-3"></div>
     <script>
-      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-      makeOHLCChart(stockinfo);
+      makeOHLCChart(stockinfo, 30);
     </script> 
     
-    <!-- <canvas id="chart<%=stock.symbol%>" class="pb-3"</canvas>
+    <canvas id="chart<%=stock.symbol%>" class="pb-3"</canvas>
     <script>
-      var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
-      makeLineChart(stockinfo);
-    </script> -->
+      makeLineChart(stockinfo, 30);
+    </script>
 
   </div>
 
@@ -371,7 +399,6 @@
         <h1 class="header-black"><i class="fa fa-chart-bar mr-1"></i> RATINGS <span class="float-right font-size-xsm "> <%=stock.rating.date%></span></h1> 
         <canvas id="ratingChart" class="pb-3" ></canvas>
         <script>
-          var stockinfo = JSON.parse('<%- JSON.stringify(stock) %>');
           makeRatingChart(stockinfo);
         </script> 
       </div>

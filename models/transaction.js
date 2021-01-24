@@ -2,12 +2,6 @@ var mongoose = require("mongoose");
 
 var transactionSchema = mongoose.Schema({
   userid: String,
-  // stock: {
-  //   stockid: String,
-  //   symbol: String,
-  //   name: String, 
-  //   price: Number
-  // },
   stockid: String,
   symbol: String,
   name: String,
@@ -18,6 +12,22 @@ var transactionSchema = mongoose.Schema({
   totalprice: {type: Number, default: 0},
   totalquantity: {type: Number, default: 0},
   isNewest: {type: Boolean, default: true },
+
+  // userid: String,
+  // symbol: String,
+  // name: String,
+  // stockid: String,
+  // history: [
+  //   {
+  //     price: Number,
+  //     time: String,
+  //     quantity: Number,
+  //     transactiontype: String
+  //   }
+  // ],
+  // totalprice: {type: Number, default: 0},
+  // totalquantity: {type: Number, default: 0}
+
 });
 
 transactionSchema.virtual('transactiontotal').get(function() {

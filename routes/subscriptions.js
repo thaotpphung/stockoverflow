@@ -3,8 +3,8 @@ const express = require("express"),
   subscriptionController = require("../controller/subscription"),
   middleware = require("../middleware");
 
-router.get("/", middleware.checkCorrectUser, subscriptionController.getSubscriptions);
-router.delete("/:subscriptionid", middleware.checkCorrectUser, subscriptionController.deleteSubscription);
-router.post("/", middleware.checkCorrectUser, subscriptionController.addSubscription);
+router.get("/", subscriptionController.getSubscriptions);
+router.delete("/:subscriptionid",  subscriptionController.deleteSubscription);
+router.post("/", subscriptionController.addSubscription);
 
 module.exports = router;

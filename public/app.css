@@ -18,6 +18,13 @@
 }
 
 /* ----------Shared------------------------ */
+
+.col-centered{
+  float: none;
+  margin: 0 auto;
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -41,9 +48,8 @@ body {
   margin-top: 62px;
 }
 
-#body-container {
-  padding: 5rem 15rem!important ;
-  /* min-width: 720px; */
+.body-container {
+  padding: 5rem 0;
 }
 
 .margin-top-2rem {
@@ -415,6 +421,12 @@ hr {
   transition:all 300ms ease-in-out;
   transform:translate(-50%,-50%) scale(1);
 }
+
+
+
+
+
+
 
 #pageload .content {
   top: 500px !important;

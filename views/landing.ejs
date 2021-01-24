@@ -1,7 +1,7 @@
 <%- include("partials/header") %>
 
 <section id="header">
-  <div id="body-container" class="text-center">
+  <div class="body-container col-11 col-md-10 col-lg-9 col-centered text-center">
     <div class="row">
       <% if(!currentUser){ %>
       <div id="intro-left" class="col 10 col-lg-6">
@@ -63,14 +63,14 @@
       </div>
 
       <% } else { %>
-
-      <div id="landing-banner" class="col-6 pt-5">
+     
+      <div id="landing-banner" class="col-11 col-centered col-md-6 py-5">
         <div>Welcome back to</div>
         <span id="logo">STOCKOVERFLOW</span> <%= currentUser.firstname %>!
         <div>How are you today?</div>
       </div>
 
-      <div class="col-5">
+      <div class="col-11 col-centered col-md-6">
         <h1 class="header-black">
           MOST GAINER
           <span class="float-right font-size-xsm"></span>
@@ -108,7 +108,7 @@
       </div>
 
 
-      <div class="col-5">
+      <div class="col-11 col-centered col-md-6">
         <h1 class="header-black">
           MOST ACTIVE
           <span class="float-right font-size-xsm"></span>
@@ -145,9 +145,8 @@
         </div>
       </div>
 
-      <div class="col-1"></div>
 
-      <div class="col-5">
+      <div class="col-11 col-centered col-md-6">
         <h1 class="header-black">
           MOST LOSER
           <span class="float-right font-size-xsm"></span>

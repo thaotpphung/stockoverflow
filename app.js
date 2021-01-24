@@ -1,4 +1,4 @@
-let express = require("express"),
+const express = require("express"),
   app = express(),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
@@ -8,7 +8,7 @@ let express = require("express"),
   LocalStrategy = require("passport-local"),
   GoogleStrategy = require("passport-google-oauth2").Strategy,
   User = require("./models/user");
-
+  
   require("dotenv").config();
 
 

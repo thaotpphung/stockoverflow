@@ -3,9 +3,9 @@ const express = require("express"),
   middleware = require("../middleware"),
   transactionController = require("../controller/transaction");
 
-router.get("/", middleware.checkCorrectUser, transactionController.getTransactions);
-router.get("/new/:stockid", middleware.checkCorrectUser, transactionController.showNewTransactionFormByStock);
-router.get("/new", middleware.checkCorrectUser, transactionController.showNewTransactionForm);
-router.post("/", middleware.checkCorrectUser, transactionController.addTransaction);
+router.get("/", transactionController.getTransactions);
+router.get("/new/:stockid", transactionController.showNewTransactionFormByStock);
+router.get("/new", transactionController.showNewTransactionForm);
+router.post("/", transactionController.addTransaction);
 
 module.exports = router;

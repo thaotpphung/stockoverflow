@@ -1,6 +1,6 @@
 <%- include("../partials/header") %>
 
-<div id="body-container">
+<div class="body-container col-11 col-md-10 col-lg-9 col-centered">
   <% if (currentUser) { %>
     <% if (subscriptions.length === 0) { %>
   <div>
@@ -63,7 +63,7 @@
         <canvas id="chart<%=subscription.stock.symbol%>" class="pb-3"></canvas>
         <script>
           var stockinfo = JSON.parse('<%- JSON.stringify(subscription.stock) %>');
-          makeLineChart(stockinfo);
+          makeLineChart(stockinfo, 30);
         </script>
         <hr />
       <% }); %>
@@ -77,7 +77,6 @@
   <div class="overlay">
     <div class="fa fa-times" onclick="togglePopup()"></div>
   </div>
-  
   <div class="content">
     <form id="searchStockForm" action="/users/<%=currentUser._id%>/subscriptions/" method="POST">
       <input
