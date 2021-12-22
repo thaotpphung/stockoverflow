@@ -1,5 +1,7 @@
 # StockOverflow
->  Stock tracker and visualization. Deployed on Heroku platform at: https://stockoverflow-stockapp.herokuapp.com/
+>  Stock tracker and visualization. Deployed on Heroku platform at:
+>  
+>  https://stockoverflow-stockapp.herokuapp.com/
 
 # Contents  
 * [Installation](#installation)  
