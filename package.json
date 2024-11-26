@@ -20,7 +20,7 @@
     "locus": "^2.0.4",
     "method-override": "^3.0.0",
     "mongoose": "^5.9.27",
-    "nodemailer": "^6.4.13",
+    "nodemailer": "^6.4.16",
     "passport": "^0.4.1",
     "passport-google-oauth2": "^0.2.0",
     "passport-local": "^1.0.0",
